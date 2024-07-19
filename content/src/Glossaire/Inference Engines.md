@@ -6,6 +6,7 @@ tags:
   - llm
   - Inference
 nanoid: qg2adjzg2ps5
+type: evergreen_note
 ---
 Nom alternatifs à "Inference Engines" :
 

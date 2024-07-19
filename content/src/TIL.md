@@ -1,5 +1,6 @@
 ---
 nanoid: zte1qenc7afm
+type: evergreen_note
 ---
 Signifie "Today I Learned".
 

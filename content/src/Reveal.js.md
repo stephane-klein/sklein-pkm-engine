@@ -1,5 +1,6 @@
 ---
 nanoid: j4e72mneaa59
+type: evergreen_note
 ---
 https://github.com/hakimel/reveal.js
 

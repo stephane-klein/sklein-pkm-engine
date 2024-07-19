@@ -6,5 +6,6 @@ tags:
   - MachineLearning
   - vocabulaire
 nanoid: zhpgpnrmnqbg
+type: evergreen_note
 ---
 

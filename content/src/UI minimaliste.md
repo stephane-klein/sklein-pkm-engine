@@ -1,5 +1,6 @@
 ---
 nanoid: kcnho36at5ia
+type: evergreen_note
 ---
 J'aime les UI Minimaliste, comme :
 

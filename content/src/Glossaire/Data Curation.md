@@ -4,6 +4,7 @@ tags:
   - dataops
   - vocabulaire
 nanoid: 8ycyp8kuzcqz
+type: evergreen_note
 ---
 Article wikipedia : https://en.wikipedia.org/wiki/Data_curation
 

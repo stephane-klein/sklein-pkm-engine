@@ -1,5 +1,6 @@
 ---
 nanoid: fofsoxbfhxzl
+type: evergreen_note
 ---
 https://www.youtube.com/@AbsolVideos
 

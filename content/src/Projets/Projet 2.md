@@ -14,6 +14,7 @@ tags:
   - coding
   - projet
 nanoid: 9t7b2hxau17b
+type: evergreen_note
 ---
 
 Date de la création de cette note : mardi 30 avril 2024.

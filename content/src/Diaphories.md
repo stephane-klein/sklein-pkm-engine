@@ -1,5 +1,6 @@
 ---
 nanoid: yqdd7jgp6jn2
+type: evergreen_note
 ---
 - Concept créé par [[Luciano Floridi]].
 - Définitation dans [[Stanford Encyclopedia of Philosophy]] : [Semantic Conceptions of Information](https://plato.stanford.edu/archIves/sum2020/entries/information-semantic/#1.3)

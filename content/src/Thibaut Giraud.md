@@ -1,5 +1,6 @@
 ---
 nanoid: c1kb3nq6bru8
+type: evergreen_note
 ---
 Auteur de la chaine [[YouTube]] nommée [[MrPhi]] et [[Axiome]].
 

@@ -11,6 +11,7 @@ tags:
 started_at: 2024-04-20
 toggl_task: apache-age
 nanoid: 8f99y14rar7o
+type: evergreen_note
 ---
 
 Date de la création de cette note : 2024-05-02  

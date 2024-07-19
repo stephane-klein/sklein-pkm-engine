@@ -3,6 +3,7 @@ title: Projet n - "...."
 aliases:
   - Projet n - "...."
 nanoid: 538hnd5ln0qp
+type: evergreen_note
 ---
 
 Date de la création de cette note : ... .

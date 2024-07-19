@@ -3,6 +3,7 @@ title: Projet 10 - "Mettre en oeuvre DotTXT AI"
 aliases:
   - Projet 10 - "Mettre en oeuvre DotTXT AI"
 nanoid: yqacfejnh87c
+type: evergreen_note
 ---
 
 Date de la création de cette note : 2024-07-07.

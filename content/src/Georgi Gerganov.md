@@ -1,5 +1,6 @@
 ---
 nanoid: 3tk6mxdbgi41
+type: evergreen_note
 ---
 GitHub account : https://github.com/ggerganov
 

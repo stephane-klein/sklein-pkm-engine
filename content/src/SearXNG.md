@@ -1,5 +1,6 @@
 ---
 nanoid: hp9j2t8cuyo4
+type: evergreen_note
 ---
 https://github.com/searxng/searxng
 

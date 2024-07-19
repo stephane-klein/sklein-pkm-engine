@@ -1,5 +1,6 @@
 ---
 nanoid: 9komynyr9bex
+type: evergreen_note
 ---
 https://fr.wikipedia.org/wiki/R%C3%A9flexions_ou_sentences_et_maximes_morales
 

@@ -1,5 +1,6 @@
 ---
 nanoid: eai49bhdfeeh
+type: evergreen_note
 ---
 https://github.com/graphile/migrate
 

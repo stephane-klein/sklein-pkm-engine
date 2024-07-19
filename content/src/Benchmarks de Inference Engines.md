@@ -1,5 +1,6 @@
 ---
 nanoid: re55myfs9gjn
+type: evergreen_note
 ---
 
 - https://dmatora.github.io/LLM-inference-speed-benchmarks/

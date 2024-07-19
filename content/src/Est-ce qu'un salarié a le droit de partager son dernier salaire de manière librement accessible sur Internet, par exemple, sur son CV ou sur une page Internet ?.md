@@ -3,6 +3,7 @@ tags:
   - salaire
   - droit
 nanoid: bwppvktbsbzt
+type: evergreen_note
 ---
 Le 27 mars 2023, [j'ai posté ce message sur Reddit](https://old.reddit.com/r/conseiljuridique/comments/123t6qp/estce_que_jai_l%C3%A9galement_le_droit_de_partager/) :
 

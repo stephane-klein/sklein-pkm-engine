@@ -1,5 +1,6 @@
 ---
 nanoid: pgicezkqfizx
+type: evergreen_note
 ---
 La fonctionnalité ["conceal"](https://neovim.io/doc/user/options.html#'concealcursor') de Vim / [[Neovim]] permet de masquer ou de remplacer certains caractères ou séquences de caractères dans un fichier pour améliorer la lisibilité ou la présentation.
 

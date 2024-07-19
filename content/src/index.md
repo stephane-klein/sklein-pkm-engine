@@ -1,6 +1,7 @@
 ---
 title: Digital Garden de Stéphane Klein
 nanoid: wk7rwzbv4ujp
+type: evergreen_note
 ---
 Vous êtes sur la page d'accueil de mon expérience de publication d'un [Digital Garden](https://jzhao.xyz/posts/networked-thought#what-is-digital-gardening) propulsé par [[Obsidian Quartz]] ([code source](https://github.com/stephane-klein/obsidian-quartz-playground)).
 

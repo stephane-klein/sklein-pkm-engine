@@ -1,5 +1,6 @@
 ---
 nanoid: 1ab1wg0fxv8x
+type: evergreen_note
 ---
 [[Andy's working notes]] a un type de note supplémentaire par rapport à [[How to Make Notes and Write]] :
 

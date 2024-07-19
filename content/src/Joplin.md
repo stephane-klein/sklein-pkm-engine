@@ -1,5 +1,6 @@
 ---
 nanoid: m4oxi6jmmx33
+type: evergreen_note
 ---
 https://joplinapp.org/
 

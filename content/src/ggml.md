@@ -1,5 +1,6 @@
 ---
 nanoid: s6cvwfttv0j4
+type: evergreen_note
 ---
 https://github.com/ggerganov/ggml - a general-purpose tensor library
 

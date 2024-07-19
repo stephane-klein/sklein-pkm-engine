@@ -1,5 +1,6 @@
 ---
 nanoid: nh1svhp172tc
+type: evergreen_note
 ---
 - [Projet 1 - "CodeMirror, autocomplétion, Svelte"](/Projets/Projet-1)
 - [Projet 2 - "Réaliser un petit projet basé sur NextJS pour le comparer avec SvelteKit"](/Projets/Projet-2)

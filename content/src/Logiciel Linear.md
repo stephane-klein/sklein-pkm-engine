@@ -5,6 +5,7 @@ tags:
   - logiciel
   - product-management
 nanoid: 7414zb6ci7pg
+type: evergreen_note
 ---
 Semble compter plus de 70 employés d'après LinkedIn.
 Basé à San Francisco.

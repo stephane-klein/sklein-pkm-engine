@@ -1,5 +1,6 @@
 ---
 nanoid: ij8aedzkg2ei
+type: evergreen_note
 ---
 Plugin [[Neovim]] pour écrire et naviguer dans un *vault* [[Obsidian]] : https://github.com/epwalsh/obsidian.nvim
 

@@ -1,5 +1,6 @@
 ---
 nanoid: eaj9l7csw9il
+type: evergreen_note
 ---
 Dans [[How to Make Notes and Write]], page 16 :
 

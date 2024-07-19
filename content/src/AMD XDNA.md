@@ -1,5 +1,6 @@
 ---
 nanoid: zfqnau4x5iin
+type: evergreen_note
 ---
 XDNA est l'architecture des puces [[NPU]] de [[AMD]].
 

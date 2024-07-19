@@ -1,5 +1,6 @@
 ---
 nanoid: la9t4sao4lr7
+type: evergreen_note
 ---
 https://github.com/rustdesk/rustdesk/
 

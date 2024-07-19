@@ -1,5 +1,6 @@
 ---
 nanoid: ux4p1i3rol4j
+type: evergreen_note
 ---
 Article wikipedia : https://fr.wikipedia.org/wiki/Brutalisme
 

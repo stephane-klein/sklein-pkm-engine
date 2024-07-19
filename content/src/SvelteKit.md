@@ -3,6 +3,7 @@ aliases:
   - J'utilise SvelteKit depuis avril 2022
 al: null
 nanoid: lqff02recy01
+type: evergreen_note
 ---
 [SvelteKit](https://kit.svelte.dev/) est pour le framework [[Svelte]] un équivalent à :
 

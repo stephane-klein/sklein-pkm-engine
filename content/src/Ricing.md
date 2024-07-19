@@ -3,6 +3,7 @@ id: Ricing
 aliases: []
 tags: []
 nanoid: ink6at6jb379
+type: evergreen_note
 ---
 "rice" est utilisé pour parler de la personnalisation esthétique et fonctionnelle des environnements de bureau [[Linux]].
 

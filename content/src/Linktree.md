@@ -1,5 +1,6 @@
 ---
 nanoid: 5x4q3g00kiq9
+type: evergreen_note
 ---
 https://linktr.ee/
 

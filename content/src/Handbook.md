@@ -2,6 +2,7 @@
 aliases:
   - handbook
 nanoid: z8h58behqhnj
+type: evergreen_note
 ---
 Exemples :
 

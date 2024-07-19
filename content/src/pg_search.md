@@ -1,5 +1,6 @@
 ---
 nanoid: ljz3x6g0yxw7
+type: evergreen_note
 ---
 https://github.com/paradedb/paradedb/tree/dev/pg_search
 

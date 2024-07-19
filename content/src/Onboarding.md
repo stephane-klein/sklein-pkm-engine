@@ -2,6 +2,7 @@
 aliases:
   - onboarding
 nanoid: z9asgmdfhe8q
+type: evergreen_note
 ---
 Terme utilisé pour le processes d'intégration d'employé de [[Startup]].
 

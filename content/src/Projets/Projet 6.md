@@ -11,6 +11,7 @@ tags:
   - SvelteFlow
   - project-completed
 nanoid: dj837wvicl61
+type: evergreen_note
 ---
 
 Date de la création de cette note : 2024-05-17 .

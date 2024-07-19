@@ -1,5 +1,6 @@
 ---
 nanoid: wttqn1fu8dqh
+type: evergreen_note
 ---
 Lien vers l'article de [[Andy's working notes]] : [Taxonomy of note types](https://notes.andymatuschak.org/zTDjZQbKAT9pALtsk2HfePx).
 

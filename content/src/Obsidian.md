@@ -1,5 +1,6 @@
 ---
 nanoid: dee0skotmd00
+type: evergreen_note
 ---
 Site web : https://obsidian.md/
 

@@ -8,6 +8,7 @@ tags:
   - python
   - open-source
 nanoid: oaom28p1kqyp
+type: evergreen_note
 ---
 Site web : https://github.com/getredash/redash
 

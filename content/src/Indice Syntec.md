@@ -1,5 +1,6 @@
 ---
 nanoid: pfd1d7qydl7k
+type: evergreen_note
 ---
 Articles au sujet de cet indice :
 

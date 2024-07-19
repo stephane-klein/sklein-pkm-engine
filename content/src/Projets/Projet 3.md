@@ -14,6 +14,7 @@ tags:
   - SvelteKit
   - projet
 nanoid: 8pgeb4km503u
+type: evergreen_note
 ---
 
 Date de la création de cette note : mardi 30 avril 2024 .

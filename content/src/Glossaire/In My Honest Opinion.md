@@ -3,6 +3,7 @@ aliases:
   - IMHO
   - À mon humble avis
 nanoid: 4wroskkjxls9
+type: evergreen_note
 ---
 Article wiktionary anglais : https://en.wiktionary.org/wiki/IMHO
 

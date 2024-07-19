@@ -3,6 +3,7 @@ title: Projet 8 - CodeMirror, conceal, Svelte"
 aliases:
   - Projet 8 - "CodeMirror, conceal, Svelte"
 nanoid: 4zc1j6z855r9
+type: evergreen_note
 ---
 Date de la création de cette note : mercredi 3 juillet 2024.
 

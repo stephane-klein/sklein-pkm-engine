@@ -1,5 +1,6 @@
 ---
 nanoid: wkjq0t2gjo3y
+type: evergreen_note
 ---
 https://mccarthyshow.com/the-core-html-version/
 

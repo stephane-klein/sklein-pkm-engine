@@ -1,5 +1,6 @@
 ---
 nanoid: afs6szjbdw7g
+type: evergreen_note
 ---
 D'après ce que je comprends *Digital Garden* est un [[Personal knowledge management]] ou un [[Systèmes d’organisation des connaissances]] rédigé de manière [[idiosyncrasique]].
 

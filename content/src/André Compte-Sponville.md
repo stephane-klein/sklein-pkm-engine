@@ -1,5 +1,6 @@
 ---
 nanoid: zxuqofpqgdka
+type: evergreen_note
 ---
 Article Wikipedia : https://fr.wikipedia.org/wiki/Andr%C3%A9_Comte-Sponville
 

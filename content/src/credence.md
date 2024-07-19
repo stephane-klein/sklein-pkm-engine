@@ -1,5 +1,6 @@
 ---
 nanoid: y9ovgzv8hea7
+type: evergreen_note
 ---
 https://en.wiktionary.org/wiki/credence
 

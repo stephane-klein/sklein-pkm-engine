@@ -1,5 +1,6 @@
 ---
 nanoid: 7ymdsfwuizfv
+type: evergreen_note
 ---
 [NextJS](https://github.com/vercel/next.js/) est pour le framework [[ReactJS]] un équivalent à :
 

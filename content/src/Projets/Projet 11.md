@@ -3,6 +3,7 @@ title: Projet 11 - "Première version d'un moteur web PKM"
 aliases:
   - Projet 11 - "Première version d'un moteur web PKM"
 nanoid: 4e1aa1yam69r
+type: evergreen_note
 ---
 Date de la création de cette note : 2024-07-16.
 

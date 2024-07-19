@@ -1,5 +1,6 @@
 ---
 nanoid: t4kw5dkyk0di
+type: evergreen_note
 ---
 https://github.com/microsoft/Phi-3CookBook
 

@@ -1,5 +1,6 @@
 ---
 nanoid: y4lj12bx6xja
+type: evergreen_note
 ---
 En janvier 2024, j'ai acheté une paire de chaussure de la marque [[Ector Sneakers]].
 

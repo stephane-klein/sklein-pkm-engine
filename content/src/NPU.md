@@ -1,5 +1,6 @@
 ---
 nanoid: nwmt09f6np6u
+type: evergreen_note
 ---
 https://en.wikipedia.org/wiki/AI_accelerator
 

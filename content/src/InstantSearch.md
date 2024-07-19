@@ -1,5 +1,6 @@
 ---
 nanoid: t8k7c4wfcaza
+type: evergreen_note
 ---
 https://github.com/algolia/instantsearch
 

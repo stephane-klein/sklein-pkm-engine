@@ -1,5 +1,6 @@
 ---
 nanoid: nsm6qo6to28g
+type: evergreen_note
 ---
 Article Wikipedia : https://fr.wikipedia.org/wiki/Rapha%C3%ABl_Enthoven
 

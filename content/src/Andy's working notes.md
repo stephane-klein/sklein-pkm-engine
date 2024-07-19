@@ -1,5 +1,6 @@
 ---
 nanoid: ibtz3frzg49j
+type: evergreen_note
 ---
 https://notes.andymatuschak.org/ de [[Andy Matuschak]].
 

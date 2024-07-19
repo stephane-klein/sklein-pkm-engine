@@ -8,6 +8,7 @@ tags:
   - POC
   - coding
 nanoid: 6mezzl1fbwfb
+type: evergreen_note
 ---
 
 Date de la création de cette note : lundi 29 avril 2024.

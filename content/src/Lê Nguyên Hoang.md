@@ -1,5 +1,6 @@
 ---
 nanoid: nhzekgp1w0tw
+type: evergreen_note
 ---
 Auteur de la chaine [[YouTube]] nommée [[Science4All]] et [[Axiome]].
 

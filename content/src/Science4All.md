@@ -1,5 +1,6 @@
 ---
 nanoid: 20qyl4h11egf
+type: evergreen_note
 ---
 Auteur : [[Lê Nguyên Hoang]].
 

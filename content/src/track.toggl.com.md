@@ -1,5 +1,6 @@
 ---
 nanoid: 76zpvpj821la
+type: evergreen_note
 ---
 https://track.toggl.com/
 

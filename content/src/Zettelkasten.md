@@ -1,5 +1,6 @@
 ---
 nanoid: 3gwda3tzy7vh
+type: evergreen_note
 ---
 Article Wikipedia : https://fr.wikipedia.org/wiki/Zettelkasten
 

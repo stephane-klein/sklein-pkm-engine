@@ -5,6 +5,7 @@ tags:
   - product-management
   - logiciel
 nanoid: c0rgbx7ae3n8
+type: evergreen_note
 ---
 https://www.productboard.com/
 

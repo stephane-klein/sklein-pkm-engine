@@ -1,5 +1,6 @@
 ---
 nanoid: wbzbn2wckxu5
+type: evergreen_note
 ---
 Acronyme : `IFT`.
 

@@ -8,6 +8,7 @@ tags:
   - docker
   - project-completed
 nanoid: 9yeyewy628d0
+type: evergreen_note
 ---
 Date de la création de cette note : 2024-06-05.
 

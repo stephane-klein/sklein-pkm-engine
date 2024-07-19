@@ -1,5 +1,6 @@
 ---
 nanoid: mvnbbtb0waxt
+type: evergreen_note
 ---
 https://www.paradedb.com/
 

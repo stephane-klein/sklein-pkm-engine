@@ -5,6 +5,7 @@ tags:
   - Traduction
   - team
 nanoid: b6qpu5hc9jku
+type: evergreen_note
 ---
 Ma traduction de l'article [The Platinum Rule](https://www.swyx.io/platinum-rule) de [[Shawn Wang (dit swyx)]] avec modifications, ajouts qui me permettent — peux-être à vous aussi — de mieux comprendre l'article.
 

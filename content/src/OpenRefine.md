@@ -6,6 +6,7 @@ tags:
   - data-cleaning
   - data-curation
 nanoid: gtkpoq6ohzca
+type: evergreen_note
 ---
 Site : https://openrefine.org/
 

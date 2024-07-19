@@ -1,5 +1,6 @@
 ---
 nanoid: 1qb1vdzx8z4z
+type: evergreen_note
 ---
 https://logseq.com/
 

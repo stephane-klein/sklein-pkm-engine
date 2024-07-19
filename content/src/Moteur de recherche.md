@@ -1,5 +1,6 @@
 ---
 nanoid: k5j3hofhknnh
+type: evergreen_note
 ---
 - [[Mojeek]]
 
