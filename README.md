@@ -7,4 +7,5 @@ More information on this project (in French): https://notes.sklein.xyz/Projets/P
 ```sh
 $ mise install
 $ pnpm install
+$ ./inject-nanoid-to-notes.js
 ```
