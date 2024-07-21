@@ -9,6 +9,7 @@ $ mise install
 $ pnpm install
 $ ./inject-nanoid-to-notes.js
 $ ./inject-note-type-to-notes.js
+$ ./inject-created-at-to-fleeting-notes.js
 ```
 
 ```
