@@ -10,3 +10,8 @@ $ pnpm install
 $ ./inject-nanoid-to-notes.js
 $ ./inject-note-type-to-notes.js
 ```
+
+```
+$ pnpm run dev
+$ firefox http://localhost:5173
+```
