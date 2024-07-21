@@ -1,1 +1,5 @@
-One fleeting note
+<script>
+    export let data;
+</script>
+
+{@html data.html}

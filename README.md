@@ -10,6 +10,9 @@ $ pnpm install
 $ ./inject-nanoid-to-notes.js
 $ ./inject-note-type-to-notes.js
 $ ./inject-created-at-to-fleeting-notes.js
+$ docker compose up -d --wait
+$ ./scripts/enter-in-pg.sh -f init.sql
+$ ./import.js
 ```
 
 ```

@@ -17,7 +17,7 @@ for await (const filePath of (await glob("content/src/Notes éphémères/*.md"))
         const filename = path.parse(path.basename(filePath)).name;
 
         if (filename.length === 10) {
-            data.data.created_at = `filename 20:00`; // The choice of 20:00 is arbitrary.
+            data.data.created_at = `${filename} 20:00`; // The choice of 20:00 is arbitrary.
         } else if (filename.length === 15) {
             data.data.created_at = `${filename.substr(0, 10)} ${filename.substr(11, 2)}:${filename.substr(13, 2)}`;
         } else {
