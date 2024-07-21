@@ -9,7 +9,7 @@ const options = {
     resolveHtmlHref: (_env, fname) => {
         const extname = wikirefs.isMedia(fname) ? path.extname(fname) : '';
         fname = fname.replace(extname, '');
-        return '/' + fname.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') + extname;
+        return '/' + fname.trim();
     },
     resolveHtmlText: (_env, fname) => fname.replace(/-/g, ' '),
     resolveEmbedContent: (_env, fname) => fname + ' content',
