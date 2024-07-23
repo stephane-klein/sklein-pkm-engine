@@ -34,6 +34,7 @@ for await (const filePath of (await glob("content/**/*.md"))) {
         INSERT INTO public.notes
         (
             nanoid,
+            title,
             filename,
             note_type,
             content,
@@ -41,6 +42,7 @@ for await (const filePath of (await glob("content/**/*.md"))) {
         )
         VALUES(
             ${data.data.nanoid},
+            ${data.data?.title || path.parse(fileName).name},
             ${fileName},
             ${data.data?.type || null},
             ${data.content},
@@ -51,6 +53,7 @@ for await (const filePath of (await glob("content/**/*.md"))) {
         ON CONFLICT (filename) DO UPDATE
             SET
                 nanoid=${data.data.nanoid},
+                title=${data.data?.title || path.parse(fileName).name},
                 content=${data.content},
                 note_type=${data.data?.type || null},
                 created_at=${
@@ -65,7 +68,7 @@ for await (const filePath of (await glob("content/**/*.md"))) {
             MERGE (
                 n:Note {
                     file_name: '${fileName.replace(/'/g, "\\'")}',
-                    title: '${(data.data?.title || path.parse(fileName).name) .replace(/'/g, "\\'") }'
+                    title: '${(data.data?.title || path.parse(fileName).name).replace(/'/g, "\\'") }'
                 }
             )
             SET

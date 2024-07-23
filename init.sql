@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS public.notes;
 CREATE TABLE public.notes (
     id          SERIAL PRIMARY KEY,
     nanoid      VARCHAR(12) UNIQUE NOT NULL,
+    title       VARCHAR DEFAULT NULL,
     filename    VARCHAR(255) UNIQUE NOT NULL,
     note_type   VARCHAR DEFAULT NULL,
     content     TEXT,
