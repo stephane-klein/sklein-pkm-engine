@@ -9,10 +9,6 @@ md.use(
     wikirefs_plugin,
     {
         resolveHtmlHref: (_env, fname) => {
-            console.log("ici1");
-            console.log(_env, fname);
-            const extname = wikirefs.isMedia(fname) ? path.extname(fname) : '';
-            fname = fname.replace(extname, '');
             return '/' + fname.trim();
         },
         resolveHtmlText: (_env, fname) => fname.replace(/-/g, ' '),
