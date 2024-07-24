@@ -5,16 +5,20 @@ import * as wikirefs from "wikirefs";
 import { hashtag, spanHashAndTag } from "@fedify/markdown-it-hashtag";
 
 const md = new MarkdownIt()
-const options = {
-    resolveHtmlHref: (_env, fname) => {
-        const extname = wikirefs.isMedia(fname) ? path.extname(fname) : '';
-        fname = fname.replace(extname, '');
-        return '/' + fname.trim();
-    },
-    resolveHtmlText: (_env, fname) => fname.replace(/-/g, ' '),
-    resolveEmbedContent: (_env, fname) => fname + ' content',
-};
-md.use(wikirefs_plugin, options);
+md.use(
+    wikirefs_plugin,
+    {
+        resolveHtmlHref: (_env, fname) => {
+            console.log("ici1");
+            console.log(_env, fname);
+            const extname = wikirefs.isMedia(fname) ? path.extname(fname) : '';
+            fname = fname.replace(extname, '');
+            return '/' + fname.trim();
+        },
+        resolveHtmlText: (_env, fname) => fname.replace(/-/g, ' '),
+        resolveEmbedContent: (_env, fname) => fname + ' content',
+    }
+);
 md.use(hashtag, {
     link: (tag) => `/tags/${tag.substring(1)}`,
     linkAttributes: () => ({ class: "hashtag" }),
