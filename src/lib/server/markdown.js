@@ -19,10 +19,13 @@ md.use(
         resolveEmbedContent: (_env, fname) => fname + ' content',
     }
 );
-md.use(hashtag, {
-    link: (tag) => `/tags/${tag.substring(1)}`,
-    linkAttributes: () => ({ class: "hashtag" }),
-    label: spanHashAndTag,
-});
+md.use(
+    hashtag,
+    {
+        link: (tag) => `/tags/${tag.substring(1)}`,
+        linkAttributes: () => ({ class: "hashtag" }),
+        label: spanHashAndTag,
+    }
+);
 
 export default md;
