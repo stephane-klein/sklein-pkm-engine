@@ -1,4 +1,8 @@
-body {
+BODY {
+    max-width: 935px;
+    padding: 0 1em;
+    margin: 0 auto;
+
     BLOCKQUOTE {
         margin: 1em 0;
         padding: 0.5rem 1.5rem;
