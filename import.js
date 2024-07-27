@@ -1,13 +1,17 @@
 #!/usr/bin/env node
-import { glob } from "glob";
+import { fileURLToPath } from "url";
 import path from "path";
+import { glob } from "glob";
 import postgres from "postgres";
 import matter from "gray-matter";
 import yaml from "js-yaml";
 import { extractLinksAndTags } from "./utils.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const sql = postgres(
-    process.env.POSTGRES_ADMIN_URL || "postgres://postgres:password@localhost:5432/postgres",
+    process.env.POSTGRES_URL || "postgres://postgres:password@localhost:5432/postgres",
     {
         connection: {
             search_path: "ag_catalog"
@@ -20,6 +24,8 @@ await sql.unsafe(`
     SELECT drop_graph('graph', true);
     SELECT create_graph('graph');
 `);
+
+process.chdir(__dirname);
 
 for await (const filePath of (await glob("content/**/*.md"))) {
     const data = matter.read(filePath, {
@@ -75,6 +81,30 @@ for await (const filePath of (await glob("content/**/*.md"))) {
                 n.file_path='${filePath.replace(/'/g, "\\'")}'
         $$) AS (v agtype);
     `);
+
+    if (data.data.tags) {
+        for await (const tagName of data.data.tags) {
+            await sql.unsafe(`
+                SELECT *
+                FROM cypher('graph', $$
+                    MATCH
+                        (n:Note)
+                    WHERE
+                        n.file_path = '${filePath.replace(/'/g, "\\'")}'
+
+                    MERGE (
+                        t:Tag
+                        {
+                            name: '${tagName.replace(/'/g, "\\'")}'
+                        }
+                    )
+
+                    CREATE
+                        (n)-[:LABELED_BY]->(t)
+                $$) AS (v agtype)
+            `);
+        };
+    }
 
     const [WikiLinks, Tags] = extractLinksAndTags(data.content);
     data.data.tags = [...new Set([...data.data?.tags || [], ...Tags])]
