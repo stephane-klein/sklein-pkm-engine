@@ -6,19 +6,21 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "@fedify/markdown-it-hashtag": "0.2.0",
-    "@sveltejs/adapter-auto": "3.2.2",
-    "@sveltejs/kit": "2.5.18",
-    "@sveltejs/vite-plugin-svelte": "3.1.1",
-    "date-fns": "3.6.0",
+  "devDependencies": {
     "eslint": "9.7.0",
     "glob": "10.3.12",
     "gray-matter": "4.0.3",
     "js-yaml": "4.1.0",
+    "nanoid": "5.0.7"
+  },
+  "dependencies": {
+    "@fedify/markdown-it-hashtag": "0.2.0",
+    "@sveltejs/adapter-node": "5.2.0",
+    "@sveltejs/kit": "2.5.18",
+    "@sveltejs/vite-plugin-svelte": "3.1.1",
+    "date-fns": "3.6.0",
     "markdown-it": "14.1.0",
     "markdown-it-wikirefs": "0.0.3",
-    "nanoid": "5.0.7",
     "postgres": "3.4.4",
     "svelte": "4.2.18",
     "vite": "5.3.4",
