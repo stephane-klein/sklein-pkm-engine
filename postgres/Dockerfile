@@ -1,4 +1,4 @@
-FROM postgres:16 AS BASE
+FROM postgres:16 AS base
 
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends --no-install-suggests \
@@ -20,10 +20,10 @@ RUN make && make install
 
 FROM postgres:16
 
-COPY --from=BASE /usr/lib/postgresql/16/lib/age.so /usr/lib/postgresql/16/lib/age.so
-COPY --from=BASE /usr/lib/postgresql/16/lib/bitcode/ /usr/lib/postgresql/16/lib/bitcode/
-COPY --from=BASE /usr/share/postgresql/16/extension/age--1.5.0.sql /usr/share/postgresql/16/extension/age--1.5.0.sql
-COPY --from=BASE /usr/share/postgresql/16/extension/age.control /usr/share/postgresql/16/extension/age.control
+COPY --from=base /usr/lib/postgresql/16/lib/age.so /usr/lib/postgresql/16/lib/age.so
+COPY --from=base /usr/lib/postgresql/16/lib/bitcode/ /usr/lib/postgresql/16/lib/bitcode/
+COPY --from=base /usr/share/postgresql/16/extension/age--1.5.0.sql /usr/share/postgresql/16/extension/age--1.5.0.sql
+COPY --from=base /usr/share/postgresql/16/extension/age.control /usr/share/postgresql/16/extension/age.control
 
 RUN apt-get update -y \
     && apt install -y curl

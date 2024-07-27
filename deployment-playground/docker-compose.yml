@@ -1,0 +1,37 @@
+services:
+    postgres:
+        build: 
+            context: ../postgres/
+        restart: unless-stopped
+        ports:
+            - 6432:5432
+        environment:
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+        volumes:
+            - ./volumes/postgres/:/var/lib/postgresql/data/
+        healthcheck:
+            test: ["CMD", "sh", "-c", "pg_isready -U $$POSTGRES_USER -h $$(hostname -i)"]
+            interval: 10s
+            start_period: 30s
+
+    nginx:
+        build:
+            context: ../nginx/
+        restart: unless-stopped
+        volumes:
+            - ../nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ../static/:/usr/share/nginx/html/
+        ports:
+            - 80:80
+        depends_on:
+            - webapp
+
+    webapp:
+        build:
+            context: ../
+        environment:
+            POSTGRES_URL: "postgres://postgres:password@postgres:5432/postgres"
+        depends_on:
+            - postgres
