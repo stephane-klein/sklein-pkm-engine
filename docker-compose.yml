@@ -1,7 +1,7 @@
 services:
   postgres:
     build: 
-        context: .
+        context: postgres/
     restart: unless-stopped
     ports:
       - 5432:5432
