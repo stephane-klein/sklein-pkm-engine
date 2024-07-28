@@ -1,7 +1,8 @@
 import MarkdownIt from "markdown-it";
-import wikirefs_plugin from "markdown-it-wikirefs";
 import { hashtag, spanHashAndTag } from "@fedify/markdown-it-hashtag";
 import hljs from "highlight.js";
+import lazy_loading from "markdown-it-image-lazy-loading";
+import WikiLinkPlugin from "./wikilink.js";
 
 const md = new MarkdownIt({
     html: true,
@@ -16,16 +17,7 @@ const md = new MarkdownIt({
         return "";
     }
 })
-md.use(
-    wikirefs_plugin,
-    {
-        resolveHtmlHref: (_env, fname) => {
-            return '/' + fname.trim();
-        },
-        resolveHtmlText: (_env, fname) => fname.replace(/-/g, ' '),
-        resolveEmbedContent: (_env, fname) => fname + ' content',
-    }
-);
+md.use(WikiLinkPlugin())
 md.use(
     hashtag,
     {
@@ -34,5 +26,6 @@ md.use(
         label: spanHashAndTag,
     }
 );
+md.use(lazy_loading);
 
 export default md;

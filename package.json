@@ -21,6 +21,8 @@
     "date-fns": "3.6.0",
     "highlight.js": "11.10.0",
     "markdown-it": "14.1.0",
+    "markdown-it-image-lazy-loading": "2.0.1",
+    "markdown-it-regexp": "0.4.0",
     "markdown-it-wikirefs": "0.0.3",
     "postgres": "3.4.4",
     "svelte": "4.2.18",
