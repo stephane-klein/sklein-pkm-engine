@@ -4,7 +4,10 @@ import wikirefs_plugin from "markdown-it-wikirefs";
 import * as wikirefs from "wikirefs";
 import { hashtag, spanHashAndTag } from "@fedify/markdown-it-hashtag";
 
-const md = new MarkdownIt()
+const md = new MarkdownIt({
+    html: true,
+    linkify: true
+})
 md.use(
     wikirefs_plugin,
     {
