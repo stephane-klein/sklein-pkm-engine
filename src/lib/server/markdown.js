@@ -1,12 +1,20 @@
-import path from "path";
 import MarkdownIt from "markdown-it";
 import wikirefs_plugin from "markdown-it-wikirefs";
-import * as wikirefs from "wikirefs";
 import { hashtag, spanHashAndTag } from "@fedify/markdown-it-hashtag";
+import hljs from "highlight.js";
 
 const md = new MarkdownIt({
     html: true,
-    linkify: true
+    linkify: true,
+    highlight: function (str, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+            try {
+                return hljs.highlight(str, { language: lang }).value;
+            } catch (__) {}
+        }
+
+        return "";
+    }
 })
 md.use(
     wikirefs_plugin,
