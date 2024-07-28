@@ -9,4 +9,8 @@ BODY {
         border: 1px solid #bbb;
         background: #f8f8f8;
     }
+
+    IMG {
+        max-width: 100%;
+    }
 }
