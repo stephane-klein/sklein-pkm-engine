@@ -22,3 +22,6 @@ $ pnpm run dev
 $ firefox http://localhost:5173
 ```
 
+## Deployment
+
+See [« How to deploy develop instance? »](./deployment/develop/)
