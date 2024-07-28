@@ -13,6 +13,7 @@ RUN pnpm install -P --frozen-lockfile
 RUN pnpm run build
 
 FROM node:20-slim
+RUN apt update -y; apt install -y curl
 RUN npm install -g pnpm@9.6
 
 WORKDIR /app
@@ -27,4 +28,7 @@ COPY --from=base /app/build ./
 ENV ROOT_DATABASE_URL=""
 
 EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD curl --fail http://localhost:3000 || exit 1
+
 CMD ["node", "./index.js"]
