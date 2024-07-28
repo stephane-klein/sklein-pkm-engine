@@ -23,7 +23,7 @@ export default () => {
                         path.extname(pagePath).toLowerCase()
                     )
                 ) {
-                    return `<img src="/${pagePath}" />`;
+                    return `<img src="/${pagePath}" loading="lazy" />`;
                 }
             }
 
