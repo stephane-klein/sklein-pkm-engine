@@ -10,6 +10,20 @@ BODY {
         background: #f8f8f8;
     }
 
+    PRE {
+        padding: 1rem 1.5rem;
+        border: 1px solid #bbb;
+        background: #f8f8f8;
+    }
+
+    CODE:not(PRE CODE) {
+        padding: 0.2em 0.4em;
+        margin: 0;
+        font-size: 85%;
+        white-space: break-space;
+        background-color: #afb8c133;
+    }
+
     IMG {
         max-width: 100%;
     }
