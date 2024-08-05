@@ -18,3 +18,7 @@
         <hr />
     {/each}
 {/each}
+<p style="text-align: center">
+    [ <a href={`?created_after=${format(data.firstNote.created_at, "yyyyMMddHHmmss")}`}>&lt;&lt; Notes plus récentes</a> ] |
+    [ <a href={`?created_before=${format(data.lastNote.created_at, "yyyyMMddHHmmss")}`}>Notes plus anciennes &gt;&gt;</a> ]
+</p>
