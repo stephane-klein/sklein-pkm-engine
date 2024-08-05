@@ -16,36 +16,110 @@ function groupByDay(notes) {
     }, {});
 }
 
-const notesByPage = 10;
+const notesByPage = 50;
 
 export async function load({locals, url}) {
-    let notes = (await locals.sql`
-        SELECT
-            nanoid,
-            filename,
-            content,
-            created_at
-        FROM
-            public.notes
-        WHERE
-            note_type='fleeting_note' 
-            ${
-                (url.searchParams.get("created_after") !== null)
-                    ? locals.sql` AND (created_at > TO_TIMESTAMP(${ url.searchParams.get("created_after") }, 'YYYYMMDDHH24MISS'))`
-                    : (
-                        (url.searchParams.get("created_before") !== null)
-                            ? locals.sql` AND (created_at < TO_TIMESTAMP(${ url.searchParams.get("created_before") }, 'YYYYMMDDHH24MISS'))`
+    const createdAfter = url.searchParams.get("created_after");
+    const createdBefore = url.searchParams.get("created_before");
+    // I think the following query is very optimized, but I also think it's hard to read.
+    // I apologize for that.
+    // I'd like to take the time one day to try and refactor it to make it more readable.
+    let result = (await locals.sql`
+        WITH _notes AS (
+            SELECT
+                nanoid,
+                filename,
+                content,
+                created_at
+            FROM
+                public.notes
+            WHERE
+                note_type='fleeting_note' 
+                ${
+                    (url.searchParams.get("created_after") !== null)
+                        ? locals.sql` AND (created_at > TO_TIMESTAMP(${ createdAfter }, 'YYYYMMDDHH24MISS'))`
+                        : (
+                            (createdBefore !== null)
+                                ? locals.sql` AND (created_at < TO_TIMESTAMP(${ createdBefore }, 'YYYYMMDDHH24MISS'))`
+                                : locals.sql``
+                        )
+                }
+            ORDER BY created_at 
+                ${
+                    (createdAfter !== null)
+                    ? locals.sql`ASC`
+                    : locals.sql`DESC`
+                }
+            LIMIT ${notesByPage}
+        ),
+        _count_new_notes AS (
+            SELECT
+                (
+                    COUNT(id)
+                    ${
+                        ((createdAfter !== null) && (createdBefore === null))
+                            ? locals.sql`- (SELECT COUNT(*) FROM _notes)`
                             : locals.sql``
-                    )
-            }
-        ORDER BY created_at 
-            ${
-                (url.searchParams.get("created_after") !== null)
-                ? locals.sql`ASC`
-                : locals.sql`DESC`
-            }
-        LIMIT ${notesByPage}
-    `).map((note) => {
+                    }
+                ) AS count
+            FROM
+                public.notes
+            WHERE
+                note_type='fleeting_note' 
+                ${
+                    (createdAfter !== null)
+                        ? locals.sql` AND (created_at > TO_TIMESTAMP(${ createdAfter }, 'YYYYMMDDHH24MISS'))`
+                        : (
+                            (createdBefore !== null)
+                                ? locals.sql` AND (created_at >= TO_TIMESTAMP(${ createdBefore }, 'YYYYMMDDHH24MISS'))`
+                                : locals.sql` AND created_at IS NULL`
+                        )
+                }
+        ),
+        _count_old_notes AS (
+            SELECT
+                (
+                    COUNT(id)
+                    ${
+                        ((createdBefore !== null) && (createdAfter === null))
+                            ? locals.sql`- (SELECT COUNT(*) FROM _notes)`
+                            : locals.sql``
+                    }
+                ) AS count
+            FROM
+                public.notes
+            WHERE
+                note_type='fleeting_note' 
+                ${
+                    (createdBefore !== null)
+                        ? locals.sql` AND (created_at < TO_TIMESTAMP(${ createdBefore }, 'YYYYMMDDHH24MISS'))`
+                        : (
+                            (createdAfter !== null)
+                                ? locals.sql` AND (created_at <= TO_TIMESTAMP(${ createdAfter }, 'YYYYMMDDHH24MISS'))`
+                                : locals.sql``
+                        )
+                }
+        )
+        SELECT
+            JSONB_BUILD_OBJECT(
+                'notes',
+                (
+                    SELECT
+                        COALESCE(
+                            ARRAY_AGG(ROW_TO_JSON(_notes)),
+                            ARRAY[]::JSON[]
+                        )
+                    FROM
+                        _notes
+                ),
+                'count_new_notes',
+                (SELECT count FROM _count_new_notes),
+                'count_old_notes',
+                (SELECT count FROM _count_old_notes)
+            ) AS result
+    `)[0].result;
+
+    result.notes = result.notes.map((note) => {
         return {
             html: md.render(note.content),
             ...note
@@ -53,12 +127,14 @@ export async function load({locals, url}) {
     });
 
     if (url.searchParams.get("created_after") !== null) {
-        notes = notes.reverse();
+        result.notes = result.notes.reverse();
     }
 
     return {
-        firstNote:notes[0], 
-        lastNote: notes.at(-1),
-        notesByDay: groupByDay(notes)
+        countNewNotes: result.count_new_notes,
+        countOldNotes: result.count_old_notes,
+        firstNote:result.notes[0], 
+        lastNote: result.notes.at(-1),
+        notesByDay: groupByDay(result.notes)
     }
 }
