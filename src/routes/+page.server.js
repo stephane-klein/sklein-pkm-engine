@@ -16,8 +16,10 @@ function groupByDay(notes) {
     }, {});
 }
 
-export async function load({locals}) {
-    const notes = (await locals.sql`
+const notesByPage = 10;
+
+export async function load({locals, url}) {
+    let notes = (await locals.sql`
         SELECT
             nanoid,
             filename,
@@ -26,8 +28,23 @@ export async function load({locals}) {
         FROM
             public.notes
         WHERE
-            note_type='fleeting_note'
-        ORDER BY created_at DESC
+            note_type='fleeting_note' 
+            ${
+                (url.searchParams.get("created_after") !== null)
+                    ? locals.sql` AND (created_at > TO_TIMESTAMP(${ url.searchParams.get("created_after") }, 'YYYYMMDDHH24MISS'))`
+                    : (
+                        (url.searchParams.get("created_before") !== null)
+                            ? locals.sql` AND (created_at < TO_TIMESTAMP(${ url.searchParams.get("created_before") }, 'YYYYMMDDHH24MISS'))`
+                            : locals.sql``
+                    )
+            }
+        ORDER BY created_at 
+            ${
+                (url.searchParams.get("created_after") !== null)
+                ? locals.sql`ASC`
+                : locals.sql`DESC`
+            }
+        LIMIT ${notesByPage}
     `).map((note) => {
         return {
             html: md.render(note.content),
@@ -35,7 +52,13 @@ export async function load({locals}) {
         };
     });
 
+    if (url.searchParams.get("created_after") !== null) {
+        notes = notes.reverse();
+    }
+
     return {
+        firstNote:notes[0], 
+        lastNote: notes.at(-1),
         notesByDay: groupByDay(notes)
     }
 }
