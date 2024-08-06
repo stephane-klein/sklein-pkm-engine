@@ -82,30 +82,6 @@ for await (const filePath of (await glob("content/**/*.md"))) {
         $$) AS (v agtype);
     `);
 
-    if (data.data.tags) {
-        for await (const tagName of data.data.tags) {
-            await sql.unsafe(`
-                SELECT *
-                FROM cypher('graph', $$
-                    MATCH
-                        (n:Note)
-                    WHERE
-                        n.file_path = '${filePath.replace(/'/g, "\\'")}'
-
-                    MERGE (
-                        t:Tag
-                        {
-                            name: '${tagName.replace(/'/g, "\\'")}'
-                        }
-                    )
-
-                    CREATE
-                        (n)-[:LABELED_BY]->(t)
-                $$) AS (v agtype)
-            `);
-        };
-    }
-
     const [WikiLinks, Tags] = extractLinksAndTags(data.content);
     data.data.tags = [...new Set([...data.data?.tags || [], ...Tags])]
 
