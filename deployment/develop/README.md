@@ -22,7 +22,7 @@ Initialize database and import data:
 
 ```
 $ ./scripts/open_ssh_tunnel_postgres.sh
-$ ./scripts/enter-in-pg.sh ../../init.sql
+$ ./scripts/enter-in-pg.sh ../../sqls/init.sql
 $ ../../import.js
 $ ./scripts/upload-static-files.sh
 $ ./scripts/close_ssh_tunnel_postgres.sh
