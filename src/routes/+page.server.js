@@ -30,9 +30,10 @@ export async function load({locals, url}) {
                 nanoid,
                 filename,
                 content,
-                created_at
+                created_at,
+                tag_names
             FROM
-                public.notes
+                public.notes_with_tag_names
             WHERE
                 note_type='fleeting_note' 
                 ${

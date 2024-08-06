@@ -9,9 +9,10 @@ export async function load({locals, params}) {
                 content,
                 title,
                 created_at,
-                note_type
+                note_type,
+                tag_names
             FROM
-                public.notes
+                public.notes_with_tag_names
             WHERE
                 filename=${params.note_filename}
         ),
