@@ -25,6 +25,11 @@
         <p>
             <a href={`/${note.filename}/`} rel="bookmark">#</a>
             {format(note.created_at, "HH:mm")}
+            -
+            {#each note.tag_names || [] as tag, i }
+                {#if i > 0}, {/if}
+                <a href="/tags/{tag}/">{tag}</a>
+            {/each}
         </p>
         <hr />
     {/each}

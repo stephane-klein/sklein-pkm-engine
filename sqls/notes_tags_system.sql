@@ -8,6 +8,7 @@ CREATE TABLE public.note_tags (
 CREATE INDEX note_tags_name_index ON public.note_tags (name);
 CREATE INDEX note_tags_note_counts_index ON public.note_tags (note_counts);
 
+DROP VIEW IF EXISTS public.notes_with_tag_names CASCADE;
 CREATE VIEW public.notes_with_tag_names AS
     WITH exploded AS (
          SELECT
@@ -19,7 +20,7 @@ CREATE VIEW public.notes_with_tag_names AS
      )
      SELECT
          notes.*,
-         ARRAY_AGG(public.note_tags.name) AS tag_names
+         ARRAY_AGG(note_tags.name) FILTER (WHERE note_tags.name IS NOT NULL) AS tag_names
      FROM
          public.notes
      LEFT JOIN
@@ -33,6 +34,7 @@ CREATE VIEW public.notes_with_tag_names AS
      GROUP BY
          notes.id;
 
+DROP VIEW IF EXISTS public.notes_with_tags CASCADE;
 CREATE VIEW public.notes_with_tags AS
     WITH exploded AS (
          SELECT
