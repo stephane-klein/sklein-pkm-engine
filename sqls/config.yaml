@@ -1,0 +1,4 @@
+schema: "public"
+table_name: "notes"
+base_table_name: "note"
+table_primary_key_name: "id"
