@@ -13,7 +13,7 @@ $ ./inject-created-at-to-fleeting-notes.js
 $ ./scripts/move-binary-files-to-static.sh
 $ docker compose build
 $ docker compose up -d --wait
-$ ./scripts/enter-in-pg.sh -f init.sql
+$ ./scripts/enter-in-pg.sh -f sqls/init.sql
 $ ./import.js
 ```
 
