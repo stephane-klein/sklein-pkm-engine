@@ -24,9 +24,13 @@ CREATE TABLE public.notes (
     filename    VARCHAR(255) UNIQUE NOT NULL,
     note_type   VARCHAR DEFAULT NULL,
     content     TEXT,
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tags        INTEGER[]
 );
 CREATE INDEX notes_id_index        ON public.notes (id);
 CREATE INDEX notes_nanoid_index    ON public.notes (nanoid);
 CREATE INDEX notes_filename_index  ON public.notes (filename);
 CREATE INDEX notes_note_type_index ON public.notes (note_type);
+CREATE INDEX notes_tags_index      ON public.notes USING GIN (tags);
+
+\ir notes_tags_system.sql

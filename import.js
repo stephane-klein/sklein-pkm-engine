@@ -35,6 +35,9 @@ for await (const filePath of (await glob("content/**/*.md"))) {
     });
     console.log(`Import ${filePath}`);
 
+    const [WikiLinks, Tags] = extractLinksAndTags(data.content);
+    data.data.tags = [...new Set([...data.data?.tags || [], ...Tags])]
+
     const fileName = path.parse(path.basename(filePath)).name;
     await sql`
         INSERT INTO public.notes
@@ -44,7 +47,8 @@ for await (const filePath of (await glob("content/**/*.md"))) {
             filename,
             note_type,
             content,
-            created_at
+            created_at,
+            tags
         )
         VALUES(
             ${data.data.nanoid},
@@ -54,7 +58,8 @@ for await (const filePath of (await glob("content/**/*.md"))) {
             ${data.content},
             ${
                 (data.data.created_at && (data.data.type === "fleeting_note")) ? data.data.created_at + ":00" : null
-            }
+            },
+            public.get_and_maybe_insert_note_tags(${data.data.tags})
         )
         ON CONFLICT (filename) DO UPDATE
             SET
@@ -64,7 +69,8 @@ for await (const filePath of (await glob("content/**/*.md"))) {
                 note_type=${data.data?.type || null},
                 created_at=${
                     (data.data.created_at && (data.data.type === "fleeting_note")) ? data.data.created_at + ":00" : null
-                }
+                },
+                tags=public.get_and_maybe_insert_note_tags(${data.data.tags})
         RETURNING id
     `;
 
@@ -81,9 +87,6 @@ for await (const filePath of (await glob("content/**/*.md"))) {
                 n.file_path='${filePath.replace(/'/g, "\\'")}'
         $$) AS (v agtype);
     `);
-
-    const [WikiLinks, Tags] = extractLinksAndTags(data.content);
-    data.data.tags = [...new Set([...data.data?.tags || [], ...Tags])]
 
     if (data.data.tags) {
         for await (const tagName of data.data.tags) {
