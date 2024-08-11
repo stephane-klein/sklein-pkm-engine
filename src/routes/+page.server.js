@@ -37,7 +37,7 @@ export async function load({locals, url}) {
             WHERE
                 note_type='fleeting_note' 
                 ${
-                    (url.searchParams.get("created_after") !== null)
+                    (createdAfter !== null)
                         ? locals.sql` AND (created_at > TO_TIMESTAMP(${ createdAfter }, 'YYYYMMDDHH24MISS'))`
                         : (
                             (createdBefore !== null)
