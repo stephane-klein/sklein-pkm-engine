@@ -1,5 +1,5 @@
 FROM node:20-slim AS base
-RUN npm install -g pnpm@9.6
+RUN npm install -g pnpm@9.7
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ RUN pnpm run build
 
 FROM node:20-slim
 RUN apt update -y; apt install -y curl
-RUN npm install -g pnpm@9.6
+RUN npm install -g pnpm@9.7
 
 WORKDIR /app
 
