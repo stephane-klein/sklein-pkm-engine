@@ -127,7 +127,7 @@ export async function load({locals, url}) {
         };
     });
 
-    if (url.searchParams.get("created_after") !== null) {
+    if (createdAfter !== null) {
         result.notes = result.notes.reverse();
     }
 
@@ -137,5 +137,5 @@ export async function load({locals, url}) {
         firstNote:result.notes[0], 
         lastNote: result.notes.at(-1),
         notesByDay: groupByDay(result.notes)
-    }
+    };
 }
