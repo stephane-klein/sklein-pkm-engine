@@ -21,7 +21,7 @@ md.use(WikiLinkPlugin())
 md.use(
     hashtag,
     {
-        link: (tag) => `/tags/${tag.substring(1)}`,
+        link: (tag) => `/search/?tags=${tag.substring(1)}`,
         linkAttributes: () => ({ class: "hashtag" }),
         label: spanHashAndTag,
     }
