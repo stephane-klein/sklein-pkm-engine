@@ -1,17 +1,34 @@
 services:
-  postgres:
-    build: 
-        context: postgres/
-    restart: unless-stopped
+  elasticsearch:
+    image: elasticsearch:8.15.0
     ports:
-      - 5432:5432
+      - 9200:9200
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      - discovery.type=single-node
+      - cluster.name=docker-cluster
+      - node.name=node-1
+      - network.host=0.0.0.0
+      - http.port=9200
+      - logger.level=warn
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - cluster.routing.allocation.disk.watermark.high=99%
+      - cluster.routing.allocation.disk.watermark.low=99%
+      - cluster.routing.allocation.disk.watermark.flood_stage=99%
+      - xpack.security.enabled=false
+      - http.cors.enabled=true
+      - http.cors.allow-origin="http://localhost:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
     volumes:
-      - ./volumes/postgres/:/var/lib/postgresql/data/
+      - ./volumes/elasticsearch/:/usr/share/elasticsearch/data
     healthcheck:
-      test: ["CMD", "sh", "-c", "pg_isready -U $$POSTGRES_USER -h $$(hostname -i)"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
+        ]
       interval: 10s
-      start_period: 30s
+      timeout: 10s
+      retries: 24
