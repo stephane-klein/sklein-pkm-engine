@@ -9,7 +9,6 @@ Build services:
 ```sh
 $ ./scripts/docker-build-nginx-develop.sh
 $ ./scripts/docker-build-webapp-develop.sh
-$ ./scripts/docker-build-nginx-develop.sh
 ```
 
 Deploy services:
@@ -21,11 +20,10 @@ $ ./scripts/deploy.sh
 Initialize database and import data:
 
 ```
-$ ./scripts/open_ssh_tunnel_postgres.sh
-$ ./scripts/enter-in-pg.sh ../../sqls/init.sql
+$ ./scripts/open_ssh_tunnel_elasticsearch.sh
 $ ../../import.js
 $ ./scripts/upload-static-files.sh
-$ ./scripts/close_ssh_tunnel_postgres.sh
+$ ./scripts/close_ssh_tunnel_elasticsearch.sh
 ```
 
 Go to <https://notes.develop.sklein.xyz>.

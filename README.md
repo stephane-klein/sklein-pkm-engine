@@ -11,9 +11,8 @@ $ ./inject-nanoid-to-notes.js
 $ ./inject-note-type-to-notes.js
 $ ./inject-created-at-to-fleeting-notes.js
 $ ./scripts/move-binary-files-to-static.sh
-$ docker compose build
+$ sudo mkdir -p volumes/elasticsearch/; sudo chmod ugo+rwX volumes/elasticsearch/
 $ docker compose up -d --wait
-$ ./scripts/enter-in-pg.sh -f sqls/init.sql
 $ ./import.js
 ```
 
