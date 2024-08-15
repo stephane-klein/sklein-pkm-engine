@@ -1,7 +1,42 @@
 <script>
+    import { page } from '$app/stores';
     import { format } from "date-fns";
     export let data;
+
+    let querySearch = "";
+
+    $: querySearch = ($page.url.searchParams.has('tags')
+        ?`#${$page.url.searchParams.get('tags')}`
+        : ""
+    );
 </script>
+
+<div style="margin: 1em 0">
+    <input
+        type="text"
+        name="search"
+        value={querySearch}
+        style="width: 100%; margin: 0; padding: 0.5em;"
+        placeholder="Search"
+    />
+</div>
+
+<p>Cliquez sur un tag pour affiner votre recherche :</p>
+<ul style="list-style: none; padding: 0; margin: 1em 0; font-size: 0.7em; display: flex; gap: 0.5em; flex-wrap: wrap;">
+    {#each data.tags as tag}
+        <li
+            style="display: inline-block; padding: 0.2em 0.4em; border: 1px solid #aaa;"
+            ><a
+                href={`/search/?tags=${tag.name}`}
+                style="white-space: nowrap; text-decoration: none;"
+                >{tag.name} ({tag.note_counts})</a>
+        </li>
+    {/each}
+    <li
+        style="display: inline-block; padding: 0.2em 0; border: 1px solid transparent;"
+    ><a
+        href="/tags/">Explorer tous les tags...</a></li>
+</ul>
 
 {#if (data.countNewNotes === 0)}
     Notes les plus récentes :
