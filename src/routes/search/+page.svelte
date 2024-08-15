@@ -1,6 +1,7 @@
 <script>
     import { page } from '$app/stores';
     import { format } from "date-fns";
+    import SearchTagPanel from './SearchTagPanel.svelte';
     export let data;
 
     let querySearch = "";
@@ -22,17 +23,18 @@
 </div>
 
 <p>Cliquez sur un tag pour affiner votre recherche :</p>
-<ul class="search-tags-panel" style="">
-    {#each data.tags as tag}
-        <li
-            style="display: inline-block; padding: 0.2em 0.4em; border: 1px solid #aaa;"
-            ><a
+
+<div class="search-tags-panel">
+    <ul>
+        {#each data.tags as tag}
+            <li><a
                 href={`/search/?tags=${tag.name}`}
-                style="white-space: nowrap; text-decoration: none;"
                 >{tag.name} ({tag.note_counts})</a>
-        </li>
-    {/each}
-</ul>
+            </li>
+        {/each}
+    </ul>
+    <button>Afficher plus de tags…</button>
+</div>
 
 {#if (data.countNewNotes === 0)}
     <p style="margin-top: 2em">Résultat de la recherche ({data.countNotes} notes) :</p>
@@ -84,26 +86,32 @@
 
 <style>
     .search-tags-panel {
-        position: relative;
-        list-style: none;
-        padding: 0;
+        display: flex;
+        width: 100%;
         margin: 1em 0;
         font-size: 0.7em;
-        display: flex;
-        gap: 0.5em;
-        flex-wrap: wrap;
-        max-height: 4em;
-        overflow: hidden;
-    }
 
-    .search-tags-panel::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 2em;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff); /* Couleurs à ajuster */
-        pointer-events: none;
+        UL {
+            max-width: calc(100% - 14em);
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 0.5em;
+            flex-wrap: wrap;
+            max-height: 2em;
+            overflow: hidden;
+
+            > LI {
+                display: inline-block;
+                padding: 0.2em 0.4em;
+                border: 1px solid #aaa;
+
+                > A {
+                    white-space: nowrap;
+                    text-decoration: none;
+                }
+            }
+        }
     }
 </style>
