@@ -1,0 +1,116 @@
+<script>
+    import { page } from '$app/stores';
+    import { format } from "date-fns";
+    export let data;
+
+    let querySearch = "";
+
+    $: querySearch = ($page.url.searchParams.has('tags')
+        ?`#${$page.url.searchParams.get('tags')}`
+        : ""
+    );
+</script>
+
+<div style="margin: 1em 0">
+    <input
+        type="text"
+        name="search"
+        value={querySearch}
+        style="width: 100%; margin: 0; padding: 0.5em;"
+        placeholder="Search"
+    />
+</div>
+
+<p>Cliquez sur un tag pour affiner votre recherche :</p>
+
+<div class="search-tags-panel">
+    <ul>
+        {#each data.tags as tag}
+            <li><a
+                href={`/search/?tags=${tag.name}`}
+                >{tag.name} ({tag.note_counts})</a>
+            </li>
+        {/each}
+    </ul>
+    <button>Afficher plus de tags…</button>
+</div>
+
+{#if (data.countNewNotes === 0)}
+    <p style="margin-top: 2em">Résultat de la recherche ({data.countNotes} notes) :</p>
+{:else}
+    <p style="text-align: center">
+        [ <a href={`?created_after=${format(data.firstNote.created_at, "yyyyMMddHHmmss")}`}>&lt;&lt; Notes plus récentes
+            ({data.countNewNotes})</a> ]
+            {#if (data.countOldNotes === 0)}
+                Pas de notes plus anciennes
+            {:else}
+                [ <a href={`?created_before=${format(data.lastNote.created_at, "yyyyMMddHHmmss")}`}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
+            {/if}
+    </p>
+{/if}
+{#each Object.entries(data.notesByDay) as [date, notes]}
+    <h2>{date}</h2>
+    {#each notes as note}
+
+        {@html note.html}
+
+        <p>
+            <a href={`/${note.filename}/`} rel="bookmark">#</a>
+            {format(note.created_at, "HH:mm")}
+            -
+            {#each note.tag_names || [] as tag, i }
+                {#if i > 0}, {/if}
+                <a href="/search/?tags={tag}">{tag}</a>
+            {/each}
+        </p>
+        <hr />
+    {/each}
+{/each}
+{#if (data.countOldNotes === 0)}
+    <p style="text-align: center">
+        Fin de la liste des notes.
+    </p>
+{:else}
+    <p style="text-align: center">
+        {#if (data.countNewNotes === 0)}
+            Pas de notes plus récentes
+        {:else}
+        [ <a href={`?created_after=${format(data.firstNote.created_at, "yyyyMMddHHmmss")}`}>&lt;&lt; Notes plus récentes
+            ({data.countNewNotes})</a> ]
+        {/if}
+        |
+        [ <a href={`?created_before=${format(data.lastNote.created_at, "yyyyMMddHHmmss")}`}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
+    </p>
+{/if}
+
+<style>
+    .search-tags-panel {
+        display: flex;
+        width: 100%;
+        margin: 1em 0;
+        font-size: 0.7em;
+
+        UL {
+            max-width: calc(100% - 14em);
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 0.5em;
+            flex-wrap: wrap;
+            max-height: 2em;
+            overflow: hidden;
+
+            > LI {
+                display: inline-block;
+                padding: 0.2em 0.4em;
+                border: 1px solid #aaa;
+
+                > A {
+                    white-space: nowrap;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+</style>
