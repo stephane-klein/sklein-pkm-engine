@@ -10,6 +10,7 @@ export async function load({locals, url}) {
                 FROM
                     public.note_tags
                 ORDER BY note_counts DESC
+                LIMIT 20
             `
         ),
         ...(await search({

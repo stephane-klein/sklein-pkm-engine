@@ -1,6 +1,7 @@
 <script>
     import { page } from '$app/stores';
     import { format } from "date-fns";
+    import ItemOverflowLimiter from "./ItemOverflowLimiter.js";
     export let data;
 
     let querySearch = "";
@@ -24,15 +25,16 @@
 <p>Cliquez sur un tag pour affiner votre recherche :</p>
 
 <div class="search-tags-panel">
-    <ul>
+    <ul use:ItemOverflowLimiter={{itemClass: "tag"}}>
         {#each data.tags as tag}
-            <li><a
-                href={`/search/?tags=${tag.name}`}
-                >{tag.name} ({tag.note_counts})</a>
+            <li class="tag">
+                <a
+                    href={`/search/?tags=${tag.name}`}
+                    >{tag.name} ({tag.note_counts})</a>
             </li>
         {/each}
+        <li><a href="">Afficher plus de tags…</a></li>
     </ul>
-    <button>Afficher plus de tags…</button>
 </div>
 
 {#if (data.countNewNotes === 0)}
@@ -91,7 +93,7 @@
         font-size: 0.7em;
 
         UL {
-            max-width: calc(100% - 14em);
+            position: relative;
             list-style: none;
             margin: 0;
             padding: 0;
@@ -103,8 +105,12 @@
 
             > LI {
                 display: inline-block;
-                padding: 0.2em 0.4em;
-                border: 1px solid #aaa;
+                padding: 0.2em 0;
+                border: 1px solid transparent;
+                &.tag {
+                    padding: 0.2em 0.4em;
+                    border-color: #aaa;
+                }
 
                 > A {
                     white-space: nowrap;
