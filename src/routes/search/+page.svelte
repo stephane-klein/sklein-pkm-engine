@@ -32,14 +32,10 @@
                 >{tag.name} ({tag.note_counts})</a>
         </li>
     {/each}
-    <li
-        style="display: inline-block; padding: 0.2em 0; border: 1px solid transparent;"
-    ><a
-        href="/tags/">Explorer tous les tags...</a></li>
 </ul>
 
 {#if (data.countNewNotes === 0)}
-    Notes les plus récentes :
+    <p style="margin-top: 2em">Résultat de la recherche ({data.countNotes} notes) :</p>
 {:else}
     <p style="text-align: center">
         [ <a href={`?created_after=${format(data.firstNote.created_at, "yyyyMMddHHmmss")}`}>&lt;&lt; Notes plus récentes

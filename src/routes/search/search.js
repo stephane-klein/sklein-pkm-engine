@@ -36,6 +36,18 @@ export default async function search({
             WHERE
                 name=${tagName}
         ),
+        _count_notes AS (
+            SELECT
+                COUNT(id) AS count
+            FROM
+                public.notes_with_tag_names
+            WHERE
+                (note_type='fleeting_note') AND
+                (
+                    ((SELECT COUNT(*) FROM _tag_id) = 0) OR
+                    ((SELECT id FROM _tag_id) = ANY(tags))
+                )
+        ),
         _notes AS (
             SELECT
                 nanoid,
@@ -136,6 +148,8 @@ export default async function search({
                     FROM
                         _notes
                 ),
+                'count_notes',
+                (SELECT count FROM _count_notes),
                 'count_new_notes',
                 (SELECT count FROM _count_new_notes),
                 'count_old_notes',
@@ -155,6 +169,7 @@ export default async function search({
     }
 
     return {
+        countNotes: result.count_notes,
         countNewNotes: result.count_new_notes,
         countOldNotes: result.count_old_notes,
         firstNote:result.notes[0], 
