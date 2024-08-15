@@ -70,8 +70,8 @@
         {#if displayMoreTags}
             <li><a
                 href=""
-                on:click={() => { window.location.hash = ""; }}>
-                >Afficher moins de tags…</a></li>
+                on:click={() => { window.location.hash = ""; }}
+            >Afficher moins de tags…</a></li>
         {:else}
             <li><a
                 href="#display-more-tags"
