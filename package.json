@@ -11,7 +11,7 @@
     "@intlify/eslint-plugin-svelte": "0.5.0",
     "@stylistic/eslint-plugin": "2.4.0",
     "@sveltejs/vite-plugin-svelte": "3.1.1",
-    "autoprefixer": "^10.4.20",
+    "autoprefixer": "10.4.20",
     "eslint": "9.7.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-config-standard": "17.1.0",
@@ -28,14 +28,15 @@
     "nanoid": "5.0.7",
     "postcss": "8.4.41",
     "postcss-nested": "6.2.0",
-    "svelte-preprocess": "6.0.2",
-    "postcss-normalize": "10.0.1"
+    "postcss-normalize": "10.0.1",
+    "svelte-preprocess": "6.0.2"
   },
   "dependencies": {
     "@fedify/markdown-it-hashtag": "0.2.0",
     "@sveltejs/adapter-node": "5.2.0",
     "@sveltejs/kit": "2.5.18",
     "@sveltejs/vite-plugin-svelte": "3.1.1",
+    "clsx": "2.1.1",
     "date-fns": "3.6.0",
     "highlight.js": "11.10.0",
     "markdown-it": "14.1.0",

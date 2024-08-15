@@ -1,6 +1,6 @@
 export default function ItemOverflowLimiter(node, options) {
     let destroyAllNextItems = false;
-    let itemsToDestroy = [];
+    let overflowItems = [];
 
     // search width of items to keep
     let widthItemsToKeep = 0;
@@ -19,18 +19,24 @@ export default function ItemOverflowLimiter(node, options) {
                 (!options?.itemClass) ||
                 (item.classList.contains(options.itemClass))
             ) {
-                itemsToDestroy.push(item);
+                overflowItems.push(item);
             }
         } else if (
             (item.offsetTop > 0) ||
             (item.offsetLeft + item.clientWidth > (node.clientWidth - widthItemsToKeep))
         ) {
-            itemsToDestroy.push(item);
+            overflowItems.push(item);
             destroyAllNextItems = true;
         }
     }
 
-    for (let item of itemsToDestroy) {
-        item.remove();
+    for (let item of overflowItems) {
+        if (options?.addClassOnOverflowItems) {
+            if (!item.classList.contains(options.addClassOnOverflowItems)) {
+                item.classList.add(options.addClassOnOverflowItems);
+            }
+        } else {
+            item.remove();
+        }
     }
 }

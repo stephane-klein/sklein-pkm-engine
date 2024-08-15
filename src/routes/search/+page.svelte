@@ -1,10 +1,13 @@
 <script>
-    import { page } from '$app/stores';
+    import clsx from "clsx/lite";
+    import { page } from "$app/stores";
     import { format } from "date-fns";
     import ItemOverflowLimiter from "./ItemOverflowLimiter.js";
     export let data;
 
     let querySearch = "";
+
+    $: displayMoreTags = $page.url.hash === '#display-more-tags';
 
     $: querySearch = ($page.url.searchParams.has('tags')
         ?`#${$page.url.searchParams.get('tags')}`
@@ -24,8 +27,11 @@
 
 <p>Cliquez sur un tag pour affiner votre recherche :</p>
 
-<div class="search-tags-panel">
-    <ul use:ItemOverflowLimiter={{itemClass: "tag"}}>
+<div class={clsx("search-tags-panel", displayMoreTags && "display-more-tags")}>
+    <ul use:ItemOverflowLimiter={{
+        itemClass: "tag",
+        addClassOnOverflowItems: "overflow-item"
+    }}>
         {#each data.tags as tag}
             <li class="tag">
                 <a
@@ -33,7 +39,11 @@
                     >{tag.name} ({tag.note_counts})</a>
             </li>
         {/each}
-        <li><a href="">Afficher plus de tags…</a></li>
+        {#if displayMoreTags}
+            <li><a href="#">Afficher moins de tags…</a></li>
+        {:else}
+            <li><a href="#display-more-tags">Afficher plus de tags…</a></li>
+        {/if}
     </ul>
 </div>
 
@@ -84,39 +94,3 @@
         [ <a href={`?created_before=${format(data.lastNote.created_at, "yyyyMMddHHmmss")}`}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
     </p>
 {/if}
-
-<style>
-    .search-tags-panel {
-        display: flex;
-        width: 100%;
-        margin: 1em 0;
-        font-size: 0.7em;
-
-        UL {
-            position: relative;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 0.5em;
-            flex-wrap: wrap;
-            max-height: 2em;
-            overflow: hidden;
-
-            > LI {
-                display: inline-block;
-                padding: 0.2em 0;
-                border: 1px solid transparent;
-                &.tag {
-                    padding: 0.2em 0.4em;
-                    border-color: #aaa;
-                }
-
-                > A {
-                    white-space: nowrap;
-                    text-decoration: none;
-                }
-            }
-        }
-    }
-</style>
