@@ -21,7 +21,7 @@ importers:
         specifier: 3.1.1
         version: 3.1.1(svelte@4.2.18)(vite@5.3.4)
       clsx:
-        specifier: ^2.1.1
+        specifier: 2.1.1
         version: 2.1.1
       date-fns:
         specifier: 3.6.0
@@ -61,7 +61,7 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(eslint@9.7.0)(typescript@5.5.4)
       autoprefixer:
-        specifier: ^10.4.20
+        specifier: 10.4.20
         version: 10.4.20(postcss@8.4.41)
       eslint:
         specifier: 9.7.0

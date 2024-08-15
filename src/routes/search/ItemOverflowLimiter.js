@@ -1,6 +1,23 @@
+function getGapInPixels(node) {
+    const style = window.getComputedStyle(node);
+    const gapValue = style.getPropertyValue("gap");
+
+    function convertToPixels(value, parentElement) {
+        if (value.includes("em") || value.includes("rem")) {
+            const fontSize = parseFloat(window.getComputedStyle(parentElement).fontSize);
+            return parseFloat(value) * fontSize;
+        }
+        return parseFloat(value);
+    }
+
+    return convertToPixels(gapValue, node);
+}
+
 export default function ItemOverflowLimiter(node, options) {
     let destroyAllNextItems = false;
     let overflowItems = [];
+
+    const gapInPixels = getGapInPixels(node);
 
     // search width of items to keep
     let widthItemsToKeep = 0;
@@ -23,7 +40,7 @@ export default function ItemOverflowLimiter(node, options) {
             }
         } else if (
             (item.offsetTop > 0) ||
-            (item.offsetLeft + item.clientWidth > (node.clientWidth - widthItemsToKeep))
+            (item.offsetLeft + item.clientWidth + gapInPixels > (node.clientWidth - widthItemsToKeep))
         ) {
             overflowItems.push(item);
             destroyAllNextItems = true;

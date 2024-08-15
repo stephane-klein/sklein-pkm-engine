@@ -1,5 +1,7 @@
 <script>
     import clsx from "clsx/lite";
+    import IconChevronRight from "$lib/icons/ChevronRight.svelte";
+    import IconChevronDown from "$lib/icons/ChevronDown.svelte";
     import { page } from "$app/stores";
     import { format } from "date-fns";
     import ItemOverflowLimiter from "./ItemOverflowLimiter.js";
@@ -28,6 +30,32 @@
 <p>Cliquez sur un tag pour affiner votre recherche :</p>
 
 <div class={clsx("search-tags-panel", displayMoreTags && "display-more-tags")}>
+    {#if displayMoreTags}
+        <a
+            style="display: inline-block;"
+            href=""
+            on:click={() => { window.location.hash = ''; }}>
+            <IconChevronDown
+                style="height: 100%; width: auto; display: block; color: #666;"
+                color="black"
+                width="2em"
+                height="2em"
+            />
+        </a>
+    {:else}
+        <a
+            style="display: inline-block;"
+            href="#display-more-tags"
+            on:click={() => { window.location.hash = "#display-more-tags"; }}
+        >
+            <IconChevronRight
+                style="height: 100%; width: auto; display: block; color: #666;"
+                color="black"
+                width="2em"
+                height="2em"
+            />
+        </a>
+    {/if}
     <ul use:ItemOverflowLimiter={{
         itemClass: "tag",
         addClassOnOverflowItems: "overflow-item"
@@ -40,9 +68,15 @@
             </li>
         {/each}
         {#if displayMoreTags}
-            <li><a href="#">Afficher moins de tags…</a></li>
+            <li><a
+                href=""
+                on:click={() => { window.location.hash = ""; }}>
+                >Afficher moins de tags…</a></li>
         {:else}
-            <li><a href="#display-more-tags">Afficher plus de tags…</a></li>
+            <li><a
+                href="#display-more-tags"
+                on:click={() => { window.location.hash = "#display-more-tags"; }}
+            >Afficher plus de tags…</a></li>
         {/if}
     </ul>
 </div>
