@@ -22,7 +22,7 @@
 </div>
 
 <p>Cliquez sur un tag pour affiner votre recherche :</p>
-<ul style="list-style: none; padding: 0; margin: 1em 0; font-size: 0.7em; display: flex; gap: 0.5em; flex-wrap: wrap;">
+<ul class="search-tags-panel" style="">
     {#each data.tags as tag}
         <li
             style="display: inline-block; padding: 0.2em 0.4em; border: 1px solid #aaa;"
@@ -81,3 +81,29 @@
         [ <a href={`?created_before=${format(data.lastNote.created_at, "yyyyMMddHHmmss")}`}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
     </p>
 {/if}
+
+<style>
+    .search-tags-panel {
+        position: relative;
+        list-style: none;
+        padding: 0;
+        margin: 1em 0;
+        font-size: 0.7em;
+        display: flex;
+        gap: 0.5em;
+        flex-wrap: wrap;
+        max-height: 4em;
+        overflow: hidden;
+    }
+
+    .search-tags-panel::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2em;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff); /* Couleurs à ajuster */
+        pointer-events: none;
+    }
+</style>
