@@ -7,21 +7,23 @@ import WikiLinkPlugin from "./wikilink.js";
 const md = new MarkdownIt({
     html: true,
     linkify: true,
-    highlight: function (str, lang) {
+    highlight: function(str, lang) {
         if (lang && hljs.getLanguage(lang)) {
             try {
                 return hljs.highlight(str, { language: lang }).value;
-            } catch (__) {}
+            } catch (e) {
+                console.log(e);
+            }
         }
 
         return "";
     }
-})
-md.use(WikiLinkPlugin())
+});
+md.use(WikiLinkPlugin());
 md.use(
     hashtag,
     {
-        link: (tag) => `/tags/${tag.substring(1)}`,
+        link: (tag) => `/search/?tags=${tag.substring(1)}`,
         linkAttributes: () => ({ class: "hashtag" }),
         label: spanHashAndTag,
     }
