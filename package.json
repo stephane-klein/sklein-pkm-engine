@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@iconify-json/tabler": "1.1.120",
     "@intlify/eslint-plugin-svelte": "0.5.0",
     "@stylistic/eslint-plugin": "2.4.0",
     "@sveltejs/vite-plugin-svelte": "3.1.1",
@@ -45,6 +46,7 @@
     "markdown-it-wikirefs": "0.0.3",
     "postgres": "3.4.4",
     "svelte": "4.2.18",
+    "unplugin-icons": "0.19.2",
     "vite": "5.3.4",
     "wikirefs": "0.0.5"
   }

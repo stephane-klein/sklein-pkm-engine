@@ -1,7 +1,8 @@
 <script>
     import clsx from "clsx/lite";
-    import IconChevronRight from "$lib/icons/ChevronRight.svelte";
-    import IconChevronDown from "$lib/icons/ChevronDown.svelte";
+    import TablerChevronRight from '~icons/tabler/chevron-right';
+    import TablerChevronDown from '~icons/tabler/chevron-down';
+
     import { page } from "$app/stores";
     import { format } from "date-fns";
     import ItemOverflowLimiter from "./ItemOverflowLimiter.js";
@@ -35,7 +36,7 @@
             style="display: inline-block;"
             href=""
             on:click={() => { window.location.hash = ''; }}>
-            <IconChevronDown
+            <TablerChevronDown
                 style="height: 100%; width: auto; display: block; color: #666;"
                 color="black"
                 width="2em"
@@ -48,7 +49,7 @@
             href="#display-more-tags"
             on:click={() => { window.location.hash = "#display-more-tags"; }}
         >
-            <IconChevronRight
+            <TablerChevronRight
                 style="height: 100%; width: auto; display: block; color: #666;"
                 color="black"
                 width="2em"
