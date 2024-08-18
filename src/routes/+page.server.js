@@ -14,23 +14,29 @@ function groupByDay(notes) {
     }, {});
 }
 
-// const notesByPage = 50;
-
-export async function load() {
+export async function load({url}) {
     // const createdAfter = url.searchParams.get("created_after");
-    // const createdBefore = url.searchParams.get("created_before");
+    const createdBefore = url.searchParams.get("created_before");
 
     const { hits: notes } = (await esClient.search({
         index: "notes",
         body: {
             _source: ["title", "created_at", "filename", "content_html", "tags"],
-            size: 3,
+            size: 20,
+            search_after: undefined,
             query: {
                 bool: {
                     filter: [
                         {
                             terms: {
                                 note_type: ["fleeting_note"]
+                            }
+                        },
+                        {
+                            range: {
+                                created_at: {
+                                    lt: createdBefore || undefined
+                                }
                             }
                         }
                     ]
@@ -46,9 +52,63 @@ export async function load() {
         }
     })).hits;
 
+    const countNewNotes = (
+        (createdBefore === null)
+            ? 0
+            : (
+                await esClient.count({
+                    index: "notes",
+                    body: {
+                        query: {
+                            bool: {
+                                filter: [
+                                    {
+                                        terms: {
+                                            note_type: ["fleeting_note"]
+                                        },
+                                    },
+                                    {
+                                        range: {
+                                            created_at: {
+                                                gt: createdBefore || undefined
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                })
+            ).count
+    );
+
+    const countOldNotes = (await esClient.count({
+        index: "notes",
+        body: {
+            query: {
+                bool: {
+                    filter: [
+                        {
+                            terms: {
+                                note_type: ["fleeting_note"]
+                            },
+                        },
+                        {
+                            range: {
+                                created_at: {
+                                    lt: createdBefore || undefined
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    })).count;
+
     return {
-        countNewNotes: 0,
-        countOldNotes: 0,
+        countNewNotes: countNewNotes,
+        countOldNotes: countOldNotes - 20,
         firstNote:notes[0], 
         lastNote: notes.at(-1),
         notesByDay: groupByDay(notes)
