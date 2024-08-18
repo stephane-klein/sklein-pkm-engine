@@ -67,6 +67,12 @@ const client = new Client({
                 type: "text",
                 analyzer: "french_analyzer"
             },
+            filename: "keyword",
+            created_at: {
+                type: "date",
+                format: "yyyy-MM-dd HH:mm:ss"
+            },
+            note_type: "keyword",
             linked_notes: "keyword",
             tags: "keyword",
             content: {
@@ -100,7 +106,10 @@ for await (const filePath of (await glob("content/**/*.md"))) {
         index: "notes",
         id: fileName,
         document: {
-            title: data.data?.title || path.basename(fileName, path.extname(fileName)),
+            filename: fileName,
+            created_at: (data.data.created_at && (data.data.type === "fleeting_note")) ? data.data.created_at + ":00" : null,
+            title: data.data?.title || path.parse(fileName).name,
+            note_type: data.data?.type || null,
             linked_notes: WikiLinks,
             tags: data.data?.tags || [],
             content: data.content,
