@@ -8,13 +8,13 @@ function extractWikiLinksAndTagsFromTokens(tokens, links, tags) {
     if (token.type === "wikilink_open") {
       const hrefIndex = token.attrIndex("filename");
       if (hrefIndex >= 0) {
-        links.push(token.attrs[hrefIndex][1]);
+        links.add(token.attrs[hrefIndex][1]);
       }
     }
     if (token.type === "hashtag") {
       const hrefIndex = token.attrIndex("href");
       if (hrefIndex >= 0) {
-        tags.push(token.attrs[hrefIndex][1].substr(1));
+        tags.add(token.attrs[hrefIndex][1].substr(1));
       }
     }
     if (token.children) {
@@ -24,7 +24,7 @@ function extractWikiLinksAndTagsFromTokens(tokens, links, tags) {
 }
 
 export function extractLinksAndTags(markdown) {
-    const md = new MarkdownIt()
+    const md = new MarkdownIt();
     const options = {
       resolveHtmlHref: (_env, fname) => {
         const extname = wikirefs.isMedia(fname) ? path.extname(fname) : '';
@@ -37,8 +37,8 @@ export function extractLinksAndTags(markdown) {
     md.use(wikirefs_plugin, options);
     md.use(hashtag);
 
-    const links = [];
-    const tags = [];
+    const links = new Set();
+    const tags = new Set();
     const tokens = md.parse(markdown, {});
     extractWikiLinksAndTagsFromTokens(tokens, links, tags);
     return [links, tags];
