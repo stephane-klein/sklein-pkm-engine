@@ -41,5 +41,8 @@ export function extractLinksAndTags(markdown) {
     const tags = new Set();
     const tokens = md.parse(markdown, {});
     extractWikiLinksAndTagsFromTokens(tokens, links, tags);
-    return [links, tags];
+    return [
+        Array.from(links),
+        Array.from(tags)
+    ];
 }

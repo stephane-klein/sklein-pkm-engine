@@ -12,82 +12,98 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const client = new Client({
-    node: "http://localhost:9200",
-    settings: {
-        analysis: {
-            analyzer: {
-                french_analyzer: {
-                    type: "custom",
-                    tokenizer: "standard",
-                    filter: [
-                        "lowercase",
-                        "asciifolding",
-                        "french_elision",
-                        "french_stop",
-                        "french_stemmer"
-                    ]
+    node: "http://localhost:9200"
+});
+
+await client.indices.delete({ index: "notes", ignore_unavailable: true });
+await client.indices.create({
+    index: "notes",
+    body: {
+        settings: {
+            analysis: {
+                analyzer: {
+                    french_analyzer: {
+                        type: "custom",
+                        tokenizer: "standard",
+                        filter: [
+                            "lowercase",
+                            "asciifolding",
+                            "french_elision",
+                            "french_stop",
+                            "french_stemmer"
+                        ]
+                    },
+                    french_html_analyzer: {
+                        type: "custom",
+                        tokenizer: "standard",
+                        filter: [
+                            "lowercase",
+                            "asciifolding",
+                            "french_elision",
+                            "french_stop",
+                            "french_stemmer"
+                        ],
+                        char_filter: [
+                            "html_strip"
+                        ]
+                    }
                 },
-                french_html_analyzer: {
-                    type: "custom",
-                    tokenizer: "standard",
-                    filter: [
-                        "lowercase",
-                        "asciifolding",
-                        "french_elision",
-                        "french_stop",
-                        "french_stemmer"
-                    ],
-                    char_filter: [
-                        "html_strip"
-                    ]
-                }
-            },
-            filter: {
-                french_elision: {
-                    type: "elision",
-                    articles_case: true,
-                    articles: [
-                        "l", "m", "t", "qu", "n", "s", "j", "d", "c", "jusqu", "quoiqu", "lorsqu", "puisqu"
-                    ]
-                },
-                french_stop: {
-                    type: "stop",
-                    stopwords: "_french_"
-                },
-                french_stemmer: {
-                    type: "stemmer",
-                    language: "light_french"
+                filter: {
+                    french_elision: {
+                        type: "elision",
+                        articles_case: true,
+                        articles: [
+                            "l", "m", "t", "qu", "n", "s", "j", "d", "c", "jusqu", "quoiqu", "lorsqu", "puisqu"
+                        ]
+                    },
+                    french_stop: {
+                        type: "stop",
+                        stopwords: "_french_"
+                    },
+                    french_stemmer: {
+                        type: "stemmer",
+                        language: "light_french"
+                    }
                 }
             }
-        }
-    },
-    mappings: {
-        properties: {
-            title: {
-                type: "text",
-                analyzer: "french_analyzer"
-            },
-            filename: "keyword",
-            created_at: {
-                type: "date",
-                format: "yyyy-MM-dd HH:mm:ss"
-            },
-            note_type: "keyword",
-            linked_notes: "keyword",
-            tags: "keyword",
-            content: {
-                type: "text",
-                analyzer: "french_analyzer"
-            },
-            content_html: {
-                type: "text",
-                analyzer: "french_html_analyzer"
+        },
+        mappings: {
+            properties: {
+                title: {
+                    type: "text",
+                    analyzer: "french_analyzer"
+                },
+                filename: {
+                    type: "keyword"
+                },
+                created_at: {
+                    type: "date",
+                    format: "yyyy-MM-dd HH:mm:ss"
+                },
+                note_type: {
+                    type: "keyword"
+                },
+                linked_notes: {
+                    type: "keyword"
+                },
+                tags: {
+                    type: "keyword"
+                },
+                content: {
+                    type: "text",
+                    analyzer: "french_analyzer"
+                },
+                content_html: {
+                    type: "text",
+                    analyzer: "french_html_analyzer"
+                }
             }
         }
     }
 });
 
 process.chdir(__dirname);
+
 
 for await (const filePath of (await glob("content/**/*.md"))) {
     const data = matter.read(filePath, {
@@ -101,6 +117,7 @@ for await (const filePath of (await glob("content/**/*.md"))) {
     data.data.tags = [...new Set([...data.data?.tags || [], ...Tags])];
 
     const fileName = path.parse(path.basename(filePath)).name;
+    console.log(WikiLinks);
 
     await client.index({
         index: "notes",

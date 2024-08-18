@@ -20,13 +20,13 @@
     <h2>{date}</h2>
     {#each notes as note}
 
-        {@html note.html}
+        {@html note._source.content_html}
 
         <p>
-            <a href={`/${note.filename}/`} rel="bookmark">#</a>
-            {format(note.created_at, "HH:mm")}
+            <a href={`/${note._source.filename}/`} rel="bookmark">#</a>
+            {format(note._source.created_at, "HH:mm")}
             -
-            {#each note.tag_names || [] as tag, i }
+            {#each note._source.tags || [] as tag, i }
                 {#if i > 0}, {/if}
                 <a href="/tags/{tag}/">{tag}</a>
             {/each}
