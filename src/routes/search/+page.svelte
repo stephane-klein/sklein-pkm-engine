@@ -86,12 +86,12 @@
     <p style="margin-top: 2em">Résultat de la recherche ({data.countNotes} notes) :</p>
 {:else}
     <p style="text-align: center">
-        [ <a href={`?created_after=${format(data.firstNote.created_at, "yyyyMMddHHmmss")}`}>&lt;&lt; Notes plus récentes
+        [ <a href={`?created_after=${data.firstNote._source.created_at}`}>&lt;&lt; Notes plus récentes
             ({data.countNewNotes})</a> ]
             {#if (data.countOldNotes === 0)}
                 Pas de notes plus anciennes
             {:else}
-                [ <a href={`?created_before=${format(data.lastNote.created_at, "yyyyMMddHHmmss")}`}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
+                [ <a href={`?created_before=${data.lastNote._source.created_at}`}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
             {/if}
     </p>
 {/if}
@@ -99,13 +99,13 @@
     <h2>{date}</h2>
     {#each notes as note}
 
-        {@html note.html}
+        {@html note._source.content_html}
 
         <p>
-            <a href={`/${note.filename}/`} rel="bookmark">#</a>
-            {format(note.created_at, "HH:mm")}
+            <a href={`/${note._source.filename}/`} rel="bookmark">#</a>
+            {format(note._source.created_at, "HH:mm")}
             -
-            {#each note.tag_names || [] as tag, i }
+            {#each note._source.tags || [] as tag, i }
                 {#if i > 0}, {/if}
                 <a href="/search/?tags={tag}">{tag}</a>
             {/each}
@@ -122,10 +122,10 @@
         {#if (data.countNewNotes === 0)}
             Pas de notes plus récentes
         {:else}
-        [ <a href={`?created_after=${format(data.firstNote.created_at, "yyyyMMddHHmmss")}`}>&lt;&lt; Notes plus récentes
+        [ <a href={`?created_after=${data.firstNote._source.created_at}`}>&lt;&lt; Notes plus récentes
             ({data.countNewNotes})</a> ]
         {/if}
         |
-        [ <a href={`?created_before=${format(data.lastNote.created_at, "yyyyMMddHHmmss")}`}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
+        [ <a href={`?created_before=${data.lastNote._source.created_at}`}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
     </p>
 {/if}
