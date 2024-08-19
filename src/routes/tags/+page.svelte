@@ -5,8 +5,8 @@
 <ul class="search-tags-panel">
     {#each data.tags as tag}
         <li><a
-            href={`/search/?tags=${tag.name}`}
-            >{tag.name} ({tag.note_counts})</a>
+            href={`/search/?tags=${tag.key}`}
+            >{tag.key} ({tag.doc_count})</a>
         </li>
     {/each}
 </ul>

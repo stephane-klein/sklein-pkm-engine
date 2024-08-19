@@ -17,8 +17,9 @@ function groupByDay(notes) {
 export default async function search({
     createdAfter = null,
     createdBefore = null,
-    notesByPage = 50
-} = {}) {
+    notesByPage = 50,
+    returnTags = false
+} = {}) { 
     const [ notesResult, countNewNotes, countOldNotes ] = await Promise.all([
         esClient.search({
             index: "notes",
@@ -44,6 +45,18 @@ export default async function search({
                         ]
                     }
                 },
+                aggs: (
+                    returnTags
+                        ? {
+                            tags_count: {
+                                terms: {
+                                    field: "tags",
+                                    size: 100
+                                }
+                            }
+                        }
+                        : undefined
+                ),
                 sort: [
                     {
                         created_at: {
@@ -118,6 +131,7 @@ export default async function search({
     }
 
     return {
+        countNotes: notesResult.hits.total.value,
         countNewNotes: (
             (createdAfter === null)
                 ? countNewNotes?.count || 0
@@ -130,6 +144,7 @@ export default async function search({
         ),
         firstNote:notes[0], 
         lastNote: notes.at(-1),
-        notesByDay: groupByDay(notes)
+        notesByDay: groupByDay(notes),
+        tags: notesResult?.aggregations?.tags_count?.buckets || []
     };
 }

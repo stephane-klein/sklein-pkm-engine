@@ -64,8 +64,8 @@
         {#each data.tags as tag}
             <li class="tag">
                 <a
-                    href={`/search/?tags=${tag.name}`}
-                    >{tag.name} ({tag.note_counts})</a>
+                    href={`/search/?tags=${tag.key}`}
+                    >{tag.key} ({tag.doc_count})</a>
             </li>
         {/each}
         {#if displayMoreTags}
