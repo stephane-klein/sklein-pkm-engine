@@ -14,59 +14,54 @@ function groupByDay(notes) {
     }, {});
 }
 
-const notesByPage = 5;
+const notesByPage = 20;
 
 export async function load({url}) {
     const createdAfter = url.searchParams.get("created_after");
     const createdBefore = url.searchParams.get("created_before");
 
-    let { hits: notes } = (await esClient.search({
-        index: "notes",
-        body: {
-            _source: ["title", "created_at", "filename", "content_html", "tags"],
-            size: notesByPage,
-            query: {
-                bool: {
-                    filter: [
-                        {
-                            terms: {
-                                note_type: ["fleeting_note"]
-                            }
-                        },
-                        {
-                            range: {
-                                created_at: {
-                                    lt: createdBefore || undefined,
-                                    gt: createdAfter || undefined
+    const [ notesResult, countNewNotes, countOldNotes ] = await Promise.all([
+        esClient.search({
+            index: "notes",
+            body: {
+                _source: ["title", "created_at", "filename", "content_html", "tags"],
+                size: notesByPage,
+                query: {
+                    bool: {
+                        filter: [
+                            {
+                                terms: {
+                                    note_type: ["fleeting_note"]
+                                }
+                            },
+                            {
+                                range: {
+                                    created_at: {
+                                        lt: createdBefore || undefined,
+                                        gt: createdAfter || undefined
+                                    }
                                 }
                             }
-                        }
-                    ]
-                }
-            },
-            sort: [
-                {
-                    created_at: {
-                        order: (
-                            (createdAfter !== null)
-                                ? "asc"
-                                : "desc"
-                        )
+                        ]
                     }
-                }
-            ]
-        }
-    })).hits;
-
-    if (createdAfter !== null) {
-        notes = notes.reverse();
-    }
-
-    const countNewNotes = (
-        ((createdBefore === null) && (createdAfter === null))
+                },
+                sort: [
+                    {
+                        created_at: {
+                            order: (
+                                (createdAfter !== null)
+                                    ? "asc"
+                                    : "desc"
+                            )
+                        }
+                    }
+                ]
+            }
+        }),
+        (((createdBefore === null) && (createdAfter === null))
             ? 0
             : (
-                await esClient.count({
+                esClient.count({
                     index: "notes",
                     body: {
                         query: {
@@ -90,44 +85,49 @@ export async function load({url}) {
                         }
                     }
                 })
-            ).count
-    );
-
-    const countOldNotes = (await esClient.count({
-        index: "notes",
-        body: {
-            query: {
-                bool: {
-                    filter: [
-                        {
-                            terms: {
-                                note_type: ["fleeting_note"]
+            )
+        ),
+        esClient.count({
+            index: "notes",
+            body: {
+                query: {
+                    bool: {
+                        filter: [
+                            {
+                                terms: {
+                                    note_type: ["fleeting_note"]
+                                },
                             },
-                        },
-                        {
-                            range: {
-                                created_at: {
-                                    lt: createdBefore || undefined,
-                                    gt: createdAfter || undefined
+                            {
+                                range: {
+                                    created_at: {
+                                        lt: createdBefore || undefined,
+                                        gt: createdAfter || undefined
+                                    }
                                 }
                             }
-                        }
-                    ]
+                        ]
+                    }
                 }
             }
-        }
-    })).count;
+        })
+    ]);
+
+    let notes = notesResult.hits.hits;
+    if (createdAfter !== null) {
+        notes = notes.reverse();
+    }
 
     return {
         countNewNotes: (
             (createdAfter === null)
-                ? countNewNotes
-                : (countNewNotes - notesByPage)
+                ? countNewNotes?.count || 0
+                : (countNewNotes.count - notesByPage)
         ),
         countOldNotes: (
             (createdAfter === null)
-                ? (countOldNotes - notesByPage)
-                : countOldNotes
+                ? (countOldNotes.count - notesByPage)
+                : countOldNotes?.count || 0
         ),
         firstNote:notes[0], 
         lastNote: notes.at(-1),
