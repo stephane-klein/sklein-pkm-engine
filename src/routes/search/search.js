@@ -15,7 +15,7 @@ function groupByDay(notes) {
 }
 
 export default async function search({
-    tagName = null,
+    tags = null,
     createdAfter = null,
     createdBefore = null,
     notesByPage = 50,
@@ -29,21 +29,25 @@ export default async function search({
                 size: notesByPage,
                 query: {
                     bool: {
-                        filter: [
+                        must: [
                             {
                                 term: {
                                     note_type: "fleeting_note"
                                 }
                             },
-                            {
-                                terms: {
-                                    tags: (
-                                        (tagName !== null)
-                                            ? [tagName]
-                                            : undefined
-                                    )
-                                }
-                            },
+                            (
+                                (Array.isArray(tags) && tags.length > 0)
+                                    ? {
+                                        bool: {
+                                            must: tags.map(tag => ({
+                                                term: {
+                                                    tags: tag
+                                                }
+                                            }))
+                                        }
+                                    }
+                                    : undefined
+                            ),
                             {
                                 range: {
                                     created_at: {
@@ -52,7 +56,7 @@ export default async function search({
                                     }
                                 }
                             }
-                        ]
+                        ].filter(Boolean)
                     }
                 },
                 aggs: (

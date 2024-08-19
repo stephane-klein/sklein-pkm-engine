@@ -6,7 +6,7 @@ export async function load({url}) {
         ...(await search({
             createdAfter: url.searchParams.get("created_after"),
             createdBefore: url.searchParams.get("created_before"),
-            tagName: url.searchParams.get("tags"),
+            tags: url.searchParams.getAll("tags"),
             returnTags: true
         }))
     };

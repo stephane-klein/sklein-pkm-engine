@@ -13,9 +13,21 @@
     $: displayMoreTags = $page.url.hash === '#display-more-tags';
 
     $: querySearch = ($page.url.searchParams.has('tags')
-        ?`#${$page.url.searchParams.get('tags')}`
+        ? ($page.url.searchParams.getAll('tags').map((tag) => `#${tag}`)).join(" ")
         : ""
     );
+    
+    /*
+    const currentQueryParams = derived(page, $page => {
+        return new URLSearchParams($page.url.search);
+    });
+    */
+
+    function buildUrlWithNewTag(tagKey) {
+        const urlParams = new URLSearchParams($page.url.search);
+        urlParams.append('tags', tagKey);
+        return `/search/?${urlParams.toString()}`;
+    }
 </script>
 
 <div style="margin: 1em 0">
@@ -64,7 +76,7 @@
         {#each data.tags as tag}
             <li class="tag">
                 <a
-                    href={`/search/?tags=${tag.key}`}
+                    href={buildUrlWithNewTag(tag.key)}
                     >{tag.key} ({tag.doc_count})</a>
             </li>
         {/each}
@@ -107,7 +119,7 @@
             -
             {#each note._source.tags || [] as tag, i }
                 {#if i > 0}, {/if}
-                <a href="/search/?tags={tag}">{tag}</a>
+                <a href={buildUrlWithNewTag(tag)}>{tag}</a>
             {/each}
         </p>
         <hr />
