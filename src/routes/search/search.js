@@ -15,6 +15,7 @@ function groupByDay(notes) {
 }
 
 export default async function search({
+    tagName = null,
     createdAfter = null,
     createdBefore = null,
     notesByPage = 50,
@@ -30,8 +31,17 @@ export default async function search({
                     bool: {
                         filter: [
                             {
+                                term: {
+                                    note_type: "fleeting_note"
+                                }
+                            },
+                            {
                                 terms: {
-                                    note_type: ["fleeting_note"]
+                                    tags: (
+                                        (tagName !== null)
+                                            ? [tagName]
+                                            : undefined
+                                    )
                                 }
                             },
                             {
