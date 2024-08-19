@@ -14,16 +14,17 @@ function groupByDay(notes) {
     }, {});
 }
 
+const notesByPage = 5;
+
 export async function load({url}) {
-    // const createdAfter = url.searchParams.get("created_after");
+    const createdAfter = url.searchParams.get("created_after");
     const createdBefore = url.searchParams.get("created_before");
 
-    const { hits: notes } = (await esClient.search({
+    let { hits: notes } = (await esClient.search({
         index: "notes",
         body: {
             _source: ["title", "created_at", "filename", "content_html", "tags"],
-            size: 20,
-            search_after: undefined,
+            size: notesByPage,
             query: {
                 bool: {
                     filter: [
@@ -35,7 +36,8 @@ export async function load({url}) {
                         {
                             range: {
                                 created_at: {
-                                    lt: createdBefore || undefined
+                                    lt: createdBefore || undefined,
+                                    gt: createdAfter || undefined
                                 }
                             }
                         }
@@ -45,15 +47,23 @@ export async function load({url}) {
             sort: [
                 {
                     created_at: {
-                        order: "desc"
+                        order: (
+                            (createdAfter !== null)
+                                ? "asc"
+                                : "desc"
+                        )
                     }
                 }
             ]
         }
     })).hits;
 
+    if (createdAfter !== null) {
+        notes = notes.reverse();
+    }
+
     const countNewNotes = (
-        (createdBefore === null)
+        ((createdBefore === null) && (createdAfter === null))
             ? 0
             : (
                 await esClient.count({
@@ -70,7 +80,8 @@ export async function load({url}) {
                                     {
                                         range: {
                                             created_at: {
-                                                gt: createdBefore || undefined
+                                                gte: createdBefore || undefined,
+                                                gt: createdAfter || undefined
                                             }
                                         }
                                     }
@@ -96,7 +107,8 @@ export async function load({url}) {
                         {
                             range: {
                                 created_at: {
-                                    lt: createdBefore || undefined
+                                    lt: createdBefore || undefined,
+                                    gt: createdAfter || undefined
                                 }
                             }
                         }
@@ -107,8 +119,16 @@ export async function load({url}) {
     })).count;
 
     return {
-        countNewNotes: countNewNotes,
-        countOldNotes: countOldNotes - 20,
+        countNewNotes: (
+            (createdAfter === null)
+                ? countNewNotes
+                : (countNewNotes - notesByPage)
+        ),
+        countOldNotes: (
+            (createdAfter === null)
+                ? (countOldNotes - notesByPage)
+                : countOldNotes
+        ),
         firstNote:notes[0], 
         lastNote: notes.at(-1),
         notesByDay: groupByDay(notes)

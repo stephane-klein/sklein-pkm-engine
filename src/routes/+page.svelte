@@ -43,7 +43,7 @@
         {#if (data.countNewNotes <= 0)}
             Pas de notes plus récentes
         {:else}
-        [ <a href={`?created_after=${data.lastNote._source.created_at}`}>&lt;&lt; Notes plus récentes
+        [ <a href={`?created_after=${data.firstNote._source.created_at}`}>&lt;&lt; Notes plus récentes
             ({data.countNewNotes})</a> ]
         {/if}
         |
