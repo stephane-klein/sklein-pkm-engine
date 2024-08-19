@@ -159,6 +159,10 @@ export default async function search({
         firstNote:notes[0], 
         lastNote: notes.at(-1),
         notesByDay: groupByDay(notes),
-        tags: notesResult?.aggregations?.tags_count?.buckets || []
+        tags: (notesResult?.aggregations?.tags_count?.buckets || []).filter(
+            (tag) => {
+                return !tags.includes(tag.key);
+            }
+        )
     };
 }
