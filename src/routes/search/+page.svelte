@@ -2,7 +2,6 @@
     import clsx from "clsx/lite";
     import TablerChevronRight from '~icons/tabler/chevron-right';
     import TablerChevronDown from '~icons/tabler/chevron-down';
-
     import { page } from "$app/stores";
     import { format } from "date-fns";
     import ItemOverflowLimiter from "./ItemOverflowLimiter.js";
@@ -16,12 +15,6 @@
         ? ($page.url.searchParams.getAll('tags').map((tag) => `#${tag}`)).join(" ")
         : ""
     );
-    
-    /*
-    const currentQueryParams = derived(page, $page => {
-        return new URLSearchParams($page.url.search);
-    });
-    */
 
     function buildUrlWithNewTag(tagKey) {
         const urlParams = new URLSearchParams($page.url.search);
@@ -76,6 +69,7 @@
         {#each data.tags as tag}
             <li class="tag">
                 <a
+                    data-sveltekit-reload
                     href={buildUrlWithNewTag(tag.key)}
                     >{tag.key} ({tag.doc_count})</a>
             </li>
