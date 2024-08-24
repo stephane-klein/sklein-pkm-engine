@@ -31,25 +31,27 @@
     />
 </div>
 
-<p>Cliquez sur un tag pour affiner votre recherche :</p>
+{#if data.tags.length > 0}
+    <p>Cliquez sur un tag pour affiner votre recherche :</p>
 
-<TagsFilterList
-    items={data.tags}
-    let:item={item}
-    expanded={displayMoreTags}
->
-    <Tag tag={item} currentUrl={currentUrl} />
-    <a
-        slot="display-more-tags-button"
-        href="#display-more-tags"
-        on:click={() => { setUrlHash("display-more-tags"); }}
-    >Afficher plus de tags…</a>
-    <a
-        slot="display-less-tags-button"
-        href=""
-        on:click={() => { setUrlHash(""); }}
-    >Afficher moins de tags…</a>
-</TagsFilterList>
+    <TagsFilterList
+        items={data.tags}
+        let:item={item}
+        expanded={displayMoreTags}
+    >
+        <Tag tag={item} currentUrl={currentUrl} />
+        <a
+            slot="display-more-tags-button"
+            href="#display-more-tags"
+            on:click={() => { setUrlHash("display-more-tags"); }}
+        >Afficher plus de tags…</a>
+        <a
+            slot="display-less-tags-button"
+            href=""
+            on:click={() => { setUrlHash(""); }}
+        >Afficher moins de tags…</a>
+    </TagsFilterList>
+{/if}
 
 {#if (data.countNewNotes === 0)}
     <p style="margin-top: 2em">Résultat de la recherche ({data.countNotes} notes) :</p>
