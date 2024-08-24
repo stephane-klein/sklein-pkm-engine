@@ -21,7 +21,7 @@ export default async function search({
     notesByPage = 50,
     returnTags = false
 } = {}) { 
-    const [ notesResult, countNewNotes, countOldNotes ] = await Promise.all([
+    const [ notesResult, aggsResult, countNewNotes, countOldNotes ] = await Promise.all([
         esClient.search({
             index: "notes",
             body: {
@@ -59,18 +59,6 @@ export default async function search({
                         ].filter(Boolean)
                     }
                 },
-                aggs: (
-                    returnTags
-                        ? {
-                            tags_count: {
-                                terms: {
-                                    field: "tags",
-                                    size: 100
-                                }
-                            }
-                        }
-                        : undefined
-                ),
                 sort: [
                     {
                         created_at: {
@@ -82,6 +70,48 @@ export default async function search({
                         }
                     }
                 ]
+            }
+        }),
+        esClient.search({
+            index: "notes",
+            body: {
+                size: 0,
+                query: {
+                    bool: {
+                        must: [
+                            {
+                                term: {
+                                    note_type: "fleeting_note"
+                                }
+                            },
+                            (
+                                (Array.isArray(tags) && tags.length > 0)
+                                    ? {
+                                        bool: {
+                                            must: tags.map(tag => ({
+                                                term: {
+                                                    tags: tag
+                                                }
+                                            }))
+                                        }
+                                    }
+                                    : undefined
+                            )
+                        ].filter(Boolean)
+                    }
+                },
+                aggs: (
+                    returnTags
+                        ? {
+                            tags_count: {
+                                terms: {
+                                    field: "tags",
+                                    size: 100
+                                }
+                            }
+                        }
+                        : undefined
+                )
             }
         }),
         (((createdBefore === null) && (createdAfter === null))
@@ -159,7 +189,7 @@ export default async function search({
         firstNote:notes[0], 
         lastNote: notes.at(-1),
         notesByDay: groupByDay(notes),
-        tags: (notesResult?.aggregations?.tags_count?.buckets || []).filter(
+        tags: (aggsResult?.aggregations?.tags_count?.buckets || []).filter(
             (tag) => {
                 return !tags.includes(tag.key);
             }
