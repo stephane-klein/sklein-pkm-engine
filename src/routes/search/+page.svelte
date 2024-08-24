@@ -16,7 +16,7 @@
 
     $: displayMoreTags = $page.url.hash === '#display-more-tags';
 
-    $: querySearch = $page.url.searchParams.has('q') || "";
+    $: querySearch = $page.url.searchParams.get('q') || "";
 
     $: currentUrl = $page.url;
 
@@ -42,6 +42,16 @@
         type="text"
         name="search"
         value={querySearch}
+        on:keyup={(e) => {
+            const url = new URL($page.url);
+            url.searchParams.set("q", e.target.value);
+            goto(
+                url.toString(),
+                { 
+                    keepFocus: true
+                }
+            );
+        }}
         style="width: 100%; margin: 0; padding: 0.5em;"
         placeholder="Search"
     />
