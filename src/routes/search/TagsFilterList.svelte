@@ -1,7 +1,5 @@
 <script>
     import clsx from "clsx/lite";
-    import TablerChevronRight from '~icons/tabler/chevron-right';
-    import TablerChevronDown from '~icons/tabler/chevron-down';
 	import { onMount, afterUpdate, tick } from "svelte";
 
     export let items;
@@ -72,32 +70,6 @@
     }
 </script>
 <div class={clsx("search-tags-panel", !expanded && "reduced")}>
-    {#if expanded}
-        <a
-            style="display: inline-block;"
-            href=""
-            on:click={() => { window.location.hash = ''; }}>
-            <TablerChevronDown
-                style="height: 100%; width: auto; display: block; color: #666;"
-                color="black"
-                width="2em"
-                height="2em"
-            />
-        </a>
-    {:else}
-        <a
-            style="display: inline-block;"
-            href="#display-more-tags"
-            on:click={() => { window.location.hash = "#display-more-tags"; }}
-        >
-            <TablerChevronRight
-                style="height: 100%; width: auto; display: block; color: #666;"
-                color="black"
-                width="2em"
-                height="2em"
-            />
-        </a>
-    {/if}
     <ul bind:this={node}>
         {#each items as item}
             <li class="tag">
