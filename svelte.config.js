@@ -1,13 +1,12 @@
 import adapter from "@sveltejs/adapter-node";
-import preprocess from "svelte-preprocess";
+import { sveltePreprocess } from 'svelte-preprocess';
 
 const config = {
-    preprocess:[
-        preprocess({
+    preprocess: sveltePreprocess({
             postcss: true
         })
-    ],
-	kit: {
+    ,
+    kit: {
 		adapter: adapter()
 	}
 };

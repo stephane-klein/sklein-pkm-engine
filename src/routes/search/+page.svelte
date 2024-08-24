@@ -1,7 +1,4 @@
 <script>
-    import clsx from "clsx/lite";
-    import TablerChevronRight from '~icons/tabler/chevron-right';
-    import TablerChevronDown from '~icons/tabler/chevron-down';
     import { page } from "$app/stores";
     import { format } from "date-fns";
     import Tag from "./Tag.svelte";
@@ -32,52 +29,23 @@
 
 <p>Cliquez sur un tag pour affiner votre recherche :</p>
 
-<div class={clsx("search-tags-panel", displayMoreTags && "display-more-tags")}>
-    {#if displayMoreTags}
-        <a
-            style="display: inline-block;"
-            href=""
-            on:click={() => { window.location.hash = ''; }}>
-            <TablerChevronDown
-                style="height: 100%; width: auto; display: block; color: #666;"
-                color="black"
-                width="2em"
-                height="2em"
-            />
-        </a>
-    {:else}
-        <a
-            style="display: inline-block;"
-            href="#display-more-tags"
-            on:click={() => { window.location.hash = "#display-more-tags"; }}
-        >
-            <TablerChevronRight
-                style="height: 100%; width: auto; display: block; color: #666;"
-                color="black"
-                width="2em"
-                height="2em"
-            />
-        </a>
-    {/if}
-
-    <TagsFilterList
-        items={data.tags}
-        let:item={item}
-        expanded={displayMoreTags}
-    >
-        <Tag tag={item} currentUrl={currentUrl} />
-        <a
-            slot="display-more-tags-button"
-            href="#display-more-tags"
-            on:click={() => { window.location.hash = "#display-more-tags"; }}
-        >Afficher plus de tags…</a>
-        <a
-            slot="display-less-tags-button"
-            href=""
-            on:click={() => { window.location.hash = ""; }}
-        >Afficher moins de tags…</a>
-    </TagsFilterList>
-</div>
+<TagsFilterList
+    items={data.tags}
+    let:item={item}
+    expanded={displayMoreTags}
+>
+    <Tag tag={item} currentUrl={currentUrl} />
+    <a
+        slot="display-more-tags-button"
+        href="#display-more-tags"
+        on:click={() => { window.location.hash = "#display-more-tags"; }}
+    >Afficher plus de tags…</a>
+    <a
+        slot="display-less-tags-button"
+        href=""
+        on:click={() => { window.location.hash = ""; }}
+    >Afficher moins de tags…</a>
+</TagsFilterList>
 
 {#if (data.countNewNotes === 0)}
     <p style="margin-top: 2em">Résultat de la recherche ({data.countNotes} notes) :</p>
