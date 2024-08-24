@@ -5,6 +5,7 @@
     import { page } from "$app/stores";
     import { format } from "date-fns";
     import ItemOverflowLimiter from "./ItemOverflowLimiter.js";
+    import Tag from "./Tag.svelte";
     export let data;
 
     let querySearch = "";
@@ -16,11 +17,7 @@
         : ""
     );
 
-    function buildUrlWithNewTag(tagKey) {
-        const urlParams = new URLSearchParams($page.url.search);
-        urlParams.append('tags', tagKey);
-        return `/search/?${urlParams.toString()}`;
-    }
+    $: currentUrl = $page.url;
 </script>
 
 <div style="margin: 1em 0">
@@ -68,10 +65,7 @@
     }}>
         {#each data.tags as tag}
             <li class="tag">
-                <a
-                    data-sveltekit-reload
-                    href={buildUrlWithNewTag(tag.key)}
-                    >{tag.key} ({tag.doc_count})</a>
+                <Tag tag={tag} currentUrl={currentUrl} />
             </li>
         {/each}
         {#if displayMoreTags}
@@ -113,7 +107,7 @@
             -
             {#each note._source.tags || [] as tag, i }
                 {#if i > 0}, {/if}
-                <a href={buildUrlWithNewTag(tag)}>{tag}</a>
+                <a href={`/search/tags=${tag}`}>{tag}</a>
             {/each}
         </p>
         <hr />
