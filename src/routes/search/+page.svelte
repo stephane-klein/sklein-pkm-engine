@@ -14,12 +14,6 @@
         goto(url.pathname + url.search + url.hash, { replaceState: true });
     }
 
-    function urlUpdateSearchParam(name, value) {
-        const url = new URL(currentUrl);
-        url.searchParams.set(name, value);
-        return url.toString();
-    }
-
     $: displayMoreTags = $page.url.hash === '#display-more-tags';
 
     $: querySearch = $page.url.searchParams.has('q') || "";
