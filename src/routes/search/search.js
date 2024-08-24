@@ -122,12 +122,25 @@ export default async function search({
                     body: {
                         query: {
                             bool: {
-                                filter: [
+                                must: [
                                     {
-                                        terms: {
-                                            note_type: ["fleeting_note"]
-                                        },
+                                        term: {
+                                            note_type: "fleeting_note"
+                                        }
                                     },
+                                    (
+                                        (Array.isArray(tags) && tags.length > 0)
+                                            ? {
+                                                bool: {
+                                                    must: tags.map(tag => ({
+                                                        term: {
+                                                            tags: tag
+                                                        }
+                                                    }))
+                                                }
+                                            }
+                                            : undefined
+                                    ),
                                     {
                                         range: {
                                             created_at: {
@@ -136,7 +149,7 @@ export default async function search({
                                             }
                                         }
                                     }
-                                ]
+                                ].filter(Boolean)
                             }
                         }
                     }
@@ -148,12 +161,25 @@ export default async function search({
             body: {
                 query: {
                     bool: {
-                        filter: [
+                        must: [
                             {
-                                terms: {
-                                    note_type: ["fleeting_note"]
-                                },
+                                term: {
+                                    note_type: "fleeting_note"
+                                }
                             },
+                            (
+                                (Array.isArray(tags) && tags.length > 0)
+                                    ? {
+                                        bool: {
+                                            must: tags.map(tag => ({
+                                                term: {
+                                                    tags: tag
+                                                }
+                                            }))
+                                        }
+                                    }
+                                    : undefined
+                            ),
                             {
                                 range: {
                                     created_at: {
@@ -162,7 +188,7 @@ export default async function search({
                                     }
                                 }
                             }
-                        ]
+                        ].filter(Boolean)
                     }
                 }
             }
@@ -179,11 +205,19 @@ export default async function search({
         countNewNotes: (
             (createdAfter === null)
                 ? countNewNotes?.count || 0
-                : (countNewNotes.count - notesByPage)
+                : (
+                    (notesByPage >= countNewNotes.count)
+                        ? 0
+                        : countNewNotes.count - notesByPage
+                )
         ),
         countOldNotes: (
             (createdAfter === null)
-                ? (countOldNotes.count - notesByPage)
+                ? (
+                    (notesByPage >= countOldNotes.count)
+                        ? 0
+                        : countOldNotes.count - notesByPage
+                )
                 : countOldNotes?.count || 0
         ),
         firstNote:notes[0], 
