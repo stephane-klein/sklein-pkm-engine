@@ -32,12 +32,12 @@ services:
                 limits:
                     memory: 1GB
         volumes:
-            - ./volumes/elasticsearch/:/usr/share/elasticsearch/data
+            - /var/lib/notes.develop.sklein.xyz/elasticsearch/:/usr/share/elasticsearch/data
         healthcheck:
             test:
                 [
                     "CMD-SHELL",
-                    "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
+                    "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\\\(green\\\\|yellow\\\\)'"
                 ]
             interval: 10s
             timeout: 10s
