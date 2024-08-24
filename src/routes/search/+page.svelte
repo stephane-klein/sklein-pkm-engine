@@ -14,11 +14,33 @@
         goto(url.pathname + url.search + url.hash, { replaceState: true });
     }
 
+    function urlUpdateSearchParam(name, value) {
+        const url = new URL(currentUrl);
+        url.searchParams.set(name, value);
+        return url.toString();
+    }
+
     $: displayMoreTags = $page.url.hash === '#display-more-tags';
 
     $: querySearch = $page.url.searchParams.has('q') || "";
 
     $: currentUrl = $page.url;
+
+    let previousPageUrl = "";
+    $: {
+        const url = new URL($page.url);
+        url.searchParams.delete("created_before");
+        url.searchParams.set("created_after", data.firstNote._source.created_at);
+        previousPageUrl = url.toString();
+    }
+
+    let nextPageUrl = "";
+    $: {
+        const url = new URL($page.url);
+        url.searchParams.delete("created_after");
+        url.searchParams.set("created_before", data.lastNote._source.created_at);
+        nextPageUrl = url.toString();
+    }
 </script>
 
 <div style="margin: 1em 0">
@@ -57,12 +79,11 @@
     <p style="margin-top: 2em">Résultat de la recherche ({data.countNotes} notes) :</p>
 {:else}
     <p style="text-align: center">
-        [ <a href={`?created_after=${data.firstNote._source.created_at}`}>&lt;&lt; Notes plus récentes
-            ({data.countNewNotes})</a> ]
+        [ <a href={previousPageUrl}>&lt;&lt; Notes plus récentes ({data.countNewNotes})</a> ]
             {#if (data.countOldNotes === 0)}
                 Pas de notes plus anciennes
             {:else}
-                [ <a href={`?created_before=${data.lastNote._source.created_at}`}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
+                [ <a href={nextPageUrl}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
             {/if}
     </p>
 {/if}
@@ -93,10 +114,9 @@
         {#if (data.countNewNotes === 0)}
             Pas de notes plus récentes
         {:else}
-        [ <a href={`?created_after=${data.firstNote._source.created_at}`}>&lt;&lt; Notes plus récentes
-            ({data.countNewNotes})</a> ]
+        [ <a href={previousPageUrl}>&lt;&lt; Notes plus récentes ({data.countNewNotes})</a> ]
         {/if}
         |
-        [ <a href={`?created_before=${data.lastNote._source.created_at}`}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
+        [ <a href={nextPageUrl}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
     </p>
 {/if}
