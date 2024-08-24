@@ -4,9 +4,9 @@
 
     let href;
     $: {
-        const urlParams = new URLSearchParams(currentUrl.search);
-        urlParams.append('tags', tag.key);
-        href = `/search/?${urlParams.toString()}`;
+        const url = new URL(currentUrl);
+        url.searchParams.append('tags', tag.key);
+        href = url.toString();
     }
 </script>
 <a
