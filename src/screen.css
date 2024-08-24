@@ -61,13 +61,14 @@ BODY {
         }
     }
 }
+
 .search-tags-panel:not(.display-more-tags) {
     UL {
         max-height: 2em;
         overflow: hidden;
-
         > LI.overflow-item {
             display: none!important;
         }
     }
 }
+

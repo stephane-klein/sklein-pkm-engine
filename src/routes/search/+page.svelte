@@ -4,8 +4,8 @@
     import TablerChevronDown from '~icons/tabler/chevron-down';
     import { page } from "$app/stores";
     import { format } from "date-fns";
-    import ItemOverflowLimiter from "./ItemOverflowLimiter.js";
     import Tag from "./Tag.svelte";
+    import TagsFilterList from "./TagsFilterList.svelte";
     export let data;
 
     let querySearch = "";
@@ -59,27 +59,24 @@
             />
         </a>
     {/if}
-    <ul use:ItemOverflowLimiter={{
-        itemClass: "tag",
-        addClassOnOverflowItems: "overflow-item"
-    }}>
-        {#each data.tags as tag}
-            <li class="tag">
-                <Tag tag={tag} currentUrl={currentUrl} />
-            </li>
-        {/each}
-        {#if displayMoreTags}
-            <li><a
-                href=""
-                on:click={() => { window.location.hash = ""; }}
-            >Afficher moins de tags…</a></li>
-        {:else}
-            <li><a
-                href="#display-more-tags"
-                on:click={() => { window.location.hash = "#display-more-tags"; }}
-            >Afficher plus de tags…</a></li>
-        {/if}
-    </ul>
+
+    <TagsFilterList
+        items={data.tags}
+        let:item={item}
+        expanded={displayMoreTags}
+    >
+        <Tag tag={item} currentUrl={currentUrl} />
+        <a
+            slot="display-more-tags-button"
+            href="#display-more-tags"
+            on:click={() => { window.location.hash = "#display-more-tags"; }}
+        >Afficher plus de tags…</a>
+        <a
+            slot="display-less-tags-button"
+            href=""
+            on:click={() => { window.location.hash = ""; }}
+        >Afficher moins de tags…</a>
+    </TagsFilterList>
 </div>
 
 {#if (data.countNewNotes === 0)}
