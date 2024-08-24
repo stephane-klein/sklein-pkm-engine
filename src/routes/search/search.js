@@ -19,8 +19,10 @@ export default async function search({
     createdAfter = null,
     createdBefore = null,
     notesByPage = 50,
-    returnTags = false
+    returnTags = false,
+    queryString = ""
 } = {}) { 
+    queryString = queryString.trim().replace(/"/g, '\\"');
     const [ notesResult, aggsResult, countNewNotes, countOldNotes ] = await Promise.all([
         esClient.search({
             index: "notes",
@@ -35,6 +37,16 @@ export default async function search({
                                     note_type: "fleeting_note"
                                 }
                             },
+                            (
+                                (queryString != "")
+                                    ? {
+                                        query_string: {
+                                            query: queryString,
+                                            default_field: "content_html"
+                                        }
+                                    }
+                                    : undefined
+                            ),
                             (
                                 (Array.isArray(tags) && tags.length > 0)
                                     ? {
@@ -85,6 +97,16 @@ export default async function search({
                                 }
                             },
                             (
+                                (queryString != "")
+                                    ? {
+                                        query_string: {
+                                            query: queryString,
+                                            default_field: "content_html"
+                                        }
+                                    }
+                                    : undefined
+                            ),
+                            (
                                 (Array.isArray(tags) && tags.length > 0)
                                     ? {
                                         bool: {
@@ -129,6 +151,16 @@ export default async function search({
                                         }
                                     },
                                     (
+                                        (queryString != "")
+                                            ? {
+                                                query_string: {
+                                                    query: queryString,
+                                                    default_field: "content_html"
+                                                }
+                                            }
+                                            : undefined
+                                    ),
+                                    (
                                         (Array.isArray(tags) && tags.length > 0)
                                             ? {
                                                 bool: {
@@ -167,6 +199,16 @@ export default async function search({
                                     note_type: "fleeting_note"
                                 }
                             },
+                            (
+                                (queryString != "")
+                                    ? {
+                                        query_string: {
+                                            query: queryString,
+                                            default_field: "content_html"
+                                        }
+                                    }
+                                    : undefined
+                            ),
                             (
                                 (Array.isArray(tags) && tags.length > 0)
                                     ? {

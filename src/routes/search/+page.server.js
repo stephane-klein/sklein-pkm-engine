@@ -7,6 +7,7 @@ export async function load({url}) {
             createdAfter: url.searchParams.get("created_after"),
             createdBefore: url.searchParams.get("created_before"),
             tags: url.searchParams.getAll("tags"),
+            queryString: decodeURIComponent(url.searchParams.get("q").trim() || ""),
             returnTags: true
         }))
     };

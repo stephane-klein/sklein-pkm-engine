@@ -7,7 +7,7 @@
     import TagsFilterList from "./TagsFilterList.svelte";
     export let data;
 
-    let querySearch = "";
+    let queryString = "";
 
     function setUrlHash(value) {
         const url = new URL(window.location.href);
@@ -17,24 +17,29 @@
 
     $: displayMoreTags = $page.url.hash === '#display-more-tags';
 
-    $: querySearch = $page.url.searchParams.get('q') || "";
+    $: queryString = decodeURIComponent($page.url.searchParams.get('q') || "");
 
     $: currentUrl = $page.url;
 
     let previousPageUrl = "";
     $: {
-        const url = new URL($page.url);
-        url.searchParams.delete("created_before");
-        url.searchParams.set("created_after", data.firstNote._source.created_at);
-        previousPageUrl = url.toString();
+
+        if (data.firstNote) {
+            const url = new URL($page.url);
+            url.searchParams.delete("created_before");
+            url.searchParams.set("created_after", data.firstNote._source.created_at);
+            previousPageUrl = url.toString();
+        }
     }
 
     let nextPageUrl = "";
     $: {
-        const url = new URL($page.url);
-        url.searchParams.delete("created_after");
-        url.searchParams.set("created_before", data.lastNote._source.created_at);
-        nextPageUrl = url.toString();
+        if (data.lastNote) {
+            const url = new URL($page.url);
+            url.searchParams.delete("created_after");
+            url.searchParams.set("created_before", data.lastNote._source.created_at);
+            nextPageUrl = url.toString();
+        }
     }
 </script>
 
@@ -42,11 +47,11 @@
     <input
         type="text"
         name="search"
-        value={querySearch}
+        value={queryString}
         use:debounceAction={{ duration: 400 }}
         on:debounced={(e) => {
             const url = new URL($page.url);
-            url.searchParams.set("q", e.target.value);
+            url.searchParams.set("q", encodeURIComponent(e.target.value));
             goto(
                 url.toString(),
                 { 
@@ -81,48 +86,52 @@
     </TagsFilterList>
 {/if}
 
-{#if (data.countNewNotes === 0)}
-    <p style="margin-top: 2em">Résultat de la recherche ({data.countNotes} notes) :</p>
+{#if data.countNotes == 0}
+    <p>Aucune note trouvée pour votre recherche.</p>
 {:else}
-    <p style="text-align: center">
-        [ <a href={previousPageUrl}>&lt;&lt; Notes plus récentes ({data.countNewNotes})</a> ]
-            {#if (data.countOldNotes === 0)}
-                Pas de notes plus anciennes
-            {:else}
-                [ <a href={nextPageUrl}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
-            {/if}
-    </p>
-{/if}
-{#each Object.entries(data.notesByDay) as [date, notes]}
-    <h2>{date}</h2>
-    {#each notes as note}
-
-        {@html note._source.content_html}
-
-        <p>
-            <a href={`/${note._source.filename}/`} rel="bookmark">#</a>
-            {format(note._source.created_at, "HH:mm")}
-            -
-            {#each note._source.tags || [] as tag, i }
-                {#if i > 0}, {/if}
-                <a href={`/search/tags=${tag}`}>{tag}</a>
-            {/each}
+    {#if (data.countNewNotes === 0)}
+        <p style="margin-top: 2em">Résultat de la recherche ({data.countNotes} notes) :</p>
+    {:else}
+        <p style="text-align: center">
+            [ <a href={previousPageUrl}>&lt;&lt; Notes plus récentes ({data.countNewNotes})</a> ]
+                {#if (data.countOldNotes === 0)}
+                    Pas de notes plus anciennes
+                {:else}
+                    [ <a href={nextPageUrl}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
+                {/if}
         </p>
-        <hr />
+    {/if}
+    {#each Object.entries(data.notesByDay) as [date, notes]}
+        <h2>{date}</h2>
+        {#each notes as note}
+
+            {@html note._source.content_html}
+
+            <p>
+                <a href={`/${note._source.filename}/`} rel="bookmark">#</a>
+                {format(note._source.created_at, "HH:mm")}
+                -
+                {#each note._source.tags || [] as tag, i }
+                    {#if i > 0}, {/if}
+                    <a href={`/search/tags=${tag}`}>{tag}</a>
+                {/each}
+            </p>
+            <hr />
+        {/each}
     {/each}
-{/each}
-{#if (data.countOldNotes === 0)}
-    <p style="text-align: center">
-        Fin de la liste des notes.
-    </p>
-{:else}
-    <p style="text-align: center">
-        {#if (data.countNewNotes === 0)}
-            Pas de notes plus récentes
-        {:else}
-        [ <a href={previousPageUrl}>&lt;&lt; Notes plus récentes ({data.countNewNotes})</a> ]
-        {/if}
-        |
-        [ <a href={nextPageUrl}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
-    </p>
+    {#if (data.countOldNotes === 0)}
+        <p style="text-align: center">
+            Fin de la liste des notes.
+        </p>
+    {:else}
+        <p style="text-align: center">
+            {#if (data.countNewNotes === 0)}
+                Pas de notes plus récentes
+            {:else}
+            [ <a href={previousPageUrl}>&lt;&lt; Notes plus récentes ({data.countNewNotes})</a> ]
+            {/if}
+            |
+            [ <a href={nextPageUrl}>Notes plus anciennes ({data.countOldNotes}) &gt;&gt; </a> ]
+        </p>
+    {/if}
 {/if}
