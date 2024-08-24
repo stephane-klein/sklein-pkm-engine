@@ -1,4 +1,5 @@
 <script>
+    import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { format } from "date-fns";
     import Tag from "./Tag.svelte";
@@ -7,12 +8,15 @@
 
     let querySearch = "";
 
+    function setUrlHash(value) {
+        const url = new URL(window.location.href);
+        url.hash = value;
+        goto(url.pathname + url.search + url.hash, { replaceState: true });
+    }
+
     $: displayMoreTags = $page.url.hash === '#display-more-tags';
 
-    $: querySearch = ($page.url.searchParams.has('tags')
-        ? ($page.url.searchParams.getAll('tags').map((tag) => `#${tag}`)).join(" ")
-        : ""
-    );
+    $: querySearch = $page.url.searchParams.has('q') || "";
 
     $: currentUrl = $page.url;
 </script>
@@ -38,12 +42,12 @@
     <a
         slot="display-more-tags-button"
         href="#display-more-tags"
-        on:click={() => { window.location.hash = "#display-more-tags"; }}
+        on:click={() => { setUrlHash("display-more-tags"); }}
     >Afficher plus de tags…</a>
     <a
         slot="display-less-tags-button"
         href=""
-        on:click={() => { window.location.hash = ""; }}
+        on:click={() => { setUrlHash(""); }}
     >Afficher moins de tags…</a>
 </TagsFilterList>
 
