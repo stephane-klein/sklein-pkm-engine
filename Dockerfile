@@ -1,5 +1,5 @@
 FROM node:20-slim AS base
-RUN npm install -g pnpm@9.7
+RUN npm install -g pnpm@9.8.0
 
 WORKDIR /app
 
@@ -8,13 +8,14 @@ COPY ./package.json       /app/package.json
 COPY ./pnpm-lock.yaml     /app/pnpm-lock.yaml
 COPY ./vite.config.js     /app/vite.config.js
 COPY ./svelte.config.js   /app/svelte.config.js
+COPY ./postcss.config.cjs /app//postcss.config.cjs
 
 RUN pnpm install -P --frozen-lockfile
 RUN pnpm run build
 
 FROM node:20-slim
 RUN apt update -y; apt install -y curl
-RUN npm install -g pnpm@9.7
+RUN npm install -g pnpm@9.8.0
 
 WORKDIR /app
 
