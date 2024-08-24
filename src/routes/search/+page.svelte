@@ -2,6 +2,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { format } from "date-fns";
+    import debounceAction from "./debounceAction.js";
     import Tag from "./Tag.svelte";
     import TagsFilterList from "./TagsFilterList.svelte";
     export let data;
@@ -42,7 +43,8 @@
         type="text"
         name="search"
         value={querySearch}
-        on:keyup={(e) => {
+        use:debounceAction={{ duration: 400 }}
+        on:debounced={(e) => {
             const url = new URL($page.url);
             url.searchParams.set("q", e.target.value);
             goto(
