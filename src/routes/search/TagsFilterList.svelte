@@ -1,11 +1,19 @@
 <script>
-	import { onMount } from "svelte";
+	import { onMount, afterUpdate, tick } from "svelte";
 
     export let items;
     export let expanded = false;
+    let fitsOnASingleLine = true;
+
+    $: if (items) {
+        fitsOnASingleLine = true;
+    }
 
     let node;
     onMount(() => {
+        addClassToItemsOverTheFirstLine();
+    });
+    afterUpdate(() => {
         addClassToItemsOverTheFirstLine();
     });
 
@@ -24,7 +32,7 @@
         return convertToPixels(gapValue, node);
     }
 
-    function addClassToItemsOverTheFirstLine() {
+    async function addClassToItemsOverTheFirstLine() {
         let destroyAllNextItems = false;
         let overflowItems = [];
 
@@ -32,10 +40,12 @@
 
         // search width of items to keep
         let widthItemsToKeep = 0;
+        await tick();
         for (let item of node.children) {
             if (!item.classList.contains("tag")) {
                 widthItemsToKeep += item.clientWidth;
             }
+            item.classList.remove("overflow-item");
         }
 
         for (let item of node.children) {
@@ -49,6 +59,8 @@
             ) {
                 overflowItems.push(item);
                 destroyAllNextItems = true;
+                console.log("ici1");
+                fitsOnASingleLine = false;
             }
         }
 
@@ -63,11 +75,13 @@
             <slot item={item} />
         </li>
     {/each}
-    <li>
-        {#if !expanded}
-            <slot name="display-more-tags-button" />
-        {:else}
-            <slot name="display-less-tags-button" />
-        {/if}
-    </li>
+    {#if !fitsOnASingleLine}
+        <li>
+            {#if !expanded}
+                <slot name="display-more-tags-button" />
+            {:else}
+                <slot name="display-less-tags-button" />
+            {/if}
+        </li>
+    {/if}
 </ul>

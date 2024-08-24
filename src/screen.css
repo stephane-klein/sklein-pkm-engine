@@ -37,6 +37,7 @@ BODY {
     font-size: 0.7em;
 
     > UL {
+        flex-grow: 1;
         position: relative;
         list-style: none;
         margin: 0;
@@ -64,8 +65,9 @@ BODY {
 
 .search-tags-panel:not(.display-more-tags) {
     UL {
+        /*
         max-height: 2em;
-        overflow: hidden;
+        overflow: hidden;*/
         > LI.overflow-item {
             display: none!important;
         }
