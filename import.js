@@ -117,7 +117,6 @@ for await (const filePath of (await glob("content/**/*.md"))) {
     data.data.tags = [...new Set([...data.data?.tags || [], ...Tags])];
 
     const fileName = path.parse(path.basename(filePath)).name;
-    console.log(WikiLinks);
 
     await client.index({
         index: "notes",
