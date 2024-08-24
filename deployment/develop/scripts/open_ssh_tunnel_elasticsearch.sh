@@ -11,12 +11,12 @@ EOF
     exit 1
 fi
 
-if [ -z "${INSTANCE_DEVELOP_POSTGRES_PORT}" ]; then
+if [ -z "${INSTANCE_DEVELOP_ELASTICSEARCH_PORT}" ]; then
     echo "Error : INSTANCE_DEVELOP_POSTGRES_PORT environment variable is not defined or empty"
     exit 1
 fi
 
-nohup ssh -L ${INSTANCE_DEVELOP_POSTGRES_PORT}:127.0.0.1:${INSTANCE_DEVELOP_POSTGRES_PORT} triton -N 2>/dev/null &
+nohup ssh -L ${INSTANCE_DEVELOP_ELASTICSEARCH_PORT}:127.0.0.1:${INSTANCE_DEVELOP_ELASTICSEARCH_PORT} triton -N 2>/dev/null &
 
 SSH_PID=$!
 

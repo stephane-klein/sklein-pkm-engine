@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const client = new Client({
-    node: "http://localhost:9200"
+    node: process.env.ELASTICSEARCH_URL || "http://localhost:9200"
 });
 
 await client.indices.delete({ index: "notes", ignore_unavailable: true });
