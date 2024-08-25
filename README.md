@@ -21,7 +21,9 @@ $ pnpm run dev
 $ firefox http://localhost:5173
 ```
 
-Screenshot: <img src="screencast.gif" />
+Screencast:<br />
+
+<img src="screencast.gif" />
 
 ## Deployment
 
