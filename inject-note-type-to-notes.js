@@ -1,10 +1,24 @@
 #!/usr/bin/env node
 import { glob } from "glob";
+import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
 import yaml from "js-yaml";
 
-for await (const filePath of (await glob("content/src/Notes éphémères/*.md"))) {
+const contentAbsPath = path.resolve(".", process.env.CONTENT_PATH || "content/");
+
+for await (const filePath of (await glob(
+    "/src/Notes éphémères/*.md",
+    {
+        cwd: contentAbsPath,
+        root: contentAbsPath,
+        dot: false,
+        ignore: [
+            "src/Templates/**",
+            "src/attachments/**"
+        ]
+    }
+))) {
     const data = matter.read(filePath, {
         engines: {
             yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA })
@@ -29,7 +43,18 @@ for await (const filePath of (await glob("content/src/Notes éphémères/*.md"))
     }
 }
 
-for await (const filePath of (await glob("content/src/**/*.md"))) {
+for await (const filePath of (await glob(
+    "/src/**/*.md",
+    {
+        cwd: contentAbsPath,
+        root: contentAbsPath,
+        dot: false,
+        ignore: [
+            "src/Templates/**",
+            "src/attachments/**"
+        ]
+    }
+))) {
     const data = matter.read(filePath, {
         engines: {
             yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA })

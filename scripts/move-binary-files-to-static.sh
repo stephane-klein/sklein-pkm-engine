@@ -3,4 +3,6 @@ set -e
 
 cd "$(dirname "$0")/../"
 
-find "content/src/" -type f ! -name "*.md" -exec mv {} "static/" \;
+rm -rf static
+mkdir static
+find "${CONTENT_PATH:-'content'}/src/" -type f ! -name "*.md" -exec mv {} "static/" \;
