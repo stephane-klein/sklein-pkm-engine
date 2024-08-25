@@ -3,7 +3,7 @@
     import { page } from "$app/stores";
     import { format } from "date-fns";
     import debounceAction from "./debounceAction.js";
-    import Tag from "./Tag.svelte";
+    import AddTag from "./AddTag.svelte";
     import TagsFilterList from "./TagsFilterList.svelte";
     export let data;
 
@@ -72,7 +72,7 @@
         let:item={item}
         expanded={displayMoreTags}
     >
-        <Tag tag={item} currentUrl={currentUrl} />
+        <AddTag tag={item} currentUrl={currentUrl} />
         <a
             slot="display-more-tags-button"
             href="#display-more-tags"
