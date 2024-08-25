@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { glob } from "glob";
 import fs from "fs";
-import { customAlphabet } from 'nanoid/non-secure'
+import { customAlphabet } from "nanoid/non-secure";
 import matter from "gray-matter";
 import yaml from "js-yaml";
 
