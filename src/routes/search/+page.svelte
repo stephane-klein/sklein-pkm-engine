@@ -4,6 +4,7 @@
     import { format } from "date-fns";
     import debounceAction from "./debounceAction.js";
     import AddTag from "./AddTag.svelte";
+    import RemoveTag from "./RemoveTag.svelte";
     import TagsFilterList from "./TagsFilterList.svelte";
     export let data;
 
@@ -41,6 +42,9 @@
             nextPageUrl = url.toString();
         }
     }
+
+    let currentFilterTags;
+    $: currentFilterTags = $page.url.searchParams.getAll("tags");
 </script>
 
 <div style="margin: 1em 0">
@@ -62,6 +66,13 @@
         style="width: 100%; margin: 0; padding: 0.5em;"
         placeholder="Search"
     />
+    <ul class="current-filter-tags">
+        {#each currentFilterTags as tag}
+            <li>
+                <RemoveTag tag={{key: tag}} currentUrl={currentUrl} />
+            </li>
+        {/each}
+    </ul>
 </div>
 
 {#if data.tags.length > 0}
@@ -135,3 +146,27 @@
         </p>
     {/if}
 {/if}
+<style lang="postcss">
+.current-filter-tags {
+    list-style: none;
+    margin-top: 0.5em;
+    padding: 0;
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+    font-size: 0.7em;
+
+    > LI {
+        display: inline-block;
+        padding: 0.2em 0;
+        border: 1px solid transparent;
+        padding: 0.2em 0.4em;
+        border-color: #aaa;
+
+        > A {
+            white-space: nowrap;
+            text-decoration: none;
+        }
+    }
+}
+</style>
