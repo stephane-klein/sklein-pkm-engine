@@ -21,6 +21,8 @@ $ pnpm run dev
 $ firefox http://localhost:5173
 ```
 
+Screenshot: <img src="screencast.gif" />
+
 ## Deployment
 
 See [« How to deploy develop instance? »](./deployment/develop/)
