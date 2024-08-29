@@ -2,10 +2,10 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { format } from "date-fns";
-    import debounceAction from "./debounceAction.js";
-    import AddTag from "./AddTag.svelte";
-    import RemoveTag from "./RemoveTag.svelte";
-    import TagsFilterList from "./TagsFilterList.svelte";
+    import debounceAction from "$lib/debounceAction.js";
+    import AddTag from "$lib/AddTag.svelte";
+    import RemoveTag from "$lib/RemoveTag.svelte";
+    import TagsFilterList from "$lib/TagsFilterList.svelte";
     export let data;
 
     let queryString = "";
