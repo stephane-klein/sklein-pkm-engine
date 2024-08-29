@@ -34,7 +34,7 @@ export default async function search({
                         must: [
                             {
                                 term: {
-                                    note_type: "fleeting_note"
+                                    note_type: "journal_note"
                                 }
                             },
                             (
@@ -93,7 +93,7 @@ export default async function search({
                         must: [
                             {
                                 term: {
-                                    note_type: "fleeting_note"
+                                    note_type: "journal_note"
                                 }
                             },
                             (
@@ -147,7 +147,7 @@ export default async function search({
                                 must: [
                                     {
                                         term: {
-                                            note_type: "fleeting_note"
+                                            note_type: "journal_note"
                                         }
                                     },
                                     (
@@ -196,7 +196,7 @@ export default async function search({
                         must: [
                             {
                                 term: {
-                                    note_type: "fleeting_note"
+                                    note_type: "journal_note"
                                 }
                             },
                             (

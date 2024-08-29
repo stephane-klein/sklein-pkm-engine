@@ -9,7 +9,7 @@ $ mise install
 $ pnpm install
 $ ./inject-nanoid-to-notes.js
 $ ./inject-note-type-to-notes.js
-$ ./inject-created-at-to-fleeting-notes.js
+$ ./inject-created-at-to-journal-notes.js
 $ ./scripts/move-binary-files-to-static.sh
 $ sudo mkdir -p volumes/elasticsearch/; sudo chmod ugo+rwX volumes/elasticsearch/
 $ docker compose up -d --wait
