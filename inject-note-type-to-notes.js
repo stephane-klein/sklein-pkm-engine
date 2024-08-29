@@ -27,8 +27,8 @@ for await (const filePath of (await glob(
     if (data.data?.type) {
         console.log(`Skip ${filePath}`);
     } else {
-        console.log(`Inject type:fleeting_note in ${filePath}`);
-        data.data.type = "fleeting_note";
+        console.log(`Inject type:journal_note in ${filePath}`);
+        data.data.type = "journal_note";
 
         const newContent = matter.stringify(data.content, data.data, {
             language: 'yaml', // Spécifie que nous utilisons YAML
