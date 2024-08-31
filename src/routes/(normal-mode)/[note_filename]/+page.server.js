@@ -5,7 +5,7 @@ export async function load({params}) {
         esClient.search({
             index: "notes",
             body: {
-                _source: ["title", "note_type", "content_html", "tags"],
+                _source: ["title", "note_type", "content_html", "tags", "created_at"],
                 query: {
                     bool: {
                         filter: [
@@ -25,12 +25,17 @@ export async function load({params}) {
                 _source: ["title", "filename", "note_type", "content_html", "tags", "created_at"],
                 query: {
                     bool: {
-                        filter: [
+                        must: [
+                            {
+                                term: {
+                                    note_type: "journal_note"
+                                }
+                            },
                             {
                                 terms: {
                                     linked_notes: [params.note_filename]
                                 }
-                            },
+                            }
                         ]
                     }
                 },

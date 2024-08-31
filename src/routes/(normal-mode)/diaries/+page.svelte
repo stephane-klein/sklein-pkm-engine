@@ -13,6 +13,19 @@
         goto(url.pathname + url.search + url.hash, { replaceState: true });
     }
 
+    function formatDate(value) {
+        const formattedDate = new Intl.DateTimeFormat(
+            "fr-FR",
+            { 
+                weekday: "long", 
+                year: "numeric", 
+                month: "long", 
+                day: "numeric"
+            }
+        ).format(new Date(value));
+        return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+    }
+
     $: displayMoreTags = $page.url.hash === '#display-more-tags';
 
     $: currentUrl = $page.url;
@@ -82,21 +95,33 @@
         </p>
     {/if}
     {#each Object.entries(data.notesByDay) as [date, notes]}
-        <h2>{date}</h2>
+        <h2 style="text-align: center; margin: 2rem 0; font-variant-caps: small-caps;">{formatDate(date)}</h2>
         {#each notes as note}
+            <div class="journal-note">
+                <p class="header">
+                    <span class="note-datetime">
+                        <a
+                            href={`/${note._source.filename}/`}
+                        >
+                            {#if note._source.title}
+                                {note._source.title}
+                            {:else}
+                                Journal du {format(note._source.created_at, "yyyy-MM-dd à HH:mm")}
+                            {/if}
+                        </a>
+                    </span>
 
-            {@html note._source.content_html}
+                    <span class="tags">
+                        {#each note._source.tags || [] as tag, i }
+                            <a href={`/search/tags=${tag}`}>#{tag}</a>
+                        {/each}
+                    </span>
+                </p>
 
-            <p>
-                <a href={`/${note._source.filename}/`} rel="bookmark">#</a>
-                {format(note._source.created_at, "HH:mm")}
-                -
-                {#each note._source.tags || [] as tag, i }
-                    {#if i > 0}, {/if}
-                    <a href={`/search/tags=${tag}`}>{tag}</a>
-                {/each}
-            </p>
-            <hr />
+                <div class="body">
+                {@html note._source.content_html}
+                </div>
+            </div>
         {/each}
     {/each}
     {#if (data.countOldNotes === 0)}

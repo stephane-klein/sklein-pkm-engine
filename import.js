@@ -148,7 +148,7 @@ for await (const filePath of (await glob(
         document: {
             filename: fileName,
             created_at: (data.data.created_at && (data.data.type === "journal_note")) ? data.data.created_at + ":00" : null,
-            title: data.data?.title || path.parse(fileName).name,
+            title: data.data?.title || ((data.data.type !== "journal_note") ? path.parse(fileName).name : undefined),
             note_type: data.data?.type || null,
             linked_notes: WikiLinks,
             tags: data.data?.tags || [],

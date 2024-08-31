@@ -119,7 +119,7 @@
 
     .reduced {
         UL {
-            max-height: 2em;
+            max-height: 2.2em;
             overflow: hidden;
 
             > LI.overflow-item {
