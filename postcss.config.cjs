@@ -3,6 +3,7 @@ module.exports = {
     plugins: {
         'postcss-normalize': {},
         'postcss-nested': {},
+        'postcss-import': {},
         'autoprefixer': {}
     }
 };
