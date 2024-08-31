@@ -24,23 +24,20 @@ for await (const filePath of (await glob(
             yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA })
         }
     });
-    if (data.data?.type) {
-        console.log(`Skip ${filePath}`);
-    } else {
-        console.log(`Inject type:journal_note in ${filePath}`);
-        data.data.type = "journal_note";
 
-        const newContent = matter.stringify(data.content, data.data, {
-            language: 'yaml', // Spécifie que nous utilisons YAML
-            engines: {
-                yaml: {
-                    parse: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }),
-                    stringify: (d) => yaml.dump(d, { schema: yaml.JSON_SCHEMA })
-                }
+    console.log(`Inject type:journal_note in ${filePath}`);
+    data.data.type = "journal_note";
+
+    const newContent = matter.stringify(data.content, data.data, {
+        language: 'yaml', // Spécifie que nous utilisons YAML
+        engines: {
+            yaml: {
+                parse: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }),
+                stringify: (d) => yaml.dump(d, { schema: yaml.JSON_SCHEMA })
             }
-        });
-        fs.writeFileSync(filePath, newContent, "utf8");
-    }
+        }
+    });
+    fs.writeFileSync(filePath, newContent, "utf8");
 }
 
 for await (const filePath of (await glob(
