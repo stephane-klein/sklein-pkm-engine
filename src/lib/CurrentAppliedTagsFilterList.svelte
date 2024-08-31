@@ -10,7 +10,7 @@
         <p>Filtre actif, cliquez pour en enlever un tag :</p>
         <ul class="current-filter-tags">
             {#each tags as tag, i}
-                <span>{#if i > 0}and{/if}</span>
+                {#if i > 0}<span>and</span>{/if}
                 <li>
                     <RemoveTag tag={{key: tag}} currentUrl={currentUrl} />
                 </li>
