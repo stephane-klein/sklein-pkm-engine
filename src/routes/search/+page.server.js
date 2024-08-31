@@ -35,7 +35,7 @@ export async function load({url}) {
         );
     }
 
-    const queryString = (url.searchParams.get("q") || "").trim().replace(/"/g, '\\"');
+    const queryString = (decodeURIComponent(url.searchParams.get("q") || "")).trim().replace(/"/g, '\\"');
     if (queryString !== "") {
         baseQuery.body.query.bool.must.push({
             query_string: {
