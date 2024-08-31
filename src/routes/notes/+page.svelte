@@ -24,7 +24,7 @@
 <CurrentAppliedTagsFilterList tags={currentFilterTags} currentUrl={currentUrl} />
 
 {#if data.tags.length > 0}
-    <p>Cliquez sur un tag pour affiner votre recherche :</p>
+    <p>Cliquez sur un ou plusieurs tags pour appliquer un filtre sur la liste des "evergreen" notes :</p>
 
     <TagsFilterList
         items={data.tags}

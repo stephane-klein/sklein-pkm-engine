@@ -7,7 +7,7 @@
 
 {#if tags.length > 0}
     <div style="margin: 1em 0">
-        <p>Filtre actif, cliquez pour en enlever un :</p>
+        <p>Filtre actif, cliquez pour en enlever un tag :</p>
         <ul class="current-filter-tags">
             {#each tags as tag, i}
                 <span>{#if i > 0}and{/if}</span>
