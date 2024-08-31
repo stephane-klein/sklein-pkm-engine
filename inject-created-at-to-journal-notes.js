@@ -8,7 +8,7 @@ import yaml from "js-yaml";
 const contentAbsPath = path.resolve(".", process.env.CONTENT_PATH || "content/");
 
 for await (const filePath of (await glob(
-    "/src/**/*.md",
+    "/src/Notes éphémères/*.md",
     {
         cwd: contentAbsPath,
         root: contentAbsPath,
