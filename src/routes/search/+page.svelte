@@ -1,7 +1,6 @@
 <script>
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
-    import { format } from "date-fns";
     import debounceAction from "$lib/debounceAction.js";
     import AddTag from "$lib/AddTag.svelte";
     import TagsFilterList from "$lib/TagsFilterList.svelte";
