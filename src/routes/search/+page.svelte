@@ -4,8 +4,8 @@
     import { format } from "date-fns";
     import debounceAction from "$lib/debounceAction.js";
     import AddTag from "$lib/AddTag.svelte";
-    import RemoveTag from "$lib/RemoveTag.svelte";
     import TagsFilterList from "$lib/TagsFilterList.svelte";
+    import CurrentAppliedTagsFilterList from "$lib/CurrentAppliedTagsFilterList.svelte";
     export let data;
 
     let queryString = "";
@@ -66,13 +66,7 @@
         style="width: 100%; margin: 0; padding: 0.5em;"
         placeholder="Search"
     />
-    <ul class="current-filter-tags">
-        {#each currentFilterTags as tag}
-            <li>
-                <RemoveTag tag={{key: tag}} currentUrl={currentUrl} />
-            </li>
-        {/each}
-    </ul>
+    <CurrentAppliedTagsFilterList tags={currentFilterTags} currentUrl={currentUrl} />
 </div>
 
 {#if data.tags.length > 0}
@@ -101,7 +95,7 @@
     <p>Aucune note trouvée pour votre recherche.</p>
 {:else}
     {#if (data.countNewNotes === 0)}
-        <p style="margin-top: 2em">Résultat de la recherche ({data.countNotes} notes) :</p>
+        <p style="margin-top: 2em">Résultat de la recherche ({data.totalNotesInAllPages} notes) :</p>
     {:else}
         <p style="text-align: center">
             [ <a href={previousPageUrl}>&lt;&lt; Notes plus récentes ({data.countNewNotes})</a> ]
@@ -112,23 +106,20 @@
                 {/if}
         </p>
     {/if}
-    {#each Object.entries(data.notesByDay) as [date, notes]}
-        <h2>{date}</h2>
-        {#each notes as note}
+    {#each data.notes as note}
 
-            {@html note._source.content_html}
+        {@html note._source.content_html}
 
-            <p>
-                <a href={`/${note._source.filename}/`} rel="bookmark">#</a>
-                {format(note._source.created_at, "HH:mm")}
-                -
-                {#each note._source.tags || [] as tag, i }
-                    {#if i > 0}, {/if}
-                    <a href={`/search/tags=${tag}`}>{tag}</a>
-                {/each}
-            </p>
-            <hr />
-        {/each}
+        <p>
+            <a href={`/${note._source.filename}/`} rel="bookmark">#</a>
+            {note._source.created_at}
+            -
+            {#each note._source.tags || [] as tag, i }
+                {#if i > 0}, {/if}
+                <a href={`/search/tags=${tag}`}>{tag}</a>
+            {/each}
+        </p>
+        <hr />
     {/each}
     {#if (data.countOldNotes === 0)}
         <p style="text-align: center">
@@ -146,27 +137,3 @@
         </p>
     {/if}
 {/if}
-<style lang="postcss">
-.current-filter-tags {
-    list-style: none;
-    margin-top: 0.5em;
-    padding: 0;
-    display: flex;
-    gap: 0.5em;
-    flex-wrap: wrap;
-    font-size: 0.7em;
-
-    > LI {
-        display: inline-block;
-        padding: 0.2em 0;
-        border: 1px solid transparent;
-        padding: 0.2em 0.4em;
-        border-color: #aaa;
-
-        > A {
-            white-space: nowrap;
-            text-decoration: none;
-        }
-    }
-}
-</style>
