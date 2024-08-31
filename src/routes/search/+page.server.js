@@ -63,6 +63,17 @@ export async function load({url}) {
             }
         }
     );
+    if (queryString !== "") {
+        currentPageQuery.body._source.splice(currentPageQuery.body._source.indexOf("content_html"), 1);
+        currentPageQuery.body.highlight = {
+            fields : {
+                content : {},
+                content_html: {
+                    number_of_fragments: 0
+                }
+            }
+        };
+    }
 
     /* Build aggsResultQuery*/
     const aggsQuery = structuredClone(baseQuery);
@@ -110,7 +121,7 @@ export async function load({url}) {
                 : { count: 0 }
         ),
         esClient.count(countOldNotesQuery),
-    ]);
+   ]);
 
    let notes = notesResult.hits.hits;
    if (createdAfter !== null) {

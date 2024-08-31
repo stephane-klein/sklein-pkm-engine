@@ -107,7 +107,7 @@
     {/if}
     {#each data.notes as note}
 
-        {@html note._source.content_html}
+        {@html note?.highlight?.content_html || note._source.content_html}
 
         <p>
             <a href={`/${note._source.filename}/`} rel="bookmark">#</a>
