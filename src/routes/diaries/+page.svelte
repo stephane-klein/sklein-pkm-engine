@@ -3,7 +3,7 @@
     import { page } from "$app/stores";
     import { format } from "date-fns";
     import AddTag from "$lib/AddTag.svelte";
-    import RemoveTag from "$lib/RemoveTag.svelte";
+    import CurrentAppliedTagsFilterList from "../../lib/CurrentAppliedTagsFilterList.svelte";
     import TagsFilterList from "$lib/TagsFilterList.svelte";
     export let data;
 
@@ -42,15 +42,7 @@
     $: currentFilterTags = $page.url.searchParams.getAll("tags");
 </script>
 
-<div style="margin: 1em 0">
-    <ul class="current-filter-tags">
-        {#each currentFilterTags as tag}
-            <li>
-                <RemoveTag tag={{key: tag}} currentUrl={currentUrl} />
-            </li>
-        {/each}
-    </ul>
-</div>
+<CurrentAppliedTagsFilterList tags={currentFilterTags} currentUrl={currentUrl} />
 
 {#if data.tags.length > 0}
     <p>Cliquez sur un tag pour affiner votre recherche :</p>
@@ -123,27 +115,3 @@
         </p>
     {/if}
 {/if}
-<style lang="postcss">
-.current-filter-tags {
-    list-style: none;
-    margin-top: 0.5em;
-    padding: 0;
-    display: flex;
-    gap: 0.5em;
-    flex-wrap: wrap;
-    font-size: 0.7em;
-
-    > LI {
-        display: inline-block;
-        padding: 0.2em 0;
-        border: 1px solid transparent;
-        padding: 0.2em 0.4em;
-        border-color: #aaa;
-
-        > A {
-            white-space: nowrap;
-            text-decoration: none;
-        }
-    }
-}
-</style>
