@@ -53,11 +53,11 @@ export async function load({url}) {
     const createdBefore = url.searchParams.get("created_before");
 
     /* Build currentPageResultQuery */
-    const currentPageResultQuery = structuredClone(baseQuery);
-    currentPageResultQuery.body._source = ["title", "created_at", "filename", "content_html", "tags"];
-    currentPageResultQuery.body.size = notesByPage;
+    const currentPageQuery = structuredClone(baseQuery);
+    currentPageQuery.body._source = ["title", "created_at", "filename", "content_html", "tags"];
+    currentPageQuery.body.size = notesByPage;
 
-    currentPageResultQuery.body.query.bool.must.push(
+    currentPageQuery.body.query.bool.must.push(
         {
             range: {
                 created_at: {
@@ -68,7 +68,7 @@ export async function load({url}) {
         }
     );
 
-    currentPageResultQuery.body.sort = [
+    currentPageQuery.body.sort = [
         {
             created_at: {
                 order: (
@@ -81,8 +81,9 @@ export async function load({url}) {
     ];
 
     /* Build aggsResultQuery*/
-    const aggsResultQuery = structuredClone(baseQuery);
-    aggsResultQuery.body.aggs = {
+    const aggsQuery = structuredClone(baseQuery);
+    aggsQuery.body.size = 0;
+    aggsQuery.body.aggs = {
         tags_count: {
             terms: {
                 field: "tags",
@@ -117,15 +118,15 @@ export async function load({url}) {
    });
 
    const [ notesResult, aggsResult, countNewNotesResult, countOldNotesResult ] = await Promise.all([
-        esClient.search(currentPageResultQuery),
-        esClient.search(aggsResultQuery),
+        esClient.search(currentPageQuery),
+        esClient.search(aggsQuery),
         (
             (countNewNotesQuery)
                 ? esClient.count(countNewNotesQuery)
                 : { count: 0 }
         ),
         esClient.count(countOldNotesQuery),
-   ]);
+    ]);
 
    let notes = notesResult.hits.hits;
    if (createdAfter !== null) {
@@ -150,7 +151,7 @@ export async function load({url}) {
                     : countOldNotesResult.count - notesByPage
             )
             : countOldNotesResult?.count || 0
-    );
+   );
 
    return {
         totalNotesInAllPages: (
