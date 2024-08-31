@@ -24,6 +24,7 @@
     $: currentPage = parseInt($page.url.searchParams.get("page") || 1, 10);
 
 
+
     $: currentUrl = $page.url;
 
     let previousPageUrl = "";
@@ -74,49 +75,51 @@
     $: totalSumOfAllNoteTypes = data.noteTypes.reduce((accumulator, noteType) => accumulator + noteType.doc_count, 0);
 </script>
 
-<div style="display: flex; flex-direction: column; gap: 0.5em;">
-    <div style="display: flex; gap: 1em;">
-        <div>Recherche effectué dans :</div>
+<div style="display: flex; gap: 1em;">
+    <div>Recherche effectué dans :</div>
+    <div>
+        <input
+            type="radio"
+            bind:group={noteTypeFilter}
+            value=""
+            id="note_type_all_input"
+        />
+        <label for="note_type_all_input">Tous type de notes ({totalSumOfAllNoteTypes})</label>
+    </div>
+    {#each data.noteTypes as note_type}
         <div>
             <input
                 type="radio"
                 bind:group={noteTypeFilter}
-                value=""
-                id="note_type_all_input"
-            />
-            <label for="note_type_all_input">Tous type de notes ({totalSumOfAllNoteTypes})</label>
+                value="{note_type.key}"
+                id={`note_type_${note_type.key}_input`}
+            /><label for={`note_type_${note_type.key}_input`}>{note_type.key} ({note_type.doc_count})</label>
         </div>
-        {#each data.noteTypes as note_type}
-            <div>
-                <input
-                    type="radio"
-                    bind:group={noteTypeFilter}
-                    value="{note_type.key}"
-                    id={`note_type_${note_type.key}_input`}
-                /><label for={`note_type_${note_type.key}_input`}>{note_type.key} ({note_type.doc_count})</label>
-            </div>
-        {/each}
-    </div>
-    <input
-        type="text"
-        name="search"
-        value={queryString}
-        use:debounceAction={{ duration: 400 }}
-        on:debounced={(e) => {
-            const url = new URL($page.url);
-            url.searchParams.set("q", encodeURIComponent(e.target.value));
-            goto(
-                url.toString(),
-                { 
-                    keepFocus: true
-                }
-            );
-        }}
-        style="width: 100%; margin: 0; padding: 0.5em;"
-        placeholder="Search"
-    />
-    <CurrentAppliedTagsFilterList tags={currentFilterTags} currentUrl={currentUrl} />
+    {/each}
 </div>
+<input
+    type="text"
+    name="search"
+    value={queryString}
+    use:debounceAction={{ duration: 400 }}
+    on:debounced={(e) => {
+        const url = new URL($page.url);
+        if (e.target.value.trim() === "") {
+            url.searchParams.delete("q");
+        } else {
+            url.searchParams.set("q", encodeURIComponent(e.target.value));
+        }
+        goto(
+            url.toString(),
+            { 
+                keepFocus: true
+            }
+        );
+    }}
+    style="width: 100%; margin: 0; padding: 0.5em;"
+    placeholder="Search"
+/>
+<CurrentAppliedTagsFilterList tags={currentFilterTags} currentUrl={currentUrl} />
 
 {#if data.tags.length > 0}
     <p>Cliquez sur un tag pour affiner votre recherche :</p>
@@ -139,6 +142,7 @@
         >Afficher moins de tags…</a>
     </TagsFilterList>
 {/if}
+
 
 {#if data.totalNotesInAllPages == 0}
     <p>Aucune note trouvée pour votre recherche.</p>
