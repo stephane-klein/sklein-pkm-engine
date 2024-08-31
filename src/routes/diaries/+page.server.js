@@ -85,7 +85,8 @@ export async function load({url}) {
     aggsResultQuery.body.aggs = {
         tags_count: {
             terms: {
-                field: "tags"
+                field: "tags",
+                size: 10000
             }
         }
     };
