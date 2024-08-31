@@ -16,3 +16,13 @@
     ({tag.doc_count})
 {/if}
 </a>
+<style>
+    A {
+        display: inline-block;
+        padding: 0.2em 0;
+        border: 1px solid #aaa;
+        padding: 0.2em 0.4em;
+        white-space: nowrap;
+        text-decoration: none;
+    }
+</style>

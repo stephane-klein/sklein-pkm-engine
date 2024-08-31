@@ -95,6 +95,7 @@
         width: 100%;
         margin: 1em 0;
         font-size: 0.7em;
+        align-items: center;
 
         > UL {
             flex-grow: 1;
@@ -106,19 +107,12 @@
             gap: 0.5em;
             flex-wrap: wrap;
 
-            > LI {
-                display: inline-block;
-                padding: 0.2em 0;
-                border: 1px solid transparent;
-                &.tag {
-                    padding: 0.2em 0.4em;
-                    border-color: #aaa;
-                }
+            LI > * {
+                vertical-align: middle;
+            }
 
-                > A {
-                    white-space: nowrap;
-                    text-decoration: none;
-                }
+            > LI:not(.tag) A {
+                border-color: transparent;
             }
         }
     }
