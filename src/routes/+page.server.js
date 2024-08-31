@@ -1,14 +1,5 @@
-import esClient from "$lib/server/elasticsearch.js";
-import search from "./search/search.js";
+import { redirect } from "@sveltejs/kit";
 
-export async function load({url}) {
-    if (!await esClient.indices.exists({ index: "notes" })) {
-        return {
-            databaseNotConfigured: true
-        };
-    }
-    return search({
-        createdAfter: url.searchParams.get("created_after"),
-        createdBefore: url.searchParams.get("created_before")
-    });
+export async function load() {
+    throw redirect(302, "/diaries/");
 }
