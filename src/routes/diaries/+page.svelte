@@ -3,7 +3,7 @@
     import { page } from "$app/stores";
     import { format } from "date-fns";
     import AddTag from "$lib/AddTag.svelte";
-    import CurrentAppliedTagsFilterList from "../../lib/CurrentAppliedTagsFilterList.svelte";
+    import CurrentAppliedTagsFilterList from "$lib/CurrentAppliedTagsFilterList.svelte";
     import TagsFilterList from "$lib/TagsFilterList.svelte";
     export let data;
 

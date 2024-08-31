@@ -3,7 +3,7 @@
     import { page } from "$app/stores";
     import TagsFilterList from "$lib/TagsFilterList.svelte";
     import AddTag from "$lib/AddTag.svelte";
-    import CurrentAppliedTagsFilterList from "../../lib/CurrentAppliedTagsFilterList.svelte";
+    import CurrentAppliedTagsFilterList from "$lib/CurrentAppliedTagsFilterList.svelte";
 
     export let data;
 
