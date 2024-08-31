@@ -28,7 +28,7 @@ BODY {
         max-width: 100%;
     }
 
-    EM {
+    EM.hightlight {
         background-color: yellow;
         font-style: italic;
         padding: 0.2em;

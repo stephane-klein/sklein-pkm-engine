@@ -69,7 +69,9 @@ export async function load({url}) {
             fields : {
                 content : {},
                 content_html: {
-                    number_of_fragments: 0
+                    number_of_fragments: 0,
+                    pre_tags: [`<em class="hightlight">`], 
+                    post_tags: ["</em>"]
                 }
             }
         };
