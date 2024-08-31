@@ -71,7 +71,12 @@ await client.indices.create({
             properties: {
                 title: {
                     type: "text",
-                    analyzer: "french_analyzer"
+                    analyzer: "french_analyzer",
+                    fields: {
+                        keyword: {
+                            type: "keyword"
+                        }
+                    }
                 },
                 filename: {
                     type: "keyword"
