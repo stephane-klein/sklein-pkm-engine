@@ -32,6 +32,13 @@ export async function load({url}) {
                     ]
                 }
             },
+            aggs: {
+                tags_count: {
+                    terms: {
+                        field: "tags"
+                    }
+                },
+            },
             sort: [
                 {
                     "title.keyword": {
@@ -54,8 +61,13 @@ export async function load({url}) {
             }
         }];
     }
-    const notes = await esClient.search(query);
+    const notesResult = await esClient.search(query);
     return {
-        notesGroupedByFirstLetter: groupByFirstLetter(notes.hits.hits)
+        notesGroupedByFirstLetter: groupByFirstLetter(notesResult.hits.hits),
+        tags: (notesResult?.aggregations?.tags_count?.buckets || []).filter(
+            (tag) => {
+                return !tags.includes(tag.key);
+            }
+        )
     };
 };
