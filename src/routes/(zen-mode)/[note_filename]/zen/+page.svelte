@@ -12,12 +12,14 @@
 <div class="note">
     <h1>{data.note._source?.title || formatDate(data.note._source.created_at)}</h1>
 
-    <ul class="tags">
-        {#each data.note._source.tags as tag, i}
-            <li><a href={`/diaries/?tags=${tag}`}>#{tag}</a>{#if i < data.note._source.tags.length - 1}, {/if}
-            </li>
-        {/each}
-    </ul>
+    {#if data.note._source.tags.length > 0}
+        <ul class="tags">
+            {#each data.note._source.tags as tag, i}
+                <li><a href={`/diaries/?tags=${tag}`}>#{tag}</a>{#if i < data.note._source.tags.length - 1}, {/if}
+                </li>
+            {/each}
+        </ul>
+    {/if}
 
     {#if (data.note._source.note_type === "journal_note") && data.note._source?.title}
         <p class="datetime">Journal du {formatDate(data.note._source.created_at).toLowerCase()}</p>

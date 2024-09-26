@@ -22,6 +22,10 @@
         </ul>
     {/if}
 
+    {#if (data.note._source.note_type === "journal_note") && data.note._source?.title}
+        <p class="datetime">Journal du {formatDate(data.note._source.created_at).toLowerCase()}</p>
+    {/if}
+
     <div class="body">
         {@html data.note._source.content_html}
     </div>
