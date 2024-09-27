@@ -6,6 +6,7 @@
     import AddTag from "$lib/AddTag.svelte";
     import TagsFilterList from "$lib/TagsFilterList.svelte";
     import CurrentAppliedTagsFilterList from "$lib/CurrentAppliedTagsFilterList.svelte";
+    import Note from "$lib/Note.svelte";
     export let data;
 
     let queryString = "";
@@ -160,19 +161,13 @@
         </p>
     {/if}
     {#each data.notes as note}
-
-        {@html note?.highlight?.content_html || note._source.content_html}
-
-        <p>
-            <a href={`/${note._source.filename}/`} rel="bookmark">#</a>
-            {note._source.created_at}
-            -
-            {#each note._source.tags || [] as tag, i }
-                {#if i > 0}, {/if}
-                <a href={`/search/tags=${tag}`}>{tag}</a>
-            {/each}
-        </p>
-        <hr />
+        <Note 
+            filename={note._source.filename}
+            title={note._source.title}
+            created_at={note._source.created_at}
+            tags={note._source.tags}
+            content_html={note?.highlight?.content_html || note._source.content_html}
+        />
     {/each}
     {#if (data.countNotesInNextPages === 0)}
         <p style="text-align: center">
