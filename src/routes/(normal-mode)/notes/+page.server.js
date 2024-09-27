@@ -2,7 +2,10 @@ import esClient from "$lib/server/elasticsearch.js";
 
 function groupByFirstLetter(notes) {
     return notes.reduce((acc, note) => {
-        let firstLetter = note._source.title.substring(0, 1);
+        let firstLetter = note._source.title.substring(0, 1).toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (!(/^[A-Z]$/.test(firstLetter))) {
+            firstLetter = "";
+        };
 
         if (!acc[firstLetter]) {
             acc[firstLetter] = [];
