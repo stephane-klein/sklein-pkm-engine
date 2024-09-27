@@ -4,7 +4,7 @@
     import AddTag from "$lib/AddTag.svelte";
     import CurrentAppliedTagsFilterList from "$lib/CurrentAppliedTagsFilterList.svelte";
     import TagsFilterList from "$lib/TagsFilterList.svelte";
-    import Note from "./note.svelte";
+    import Note from "$lib/Note.svelte";
     export let data;
 
     function setUrlHash(value) {
