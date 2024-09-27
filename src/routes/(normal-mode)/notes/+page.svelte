@@ -45,8 +45,14 @@
     </TagsFilterList>
 {/if}
 
+<ul class="letters">
+{#each Object.keys(data.notesGroupedByFirstLetter) as firstLetter}
+    <li><a href={`#${firstLetter}`}>{firstLetter}</a></li>
+{/each}
+</ul>
+
 {#each Object.entries(data.notesGroupedByFirstLetter) as [firstLetter, notes]}
-    <h2>{firstLetter}</h2>
+    <h2 id={firstLetter}>{firstLetter}</h2>
 
     <ul>
     {#each notes as note}
@@ -54,3 +60,16 @@
     {/each}
     </ul>
 {/each}
+
+<style>
+    .letters {
+        margin: 2rem auto;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+</style>
