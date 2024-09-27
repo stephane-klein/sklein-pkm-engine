@@ -39,7 +39,7 @@
     {#each data.backlink_notes as note}
         <div class="journal-note">
             <p class="header">
-                <span class="note-datetime">
+                <span class="note-title">
                     <a
                         href={`/${note._source.filename}/`}
                     >
