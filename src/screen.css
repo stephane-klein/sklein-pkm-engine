@@ -96,31 +96,39 @@ IMG {
     border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-
     .header {
-        display: flex;
-        align-items: center;
+        padding: 0;
         margin: 0;
-        padding: 0.5rem 1rem;
-        border-bottom: 1px solid #eee;
-        background-color: #fafafa;
-        A {
-            text-decoration: none;
-            color: #333;
-            white-space: nowrap;
+        display: flex;
+        flex-direction: column;
+        .note-title {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #eee;
+            background-color: #fafafa;
+            font-size: calc((24/20) * var(--base-font-size));
+            text-align: center;
+            A {
+                text-decoration: none;
+                color: #333;
+                white-space: nowrap;
+            }
         }
 
         .tags {
-            flex-grow: 1;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            text-align: right;
+            padding: 0.5rem 1rem;
             display: flex;
-            gap: 0.5rem;
-            font-weight: 400;
+            flex-wrap: wrap;
+            justify-content: center;
+            row-gap: 0.5em;
+            SPAN {
+                white-space: nowrap;
+            }
+            text-align: center;
+            font-weight: 200;
             font-family: var(--monospaced-font-stack);
             font-size: calc((16/20) * var(--base-font-size));
             font-style: italic;
+            border-bottom: 1px solid #eee;
         }
     }
 
