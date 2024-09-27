@@ -41,6 +41,9 @@ importers:
       highlight.js:
         specifier: 11.10.0
         version: 11.10.0
+      image-size:
+        specifier: 1.1.1
+        version: 1.1.1
       markdown-it:
         specifier: 14.1.0
         version: 14.1.0

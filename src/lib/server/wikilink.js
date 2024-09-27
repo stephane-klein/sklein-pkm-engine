@@ -1,5 +1,6 @@
 import Plugin from "markdown-it-regexp";
 import path from "path";
+import imageSize from "image-size";
 
 export default () => {
     return Plugin(
@@ -23,11 +24,17 @@ export default () => {
                         path.extname(pagePath).toLowerCase()
                     )
                 ) {
-                    return `<img src="/${pagePath}" loading="lazy" />`;
+                    const { width, height } = imageSize(
+                        path.join(
+                            'static/',
+                            pagePath
+                        )
+                    );
+                    return `<img src="/${pagePath}" loading="lazy" width="${width}" height="${height}"/>`;
                 }
             }
 
-            return `<a href="/${pagePath}/">${label}</a>`
+            return `<a href="/${pagePath}/">${label}</a>`;
         }
-    )
-}
+    );
+};
