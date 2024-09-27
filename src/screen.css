@@ -78,6 +78,11 @@ BODY {
     }
 }
 
+BUTTON {
+    all: unset;
+    cursor: pointer;
+}
+
 IMG {
     max-width: 100%;
     height: auto;
@@ -118,8 +123,21 @@ IMG {
             font-style: italic;
         }
     }
+
     .body {
         padding: 0.5rem 1rem;
+        transition: max-height 2s;
+        max-height: 0;
+        &.close {
+            overflow-y: hidden;
+            max-height: 50em;
+        }
+    }
+
+    .see-more-or-less {
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 0.6em;
     }
 }
 
