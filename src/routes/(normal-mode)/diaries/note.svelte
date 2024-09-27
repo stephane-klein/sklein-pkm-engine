@@ -38,11 +38,13 @@
             </a>
         </span>
 
-        <span class="tags">
-            {#each tags || [] as tag, i }
-                <span><a href={`/search/tags=${tag}`}>#{tag}</a>{#if i < tags.length - 1}, {/if}</span>
-            {/each}
-        </span>
+        {#if tags.length > 0}
+            <span class="tags">
+                {#each tags || [] as tag, i }
+                    <span><a href={`/search/tags=${tag}`}>#{tag}</a>{#if i < tags.length - 1}, {/if}</span>
+                {/each}
+            </span>
+        {/if}
     </p>
 
     <div
