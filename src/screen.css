@@ -10,13 +10,8 @@
 
     --background-color: #fff;
     --text-color: #000;
-    --base-font-size: 20px;
+    --base-font-size: calc(0.65rem + 0.5vw);
     --prose-max-width: 935px;
-    @media all and (max-width: 649px) {
-        :root {
-            --base-font-size: 18px;
-        }
-    }
     @media all and (max-width: 649px) {
         --line-height: 1.45;
     }
@@ -88,6 +83,10 @@ IMG {
     height: auto;
 }
 
+H2 {
+    font-size: 1.5rem;
+}
+
 .journal-note {
     margin: 1rem 0;
     overflow: hidden;
@@ -105,7 +104,7 @@ IMG {
             padding: 0.5rem 1rem;
             border-bottom: 1px solid #eee;
             background-color: #fafafa;
-            font-size: calc((24/20) * var(--base-font-size));
+            font-size: 1.2rem;
             text-align: center;
             A {
                 text-decoration: none;
@@ -126,7 +125,7 @@ IMG {
             text-align: center;
             font-weight: 200;
             font-family: var(--monospaced-font-stack);
-            font-size: calc((16/20) * var(--base-font-size));
+            font-size: 0.8rem;
             font-style: italic;
             border-bottom: 1px solid #eee;
         }
