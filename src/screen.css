@@ -37,7 +37,7 @@ HTML {
 
 BODY {
     max-width: var(--prose-max-width);
-    padding: 0 1em;
+    padding: 0 0.3em;
     margin: 0 auto;
 
     BLOCKQUOTE {
