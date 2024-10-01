@@ -1,6 +1,7 @@
 <script>
     import { format } from "date-fns";
     import { fr } from "date-fns/locale";
+    import Note from "$lib/Note.svelte";
     
     function formatDate(value) {
         const formattedDate = format(value, "eeee dd MMMM yyyy à HH:mm", {locale: fr});
@@ -37,30 +38,12 @@
     <h2>Journaux liées à cette note :</h2>
 
     {#each data.backlink_notes as note}
-        <div class="journal-note">
-            <p class="header">
-                <span class="note-title">
-                    <a
-                        href={`/${note._source.filename}/`}
-                    >
-                        {#if note._source.title}
-                            {note._source.title}
-                        {:else}
-                            Journal du {format(note._source.created_at, "yyyy-MM-dd à HH:mm")}
-                        {/if}
-                    </a>
-                </span>
-
-                <span class="tags">
-                    {#each note._source.tags || [] as tag, i }
-                        <a href={`/search/tags=${tag}`}>#{tag}</a>
-                    {/each}
-                </span>
-            </p>
-
-            <div class="body">
-                {@html note._source.content_html}
-            </div>
-        </div>
+        <Note 
+            filename={note._source.filename}
+            title={note._source.title}
+            created_at={note._source.created_at}
+            tags={note._source.tags}
+            content_html={note._source.content_html}
+        />
     {/each}
 {/if}
