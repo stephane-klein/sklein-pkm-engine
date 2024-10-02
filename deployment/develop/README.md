@@ -21,7 +21,7 @@ Initialize database and import data:
 
 ```
 $ ./scripts/open_ssh_tunnel_elasticsearch.sh
-$ ../../import.js
+$ ../../import-to-es-database.js
 $ ./scripts/upload-static-files.sh
 $ ./scripts/close_ssh_tunnel_elasticsearch.sh
 ```
