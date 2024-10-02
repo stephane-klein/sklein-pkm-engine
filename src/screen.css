@@ -23,6 +23,7 @@
     }
     @media all and (min-width: 1200px) {
         --line-height: 1.60;
+        --base-font-size: calc(0.80em + 0.2vw);
     }
 }
 
