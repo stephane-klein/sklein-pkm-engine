@@ -1,5 +1,7 @@
 FROM node:20-slim AS base
-RUN npm install -g pnpm@9.9.0
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 WORKDIR /app
 
@@ -10,21 +12,18 @@ COPY ./vite.config.js     /app/vite.config.js
 COPY ./svelte.config.js   /app/svelte.config.js
 COPY ./postcss.config.cjs /app//postcss.config.cjs
 
-RUN pnpm install -P --frozen-lockfile
+FROM base AS prod-deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+
+FROM base AS build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
 
-FROM node:20-slim
+FROM base
 RUN apt update -y; apt install -y curl
-RUN npm install -g pnpm@9.9.0
 
-WORKDIR /app
-
-COPY --from=base /app/package.json ./
-COPY --from=base /app/pnpm-lock.yaml ./
-
-RUN pnpm install -P --frozen-lockfile
-
-COPY --from=base /app/build ./
+COPY --from=prod-deps /app/node_modules /app/node_modules
+COPY --from=build /app/build /app/build
 
 ENV ROOT_DATABASE_URL=""
 
@@ -32,4 +31,4 @@ EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD curl --fail http://localhost:3000 || exit 1
 
-CMD ["node", "./index.js"]
+CMD ["node", "./build/index.js"]
