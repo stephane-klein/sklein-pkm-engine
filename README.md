@@ -13,7 +13,7 @@ $ ./inject-created-at-to-journal-notes.js
 $ ./scripts/move-binary-files-to-static.sh
 $ sudo mkdir -p volumes/elasticsearch/; sudo chmod ugo+rwX volumes/elasticsearch/
 $ docker compose up -d --wait
-$ ./import.js
+$ ./import-to-es-database.js
 ```
 
 ```
