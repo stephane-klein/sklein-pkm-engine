@@ -10,7 +10,7 @@ chmod ugo+rwX /var/lib/notes.develop.sklein.xyz/elasticsearch/
 cat <<EOF > ${PROJECT_FOLDER}docker-compose.yaml
 services:
     elasticsearch:
-        image: elasticsearch:8.15.0
+        image: elasticsearch:8.15.2
         ports:
             - 127.0.0.1:{{ .Env.INSTANCE_DEVELOP_ELASTICSEARCH_PORT }}:9200
         environment:
