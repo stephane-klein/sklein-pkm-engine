@@ -27,4 +27,5 @@ Screencast:<br />
 
 ## Deployment
 
-See [« How to deploy develop instance? »](./deployment/develop/)
+See [« How to deploy develop instance? »](./deployment/develop/) and [« How to deploy prod instance
+»?](./deployment/prod/).
