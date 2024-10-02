@@ -15,97 +15,118 @@ const client = new Client({
     node: process.env.ELASTICSEARCH_URL || "http://localhost:9200"
 });
 
-await client.indices.delete({ index: "notes", ignore_unavailable: true });
-await client.indices.create({
-    index: "notes",
-    body: {
-        settings: {
-            analysis: {
-                analyzer: {
-                    french_analyzer: {
-                        type: "custom",
-                        tokenizer: "standard",
-                        filter: [
-                            "lowercase",
-                            "asciifolding",
-                            "french_elision",
-                            "french_stop",
-                            "french_stemmer"
-                        ]
-                    },
-                    french_html_analyzer: {
-                        type: "custom",
-                        tokenizer: "standard",
-                        filter: [
-                            "lowercase",
-                            "asciifolding",
-                            "french_elision",
-                            "french_stop",
-                            "french_stemmer"
-                        ],
-                        char_filter: [
-                            "html_strip"
-                        ]
-                    }
-                },
-                filter: {
-                    french_elision: {
-                        type: "elision",
-                        articles_case: true,
-                        articles: [
-                            "l", "m", "t", "qu", "n", "s", "j", "d", "c", "jusqu", "quoiqu", "lorsqu", "puisqu"
-                        ]
-                    },
-                    french_stop: {
-                        type: "stop",
-                        stopwords: "_french_"
-                    },
-                    french_stemmer: {
-                        type: "stemmer",
-                        language: "light_french"
-                    }
-                }
-            }
+// List used later to delete all notes that no longer exist
+const allNoteFileNames = (
+    await client.search({
+        index: "notes",
+        body: {
+            query: {
+                match_all: {}
+            },
+            stored_fields: [],
+            _source: false
         },
-        mappings: {
-            properties: {
-                title: {
-                    type: "text",
-                    analyzer: "french_analyzer",
-                    fields: {
-                        keyword: {
-                            type: "keyword"
+        size: 10000
+    })
+).hits.hits.map((row) => row._id);
+
+if (!await client.indices.exists({ index: "notes" })) {
+
+    // If you modify this data model, you must delete the database with the following script:
+    //
+    // $ ./reset-es-database.js
+    //
+    await client.indices.create({
+        index: "notes",
+        body: {
+            settings: {
+                analysis: {
+                    analyzer: {
+                        french_analyzer: {
+                            type: "custom",
+                            tokenizer: "standard",
+                            filter: [
+                                "lowercase",
+                                "asciifolding",
+                                "french_elision",
+                                "french_stop",
+                                "french_stemmer"
+                            ]
+                        },
+                        french_html_analyzer: {
+                            type: "custom",
+                            tokenizer: "standard",
+                            filter: [
+                                "lowercase",
+                                "asciifolding",
+                                "french_elision",
+                                "french_stop",
+                                "french_stemmer"
+                            ],
+                            char_filter: [
+                                "html_strip"
+                            ]
+                        }
+                    },
+                    filter: {
+                        french_elision: {
+                            type: "elision",
+                            articles_case: true,
+                            articles: [
+                                "l", "m", "t", "qu", "n", "s", "j", "d", "c", "jusqu", "quoiqu", "lorsqu", "puisqu"
+                            ]
+                        },
+                        french_stop: {
+                            type: "stop",
+                            stopwords: "_french_"
+                        },
+                        french_stemmer: {
+                            type: "stemmer",
+                            language: "light_french"
                         }
                     }
-                },
-                filename: {
-                    type: "keyword"
-                },
-                created_at: {
-                    type: "date",
-                    format: "yyyy-MM-dd HH:mm:ss"
-                },
-                note_type: {
-                    type: "keyword"
-                },
-                linked_notes: {
-                    type: "keyword"
-                },
-                tags: {
-                    type: "keyword"
-                },
-                content: {
-                    type: "text",
-                    analyzer: "french_analyzer"
-                },
-                content_html: {
-                    type: "text",
-                    analyzer: "french_html_analyzer"
+                }
+            },
+            mappings: {
+                properties: {
+                    title: {
+                        type: "text",
+                        analyzer: "french_analyzer",
+                        fields: {
+                            keyword: {
+                                type: "keyword"
+                            }
+                        }
+                    },
+                    filename: {
+                        type: "keyword"
+                    },
+                    created_at: {
+                        type: "date",
+                        format: "yyyy-MM-dd HH:mm:ss"
+                    },
+                    note_type: {
+                        type: "keyword"
+                    },
+                    linked_notes: {
+                        type: "keyword"
+                    },
+                    tags: {
+                        type: "keyword"
+                    },
+                    content: {
+                        type: "text",
+                        analyzer: "french_analyzer"
+                    },
+                    content_html: {
+                        type: "text",
+                        analyzer: "french_html_analyzer"
+                    }
                 }
             }
         }
-    }
-});
+    });
+}
 
 process.chdir(__dirname);
 
@@ -155,5 +176,18 @@ for await (const filePath of (await glob(
             content: data.content,
             content_html: md.render(data.content)
         },
+    });
+    const fileNameIndex = allNoteFileNames.findIndex((item) => item === fileName);
+    if (fileNameIndex > -1) {
+        allNoteFileNames.splice(fileNameIndex, 1);
+    }
+}
+
+// Delete all notes that no longer exist
+for (const fileName of allNoteFileNames) {
+    console.log(`Delete "${fileName}" note still in Elastic Search database`);
+    await client.delete({
+      index: "notes",
+      id: fileName
     });
 }
