@@ -48,6 +48,7 @@
     "postcss-normalize": "10.0.1",
     "source-serif": "4.5.0",
     "svelte": "4.2.19",
+    "svelte-hamburgers": "4.2.1",
     "svelte-preprocess": "6.0.2",
     "unplugin-icons": "0.19.2",
     "vite": "5.4.2",
