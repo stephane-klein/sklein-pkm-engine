@@ -15,21 +15,6 @@ const client = new Client({
     node: process.env.ELASTICSEARCH_URL || "http://localhost:9200"
 });
 
-// List used later to delete all notes that no longer exist
-const allNoteFileNames = (
-    await client.search({
-        index: "notes",
-        body: {
-            query: {
-                match_all: {}
-            },
-            stored_fields: [],
-            _source: false
-        },
-        size: 10000
-    })
-).hits.hits.map((row) => row._id);
-
 if (!await client.indices.exists({ index: "notes" })) {
 
     // If you modify this data model, you must delete the database with the following script:
@@ -127,6 +112,21 @@ if (!await client.indices.exists({ index: "notes" })) {
         }
     });
 }
+
+// List used later to delete all notes that no longer exist
+const allNoteFileNames = (
+    await client.search({
+        index: "notes",
+        body: {
+            query: {
+                match_all: {}
+            },
+            stored_fields: [],
+            _source: false
+        },
+        size: 10000
+    })
+).hits.hits.map((row) => row._id);
 
 process.chdir(__dirname);
 
