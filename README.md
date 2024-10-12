@@ -10,7 +10,7 @@ $ pnpm install
 $ ./inject-nanoid-to-notes.js
 $ ./inject-note-type-to-notes.js
 $ ./inject-created-at-to-journal-notes.js
-$ ./scripts/move-binary-files-to-static.sh
+$ ./scripts/copy-binary-files-to-static.sh
 $ sudo mkdir -p volumes/elasticsearch/; sudo chmod ugo+rwX volumes/elasticsearch/
 $ docker compose up -d --wait
 $ ./import-to-es-database.js
