@@ -10,7 +10,7 @@ const nanoid = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 12); // se
 
 const contentAbsPath = path.resolve(".", process.env.CONTENT_PATH || "content/");
 
-for await (const filePath of (await glob(
+for (const filePath of (await glob(
     "/src/**/*.md",
     {
         cwd: contentAbsPath,
