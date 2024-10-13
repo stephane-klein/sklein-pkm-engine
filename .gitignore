@@ -5,3 +5,4 @@ vite.config.js.timestamp-*
 volumes/
 full-content/
 static/
+import-to-es-database.state
