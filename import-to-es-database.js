@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
 import { glob } from "glob";
@@ -8,6 +9,7 @@ import yaml from "js-yaml";
 import { Listr } from "listr2";
 import { extractLinksAndTags } from "./utils.js";
 import md from "./src/lib/server/markdown.js";
+import { parse, format } from "date-fns";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,10 +21,17 @@ const client = new Client({
 });
 
 let ctx = {
+    lastImportDatetime: (
+        fs.existsSync("import-to-es-database.state")
+            ? parse(fs.readFileSync("import-to-es-database.state", "utf8"), "yyyyMMddHHmmss", new Date())
+            : null
+    ),
+    currentDatetime: format(new Date(), "yyyyMMddHHmmSS"),
     notesIndiceExists: false,
     contentAbsPath: path.resolve(".", process.env.CONTENT_PATH || "content/"),
     allFilenameOfNotesInElasticsearch: [],
-    allFilepathOfNotesOnTheFileSystem: []
+    allFilepathOfNotesOnTheFileSystem: [],
+    filepathOfNotesOnTheFileSystemUpdatedSinceLastimport: null
 };
 
 const tasks = new Listr(
@@ -158,7 +167,7 @@ const tasks = new Listr(
             }
         },
         {
-            title: "Loads a list of all note files to be processed",
+            title: `Loads a list of all notes on the file system`,
             task: async(ctx) => {
                 ctx.allFilepathOfNotesOnTheFileSystem = await glob(
                     "/src/**/*.md",
@@ -175,13 +184,36 @@ const tasks = new Listr(
             }
         },
         {
-            title: "Upload notes from filesystem to database",
+            title: `Generates the list of notes to be imported, the note updated after ${ctx.lastImportDatetime ? format(ctx.lastImportDatetime, "yyyy-MM-dd HH:mm:SS") : "..."}`,
+            skip: (ctx) => ctx.lastImportDatetime === null,
+            task: async(ctx, task) => {
+                let index = 0;
+                let totalNoteToImport = 0;
+                const allNoteFilesLength = ctx.allFilepathOfNotesOnTheFileSystem.length;
+                ctx.filepathOfNotesOnTheFileSystemUpdatedSinceLastimport = ctx.allFilepathOfNotesOnTheFileSystem.filter((file) => {
+                    index++;
+                    task.title = `Generates the list of notes to be imported, the note updated after ${format(ctx.lastImportDatetime, "yyyy-MM-dd HH:mm:SS")} (${index}/${allNoteFilesLength}) => ${totalNoteToImport}`;
+                    const isFileToKeep = fs.statSync(file).mtime > ctx.lastImportDatetime;
+                    if (isFileToKeep) {
+                        totalNoteToImport++;
+                    }
+                    return isFileToKeep;
+                });
+            }
+        },
+        {
+            title: "Upload notes from filesystem to Elasticsearch database",
             task: async(ctx, task) => {
                 let index = 0;
                 const contentAbsPathLength = ctx.contentAbsPath.length;
-                for await (const filePath of ctx.allFilepathOfNotesOnTheFileSystem) {
+                const filepathOfNoteToUpload = (
+                    ctx.filepathOfNotesOnTheFileSystemUpdatedSinceLastimport
+                        ? ctx.filepathOfNotesOnTheFileSystemUpdatedSinceLastimport
+                        : ctx.allFilepathOfNotesOnTheFileSystem
+                );
+                for await (const filePath of filepathOfNoteToUpload) {
                     index++;
-                    task.title = `Upload notes from filesystem to database (${index}/${ctx.allFilepathOfNotesOnTheFileSystem.length})`;
+                    task.title = `Upload notes from filesystem to Elasticsearch database (${index}/${filepathOfNoteToUpload.length})`;
                     const fileName = path.parse(path.basename(filePath)).name;
                     const relativeFilePath = filePath.substring(contentAbsPathLength);
 
@@ -197,7 +229,7 @@ const tasks = new Listr(
                         task.output = `Skip draft note: ${relativeFilePath}`;
                         continue;
                     } else {
-                        task.output = `Load ${relativeFilePath} to database`;
+                        task.output = `Upload ${relativeFilePath} to Elasticsearch database`;
                     }
 
                     const [WikiLinks, Tags] = extractLinksAndTags(data.content);
@@ -217,27 +249,43 @@ const tasks = new Listr(
                             content_html: md.render(data.content)
                         },
                     });
-                    const fileNameIndex = ctx.allFilenameOfNotesInElasticsearch.findIndex((item) => item === fileName);
-                    if (fileNameIndex > -1) {
-                        ctx.allFilenameOfNotesInElasticsearch.splice(fileNameIndex, 1);
-                    }
                 }
             },
         },
         {
-            title: "Delete any notes still present in the database but which have been deleted from the filesystem",
+            title: "Delete any notes still present in the Elasticsearch database but which have been deleted from the filesystem",
             task: async(ctx, task) => {
                 let index = 0;
-                task.title = `Delete any notes still present in the database but which have been deleted from the filesystem (${index}/${ctx.allFilenameOfNotesInElasticsearch.length})`;
-                for (const fileName of ctx.allFilenameOfNotesInElasticsearch) {
+
+                const notesToDelete = ctx.allFilenameOfNotesInElasticsearch.filter(
+                    (noteFileName) => {
+                        return (
+                            !ctx.allFilepathOfNotesOnTheFileSystem.some(
+                                (noteFilepath) => {
+                                    return path.parse(path.basename(noteFilepath)).name === noteFileName;
+                                }
+                            )
+                        );
+                    }
+                );
+                const notesToDeleteLength = notesToDelete.length;
+
+                task.title = `Delete any notes still present in the Elasticseach database but which have been deleted from the filesystem (${index}/${notesToDeleteLength})`;
+                for (const fileName of notesToDelete) {
                     index++;
-                    task.title = `Delete any notes still present in the database but which have been deleted from the filesystem (${index}/${ctx.allFilenameOfNotesInElasticsearch.length})`;
-                    task.output = `Delete "${fileName}" note from database`;
-                    await client.delete({
-                        index: "notes",
-                        id: fileName
-                    });
+                    task.title = `Delete any notes still present in the Elasticsearch database but which have been deleted from the filesystem (${index}/${notesToDeleteLength})`;
+                    task.output = `Delete "${fileName}" note from Elasticsearch database`;
+                    //await client.delete({
+                    //    index: "notes",
+                    //    id: fileName
+                    //});
                 }
+            }
+        },
+        {
+            title: `Write current datetime ${ctx.currentDatetime} to import-to-es-database.state`,
+            task: async(ctx) => {
+                fs.writeFileSync("import-to-es-database.state", ctx.currentDatetime);
             }
         }
     ],
