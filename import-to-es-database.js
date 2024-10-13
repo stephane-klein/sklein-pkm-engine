@@ -20,9 +20,9 @@ const client = new Client({
 
 let ctx = {
     notesIndiceExists: false,
-    allNoteFileNames: [],
     contentAbsPath: path.resolve(".", process.env.CONTENT_PATH || "content/"),
-    allFilesToImport: []
+    allFilenameOfNotesInElasticsearch: [],
+    allFilepathOfNotesOnTheFileSystem: []
 };
 
 const tasks = new Listr(
@@ -142,7 +142,7 @@ const tasks = new Listr(
             title: "Loads the names of all notes already in the Elasticsearch database",
             task: async(ctx) => {
                 // List used later to delete all notes that no longer exist
-                ctx.allNoteFileNames = (
+                ctx.allFilenameOfNotesInElasticsearch = (
                     await client.search({
                         index: "notes",
                         body: {
@@ -160,7 +160,7 @@ const tasks = new Listr(
         {
             title: "Loads a list of all note files to be processed",
             task: async(ctx) => {
-                ctx.allFilesToImport = await glob(
+                ctx.allFilepathOfNotesOnTheFileSystem = await glob(
                     "/src/**/*.md",
                     {
                         cwd: ctx.contentAbsPath,
@@ -179,9 +179,9 @@ const tasks = new Listr(
             task: async(ctx, task) => {
                 let index = 0;
                 const contentAbsPathLength = ctx.contentAbsPath.length;
-                for await (const filePath of ctx.allFilesToImport) {
+                for await (const filePath of ctx.allFilepathOfNotesOnTheFileSystem) {
                     index++;
-                    task.title = `Upload notes from filesystem to database (${index}/${ctx.allFilesToImport.length})`;
+                    task.title = `Upload notes from filesystem to database (${index}/${ctx.allFilepathOfNotesOnTheFileSystem.length})`;
                     const fileName = path.parse(path.basename(filePath)).name;
                     const relativeFilePath = filePath.substring(contentAbsPathLength);
 
@@ -217,9 +217,9 @@ const tasks = new Listr(
                             content_html: md.render(data.content)
                         },
                     });
-                    const fileNameIndex = ctx.allNoteFileNames.findIndex((item) => item === fileName);
+                    const fileNameIndex = ctx.allFilenameOfNotesInElasticsearch.findIndex((item) => item === fileName);
                     if (fileNameIndex > -1) {
-                        ctx.allNoteFileNames.splice(fileNameIndex, 1);
+                        ctx.allFilenameOfNotesInElasticsearch.splice(fileNameIndex, 1);
                     }
                 }
             },
@@ -228,10 +228,10 @@ const tasks = new Listr(
             title: "Delete any notes still present in the database but which have been deleted from the filesystem",
             task: async(ctx, task) => {
                 let index = 0;
-                task.title = `Delete any notes still present in the database but which have been deleted from the filesystem (${index}/${ctx.allNoteFileNames.length})`;
-                for (const fileName of ctx.allNoteFileNames) {
+                task.title = `Delete any notes still present in the database but which have been deleted from the filesystem (${index}/${ctx.allFilenameOfNotesInElasticsearch.length})`;
+                for (const fileName of ctx.allFilenameOfNotesInElasticsearch) {
                     index++;
-                    task.title = `Delete any notes still present in the database but which have been deleted from the filesystem (${index}/${ctx.allNoteFileNames.length})`;
+                    task.title = `Delete any notes still present in the database but which have been deleted from the filesystem (${index}/${ctx.allFilenameOfNotesInElasticsearch.length})`;
                     task.output = `Delete "${fileName}" note from database`;
                     await client.delete({
                         index: "notes",
