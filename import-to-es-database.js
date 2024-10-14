@@ -26,7 +26,7 @@ let ctx = {
             ? parse(fs.readFileSync("import-to-es-database.state", "utf8"), "yyyyMMddHHmmss", new Date())
             : null
     ),
-    currentDatetime: format(new Date(), "yyyyMMddHHmmSS"),
+    currentDatetime: format(new Date(), "yyyyMMddHHmmss"),
     notesIndiceExists: false,
     contentAbsPath: path.resolve(".", process.env.CONTENT_PATH || "content/"),
     allFilenameOfNotesInElasticsearch: [],
