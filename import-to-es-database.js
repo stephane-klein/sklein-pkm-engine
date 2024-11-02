@@ -249,7 +249,7 @@ const tasks = new Listr(
                     });
                     if (
                         (data.data.draft === true) ||
-                            (data.data.draft === "true")
+                        (data.data.draft === "true")
                     ) {
                         task.output = `Skip draft note: ${relativeFilePath}`;
                         continue;
