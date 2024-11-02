@@ -203,9 +203,11 @@ const tasks = new Listr(
                     task.title = `Generates the list of notes to be imported, the note updated after ${format(ctx.lastImportDatetime, "yyyy-MM-dd HH:mm:SS")} (${index}/${allNoteFilesLength}) => ${totalNoteToImport}`;
                     const isFileToKeep = fs.statSync(file).mtime > ctx.lastImportDatetime;
                     if (isFileToKeep) {
+                    const isUpdatedFile = fs.statSync(file).mtime > ctx.lastImportDatetime;
+                    if (isUpdatedFile) {
                         totalNoteToImport++;
                     }
-                    return isFileToKeep;
+                    return isUpdatedFile;
                 });
             }
         },
