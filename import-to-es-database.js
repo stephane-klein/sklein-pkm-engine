@@ -212,6 +212,7 @@ const tasks = new Listr(
                             (data.data.draft !== true) &&
                             (data.data.draft !== "true")
                         ) {
+                            task.output = `Add note: ${path.parse(path.basename(filePath)).name}`;
                             totalNoteToImport++;
 
                             return true;
@@ -219,6 +220,10 @@ const tasks = new Listr(
                     }
                     return false;
                 });
+            },
+            rendererOptions: {
+                outputBar: 20,
+                persistentOutput: true
             }
         },
         {
@@ -273,6 +278,10 @@ const tasks = new Listr(
                     }
                 }
             },
+            rendererOptions: {
+                outputBar: 20,
+                persistentOutput: true
+            }
         },
         {
             title: "Delete any notes still present in the Elasticsearch database but which have been deleted from the filesystem",
