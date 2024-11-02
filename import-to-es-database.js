@@ -203,9 +203,21 @@ const tasks = new Listr(
                     task.title = `Generates the list of notes to be imported, the note updated after ${format(ctx.lastImportDatetime, "yyyy-MM-dd HH:mm:SS")} (${index}/${allNoteFilesLength}) => ${totalNoteToImport}`;
                     const isUpdatedFile = fs.statSync(filePath).mtime > ctx.lastImportDatetime;
                     if (isUpdatedFile) {
-                        totalNoteToImport++;
+                        const data = matter.read(filePath, {
+                            engines: {
+                                yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA })
+                            }
+                        });
+                        if (
+                            (data.data.draft !== true) &&
+                            (data.data.draft !== "true")
+                        ) {
+                            totalNoteToImport++;
+
+                            return true;
+                        }
                     }
-                    return isUpdatedFile;
+                    return false;
                 });
             }
         },
