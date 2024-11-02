@@ -7,9 +7,6 @@ More information on this project (in French): https://notes.sklein.xyz/Projets/P
 ```sh
 $ mise install
 $ pnpm install
-$ ./inject-nanoid-to-notes.js
-$ ./inject-note-type-to-notes.js
-$ ./inject-created-at-to-journal-notes.js
 $ ./scripts/copy-binary-files-to-static.sh
 $ sudo mkdir -p volumes/elasticsearch/; sudo chmod ugo+rwX volumes/elasticsearch/
 $ docker compose up -d --wait

@@ -11,6 +11,7 @@ import { program } from "commander";
 import { extractLinksAndTags } from "./utils.js";
 import md from "./src/lib/server/markdown.js";
 import { parse, format } from "date-fns";
+import { customAlphabet } from "nanoid/non-secure";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,8 +19,8 @@ const __dirname = path.dirname(__filename);
 process.chdir(__dirname);
 
 program
-  .option('--dry', 'Run in dry mode')
-  .parse();
+    .option('--dry', 'Run in dry mode')
+    .parse();
 
 const client = new Client({
     node: process.env.ELASTICSEARCH_URL || "http://localhost:9200"
@@ -40,8 +41,89 @@ let ctx = {
     filepathOfNotesOnTheFileSystemUpdatedSinceLastimport: null
 };
 
+const nanoid = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 12); // see https://notes.sklein.xyz/Notes-%C3%A9ph%C3%A9m%C3%A8res/2024-07-19_2316
+
 const tasks = new Listr(
     [
+        {
+            title: `Inject nanoid and type props to note front-matters`,
+            task: async(ctx, task) => {
+                const contentAbsPathLength = ctx.contentAbsPath.length;
+
+                for (const filePath of (await glob(
+                    "/src/**/*.md",
+                    {
+                        cwd: ctx.contentAbsPath,
+                        root: ctx.contentAbsPath,
+                        dot: false,
+                        ignore: [
+                            "src/Templates/**",
+                            "src/attachments/**"
+                        ]
+                    }
+                ))) {
+                    const relativeFilePath = filePath.substring(contentAbsPathLength);
+                    const data = matter.read(filePath, {
+                        engines: {
+                            yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA })
+                        }
+                    });
+                    let frontMatterUpdated = false;
+                    if (!data.data?.nanoid) {
+                        data.data.nanoid = nanoid();
+                        frontMatterUpdated = true;
+                        task.output = `Inject nanoid: ${data.data.nanoid} to ${relativeFilePath} note`;
+                    }
+                    if (relativeFilePath.startsWith("/src/Notes éphémères/")) {
+                        if (data.data?.type !== "journal_note") {
+                            data.data.type = "journal_note";
+                            frontMatterUpdated = true;
+                            task.output = `Inject type: "journal_note" to ${relativeFilePath} note`;
+                        }
+                    } else {
+                        if (!data.data?.type) {
+                            data.data.type = "evergreen_note";
+                            frontMatterUpdated = true;
+                            task.output = `Inject type: "evergreen_note" to ${relativeFilePath} note`;
+                        }
+                    }
+
+                    if (relativeFilePath.startsWith("/src/Notes éphémères/")) {
+                        if (!data.data?.created_at) {
+                            const filename = path.parse(path.basename(filePath)).name;
+                            if (filename.length === 10) {
+                                data.data.created_at = `${filename} 20:00`; // The choice of 20:00 is arbitrary.
+                                task.output = `Inject created_at: "${data.data.created_at}" to ${relativeFilePath} note`;
+                                frontMatterUpdated = true;
+                            } else if (filename.length === 15) {
+                                data.data.created_at = `${filename.substring(0, 10)} ${filename.substring(11, 13)}:${filename.substring(13, 15)}`;
+                                task.output = `Inject created_at: "${data.data.created_at}" to ${relativeFilePath} note`;
+                                frontMatterUpdated = true;
+                            }
+                        }
+                    }
+
+                    if (frontMatterUpdated) {
+                        const newContent = matter.stringify(data.content, data.data, {
+                            language: 'yaml',
+                            engines: {
+                                yaml: {
+                                    parse: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }),
+                                    stringify: (d) => yaml.dump(d, { schema: yaml.JSON_SCHEMA })
+                                }
+                            }
+                        });
+                        if (!ctx.dry) {
+                            fs.writeFileSync(filePath, newContent, "utf8");
+                        }
+                    }
+                }
+            },
+            rendererOptions: {
+                outputBar: 20,
+                persistentOutput: true
+            }
+        },
         {
             title: `Check if "notes" indice exists in Elasticsearch database`,
             task: async(ctx, task) => {
