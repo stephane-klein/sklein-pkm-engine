@@ -198,12 +198,10 @@ const tasks = new Listr(
                 let index = 0;
                 let totalNoteToImport = 0;
                 const allNoteFilesLength = ctx.allFilepathOfNotesOnTheFileSystem.length;
-                ctx.filepathOfNotesOnTheFileSystemUpdatedSinceLastimport = ctx.allFilepathOfNotesOnTheFileSystem.filter((file) => {
+                ctx.filepathOfNotesOnTheFileSystemUpdatedSinceLastimport = ctx.allFilepathOfNotesOnTheFileSystem.filter((filePath) => {
                     index++;
                     task.title = `Generates the list of notes to be imported, the note updated after ${format(ctx.lastImportDatetime, "yyyy-MM-dd HH:mm:SS")} (${index}/${allNoteFilesLength}) => ${totalNoteToImport}`;
-                    const isFileToKeep = fs.statSync(file).mtime > ctx.lastImportDatetime;
-                    if (isFileToKeep) {
-                    const isUpdatedFile = fs.statSync(file).mtime > ctx.lastImportDatetime;
+                    const isUpdatedFile = fs.statSync(filePath).mtime > ctx.lastImportDatetime;
                     if (isUpdatedFile) {
                         totalNoteToImport++;
                     }
