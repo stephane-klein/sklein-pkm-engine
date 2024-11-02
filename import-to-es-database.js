@@ -7,6 +7,7 @@ import { Client } from "@elastic/elasticsearch";
 import matter from "gray-matter";
 import yaml from "js-yaml";
 import { Listr } from "listr2";
+import { program } from "commander";
 import { extractLinksAndTags } from "./utils.js";
 import md from "./src/lib/server/markdown.js";
 import { parse, format } from "date-fns";
@@ -16,11 +17,16 @@ const __dirname = path.dirname(__filename);
 
 process.chdir(__dirname);
 
+program
+  .option('--dry', 'Run in dry mode')
+  .parse();
+
 const client = new Client({
     node: process.env.ELASTICSEARCH_URL || "http://localhost:9200"
 });
 
 let ctx = {
+    ...program.opts(),
     lastImportDatetime: (
         fs.existsSync("import-to-es-database.state")
             ? parse(fs.readFileSync("import-to-es-database.state", "utf8"), "yyyyMMddHHmmss", new Date())
@@ -50,101 +56,103 @@ const tasks = new Listr(
         {
             title: `Create "notes" indice`,
             skip: (ctx) => ctx.notesIndiceExists,
-            task: async() => {
+            task: async(ctx) => {
                 // If you modify this data model, you must delete the database with the following script:
                 //
                 // $ ./reset-es-database.js
                 //
-                await client.indices.create({
-                    index: "notes",
-                    body: {
-                        settings: {
-                            analysis: {
-                                analyzer: {
-                                    french_analyzer: {
-                                        type: "custom",
-                                        tokenizer: "standard",
-                                        filter: [
-                                            "lowercase",
-                                            "asciifolding",
-                                            "french_elision",
-                                            "french_stop",
-                                            "french_stemmer"
-                                        ]
+                if (!ctx.dry) {
+                    await client.indices.create({
+                        index: "notes",
+                        body: {
+                            settings: {
+                                analysis: {
+                                    analyzer: {
+                                        french_analyzer: {
+                                            type: "custom",
+                                            tokenizer: "standard",
+                                            filter: [
+                                                "lowercase",
+                                                "asciifolding",
+                                                "french_elision",
+                                                "french_stop",
+                                                "french_stemmer"
+                                            ]
+                                        },
+                                        french_html_analyzer: {
+                                            type: "custom",
+                                            tokenizer: "standard",
+                                            filter: [
+                                                "lowercase",
+                                                "asciifolding",
+                                                "french_elision",
+                                                "french_stop",
+                                                "french_stemmer"
+                                            ],
+                                            char_filter: [
+                                                "html_strip"
+                                            ]
+                                        }
                                     },
-                                    french_html_analyzer: {
-                                        type: "custom",
-                                        tokenizer: "standard",
-                                        filter: [
-                                            "lowercase",
-                                            "asciifolding",
-                                            "french_elision",
-                                            "french_stop",
-                                            "french_stemmer"
-                                        ],
-                                        char_filter: [
-                                            "html_strip"
-                                        ]
-                                    }
-                                },
-                                filter: {
-                                    french_elision: {
-                                        type: "elision",
-                                        articles_case: true,
-                                        articles: [
-                                            "l", "m", "t", "qu", "n", "s", "j", "d", "c", "jusqu", "quoiqu", "lorsqu", "puisqu"
-                                        ]
-                                    },
-                                    french_stop: {
-                                        type: "stop",
-                                        stopwords: "_french_"
-                                    },
-                                    french_stemmer: {
-                                        type: "stemmer",
-                                        language: "light_french"
-                                    }
-                                }
-                            }
-                        },
-                        mappings: {
-                            properties: {
-                                title: {
-                                    type: "text",
-                                    analyzer: "french_analyzer",
-                                    fields: {
-                                        keyword: {
-                                            type: "keyword"
+                                    filter: {
+                                        french_elision: {
+                                            type: "elision",
+                                            articles_case: true,
+                                            articles: [
+                                                "l", "m", "t", "qu", "n", "s", "j", "d", "c", "jusqu", "quoiqu", "lorsqu", "puisqu"
+                                            ]
+                                        },
+                                        french_stop: {
+                                            type: "stop",
+                                            stopwords: "_french_"
+                                        },
+                                        french_stemmer: {
+                                            type: "stemmer",
+                                            language: "light_french"
                                         }
                                     }
-                                },
-                                filename: {
-                                    type: "keyword"
-                                },
-                                created_at: {
-                                    type: "date",
-                                    format: "yyyy-MM-dd HH:mm:ss"
-                                },
-                                note_type: {
-                                    type: "keyword"
-                                },
-                                linked_notes: {
-                                    type: "keyword"
-                                },
-                                tags: {
-                                    type: "keyword"
-                                },
-                                content: {
-                                    type: "text",
-                                    analyzer: "french_analyzer"
-                                },
-                                content_html: {
-                                    type: "text",
-                                    analyzer: "french_html_analyzer"
+                                }
+                            },
+                            mappings: {
+                                properties: {
+                                    title: {
+                                        type: "text",
+                                        analyzer: "french_analyzer",
+                                        fields: {
+                                            keyword: {
+                                                type: "keyword"
+                                            }
+                                        }
+                                    },
+                                    filename: {
+                                        type: "keyword"
+                                    },
+                                    created_at: {
+                                        type: "date",
+                                        format: "yyyy-MM-dd HH:mm:ss"
+                                    },
+                                    note_type: {
+                                        type: "keyword"
+                                    },
+                                    linked_notes: {
+                                        type: "keyword"
+                                    },
+                                    tags: {
+                                        type: "keyword"
+                                    },
+                                    content: {
+                                        type: "text",
+                                        analyzer: "french_analyzer"
+                                    },
+                                    content_html: {
+                                        type: "text",
+                                        analyzer: "french_html_analyzer"
+                                    }
                                 }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
         },
         {
@@ -235,20 +243,22 @@ const tasks = new Listr(
                     const [WikiLinks, Tags] = extractLinksAndTags(data.content);
                     data.data.tags = [...new Set([...data.data?.tags || [], ...Tags])];
 
-                    await client.index({
-                        index: "notes",
-                        id: fileName,
-                        document: {
-                            filename: fileName,
-                            created_at: (data.data.created_at && (data.data.type === "journal_note")) ? data.data.created_at + ":00" : null,
-                            title: data.data?.title || ((data.data.type !== "journal_note") ? path.parse(fileName).name : undefined),
-                            note_type: data.data?.type || null,
-                            linked_notes: WikiLinks,
-                            tags: data.data?.tags || [],
-                            content: data.content,
-                            content_html: md.render(data.content)
-                        },
-                    });
+                    if (!ctx.dry) {
+                        await client.index({
+                            index: "notes",
+                            id: fileName,
+                            document: {
+                                filename: fileName,
+                                created_at: (data.data.created_at && (data.data.type === "journal_note")) ? data.data.created_at + ":00" : null,
+                                title: data.data?.title || ((data.data.type !== "journal_note") ? path.parse(fileName).name : undefined),
+                                note_type: data.data?.type || null,
+                                linked_notes: WikiLinks,
+                                tags: data.data?.tags || [],
+                                content: data.content,
+                                content_html: md.render(data.content)
+                            },
+                        });
+                    }
                 }
             },
         },
@@ -275,17 +285,21 @@ const tasks = new Listr(
                     index++;
                     task.title = `Delete any notes still present in the Elasticsearch database but which have been deleted from the filesystem (${index}/${notesToDeleteLength})`;
                     task.output = `Delete "${fileName}" note from Elasticsearch database`;
-                    //await client.delete({
-                    //    index: "notes",
-                    //    id: fileName
-                    //});
+                    if (!ctx.dry) {
+                        await client.delete({
+                           index: "notes",
+                           id: fileName
+                        });
+                    }
                 }
             }
         },
         {
             title: `Write current datetime ${ctx.currentDatetime} to import-to-es-database.state`,
             task: async(ctx) => {
-                fs.writeFileSync("import-to-es-database.state", ctx.currentDatetime);
+                if (!ctx.dry) {
+                    fs.writeFileSync("import-to-es-database.state", ctx.currentDatetime);
+                }
             }
         }
     ],
