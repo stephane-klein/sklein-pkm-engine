@@ -20,16 +20,19 @@ process.chdir(__dirname);
 
 program
     .option('--dry', 'Run in dry mode')
+    .option('--ignore-state', 'Ignore state file')
     .parse();
 
 const client = new Client({
     node: process.env.ELASTICSEARCH_URL || "http://localhost:9200"
 });
 
+const options = program.opts();
+
 let ctx = {
-    ...program.opts(),
+    ...options,
     lastImportDatetime: (
-        fs.existsSync("import-to-es-database.state")
+        (fs.existsSync("import-to-es-database.state") && !options.ignoreState)
             ? parse(fs.readFileSync("import-to-es-database.state", "utf8"), "yyyyMMddHHmmss", new Date())
             : null
     ),
@@ -275,8 +278,12 @@ const tasks = new Listr(
             }
         },
         {
-            title: `Generates the list of notes to be imported, the note updated after ${ctx.lastImportDatetime ? format(ctx.lastImportDatetime, "yyyy-MM-dd HH:mm:SS") : "..."}`,
-            skip: (ctx) => ctx.lastImportDatetime === null,
+            title: (
+                ctx.lastImportDatetime
+                    ? `Generates the list of notes to be imported, the note updated after ${format(ctx.lastImportDatetime, "yyyy-MM-dd HH:mm:SS")}`
+                    : `Generates the list of notes to be imported`
+            ),
+            enabled: (ctx) => ctx.lastImportDatetime !== null,
             task: async(ctx, task) => {
                 let index = 0;
                 let totalNoteToImport = 0;
@@ -400,6 +407,7 @@ const tasks = new Listr(
         },
         {
             title: `Write current datetime ${ctx.currentDatetime} to import-to-es-database.state`,
+            enabled: (ctx) => !ctx.ignoreState,
             task: async(ctx) => {
                 if (!ctx.dry) {
                     fs.writeFileSync("import-to-es-database.state", ctx.currentDatetime);
