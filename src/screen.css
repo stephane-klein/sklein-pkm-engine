@@ -186,6 +186,12 @@ ARTICLE {
             overflow-y: hidden;
             max-height: 50em;
         }
+
+        IMG {
+            box-shadow: 0 0 5px 0 #777;
+            margin: auto;
+            display: block;
+        }
     }
 
     .see-more-or-less {
@@ -270,6 +276,12 @@ BODY {
         margin: 2rem 0;
         hyphens: auto;
         text-align: justify;
+
+        IMG {
+            box-shadow: 0 0 5px 0 #777;
+            margin: auto;
+            display: block;
+        }
     }
 }
 
