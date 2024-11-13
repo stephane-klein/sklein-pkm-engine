@@ -33,7 +33,7 @@ let ctx = {
             ? parse(fs.readFileSync("import-to-es-database.state", "utf8"), "yyyyMMddHHmmss", new Date())
             : null
     ),
-    currentDatetime: format(new Date(), "yyyyMMddHHmmss"),
+    currentDatetime: undefined,
     notesIndiceExists: false,
     contentAbsPath: path.resolve(".", process.env.CONTENT_PATH || "content/"),
     allFilenameOfNotesInElasticsearch: [],
@@ -118,6 +118,7 @@ const tasks = new Listr(
                         }
                     }
                 }
+                ctx.currentDatetime = format(new Date(new Date().getTime() + 1000), "yyyyMMddHHmmss");
             },
             rendererOptions: {
                 outputBar: 20,
