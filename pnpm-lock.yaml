@@ -53,6 +53,9 @@ importers:
       markdown-it:
         specifier: 14.1.0
         version: 14.1.0
+      markdown-it-callouts:
+        specifier: 1.0.3
+        version: 1.0.3
       markdown-it-image-lazy-loading:
         specifier: 2.0.1
         version: 2.0.1
@@ -1743,6 +1746,9 @@ packages:
 
   magic-string@0.30.10:
     resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
+
+  markdown-it-callouts@1.0.3:
+    resolution: {integrity: sha512-DkWzoK3mDZpdkkBSS6dTiTXRdauUeCqEVoH/wPIaB+62pSgcRq2bWB7FHTrzH5kHUSrQ2IjjoelBsWenQBXdig==}
 
   markdown-it-image-lazy-loading@2.0.1:
     resolution: {integrity: sha512-IN1DNE2ubw8yn0I7G2conoxSz0R5GgMuOczbxtV+k20MtXeHrDvMQPkQYYGQSd+ejy4eSKQOhqu3gk676Ca//A==}
@@ -4212,6 +4218,8 @@ snapshots:
   magic-string@0.30.10:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  markdown-it-callouts@1.0.3: {}
 
   markdown-it-image-lazy-loading@2.0.1:
     dependencies:

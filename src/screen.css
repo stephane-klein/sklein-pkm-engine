@@ -41,7 +41,58 @@ BODY {
     padding: 0 0.3em;
     margin: 0 auto;
 
-    BLOCKQUOTE {
+    blockquote.callout-quote {
+        position: relative;
+        width: fit-content;
+        margin: 2em auto 2em auto;
+
+        font-style: italic;
+
+        &::before, &::after {
+            color: #888;
+            position: absolute;
+            font-size: 3em;
+        }
+        &::before {
+            content: "\201C";
+            left: -1em;
+            top: -0.56em;
+        }
+        &::after {
+            content: "\201D";
+            right: -1em;
+            bottom: -1.12em;
+        }
+        p:last-of-type {
+            text-align: right;
+        }
+
+        A {
+            position: relative;
+            padding-left: 0.2em;
+            padding-right: 0.2em;
+            text-decoration: none;
+            background-image: linear-gradient(currentColor, currentColor);
+            background-size: 1px 1px;
+            background-repeat: repeat-x;
+            background-position: 0% 100%;/*calc(100% - 0.1em);*/
+
+            &::before {
+                content: " ";
+                position: absolute;
+                top: 0.4em;
+                left: -1px;
+                bottom: 0;
+                width: 1px;
+                height: calc(100% - 0.4em);
+                background-image: linear-gradient(currentColor, currentColor);
+                background-size: 1px 1px;
+                background-repeat: repeat-y;
+            }
+        }
+    }
+
+    BLOCKQUOTE:not(.callout-quote) {
         margin: 1em 0;
         padding: 0.5rem 1.5rem;
         border: 1px solid #bbb;
