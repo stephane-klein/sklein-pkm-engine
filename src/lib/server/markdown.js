@@ -3,6 +3,7 @@ import { hashtag, spanHashAndTag } from "@fedify/markdown-it-hashtag";
 import hljs from "highlight.js";
 import lazy_loading from "markdown-it-image-lazy-loading";
 import WikiLinkPlugin from "./wikilink.js";
+import MarkdownItCallout from "markdown-it-callouts";
 
 const md = new MarkdownIt({
     html: true,
@@ -20,6 +21,12 @@ const md = new MarkdownIt({
     }
 });
 md.use(WikiLinkPlugin());
+md.use(
+    MarkdownItCallout,
+    {
+        defaultElementType: "blockquote"
+    }
+);
 md.use(
     hashtag,
     {

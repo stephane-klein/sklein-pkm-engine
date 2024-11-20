@@ -40,6 +40,7 @@
     "image-size": "1.1.1",
     "listr2": "8.2.4",
     "markdown-it": "14.1.0",
+    "markdown-it-callouts": "1.0.3",
     "markdown-it-image-lazy-loading": "2.0.1",
     "markdown-it-regexp": "0.4.0",
     "markdown-it-wikirefs": "0.0.3",
