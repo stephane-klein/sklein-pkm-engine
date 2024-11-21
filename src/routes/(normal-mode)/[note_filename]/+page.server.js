@@ -1,3 +1,4 @@
+import { error } from "@sveltejs/kit";
 import esClient from "$lib/server/elasticsearch.js";
 
 export async function load({params}) {
@@ -50,6 +51,9 @@ export async function load({params}) {
         })
     ]);
 
+    if (!noteResult.hits.hits[0]) {
+        throw error(404, 'Page not found');
+    }
     return {
         note: noteResult.hits.hits[0],
         backlink_notes: backlinkNotesResult.hits.hits
