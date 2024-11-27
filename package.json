@@ -1,5 +1,5 @@
 {
-  "name": "sklein-pkm-engine",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite dev",
