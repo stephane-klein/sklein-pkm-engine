@@ -4,6 +4,7 @@ import hljs from "highlight.js";
 import lazy_loading from "markdown-it-image-lazy-loading";
 import WikiLinkPlugin from "./wikilink.js";
 import MarkdownItCallout from "markdown-it-callouts";
+import markdownItAttrs from "markdown-it-attrs";
 
 const md = new MarkdownIt({
     html: true,
@@ -21,6 +22,14 @@ const md = new MarkdownIt({
     }
 });
 md.use(WikiLinkPlugin());
+md.use(
+    markdownItAttrs,
+    {
+        leftDelimiter: '{',
+        rightDelimiter: '}',
+        allowedAttributes: []
+    }
+);
 md.use(
     MarkdownItCallout,
     {
