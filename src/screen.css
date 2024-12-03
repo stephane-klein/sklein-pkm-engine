@@ -67,7 +67,7 @@ BODY {
             text-align: right;
         }
 
-        A {
+        A.source {
             position: relative;
             padding-left: 0.2em;
             padding-right: 0.2em;
