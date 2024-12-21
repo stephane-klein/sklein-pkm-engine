@@ -101,21 +101,21 @@ export async function load({url}) {
         }
     };
 
-   const [ notesResult, aggsTagsResult, aggsNoteTypesResult] = await Promise.all([
+    const [ notesResult, aggsTagsResult, aggsNoteTypesResult] = await Promise.all([
         esClient.search(currentPageQuery),
         esClient.search(aggsTagsQuery),
         esClient.search(aggsNoteTypesQuery),
-   ]);
+    ]);
 
-   let notes = notesResult.hits.hits;
+    let notes = notesResult.hits.hits;
 
-   let countNotesInPreviousPages = (page - 1) * notesByPage;
-   if (countNotesInPreviousPages < 0) countNotesInPreviousPages = 0;
+    let countNotesInPreviousPages = (page - 1) * notesByPage;
+    if (countNotesInPreviousPages < 0) countNotesInPreviousPages = 0;
 
-   let countNotesInNextPages = notesResult.hits.total.value - (page * notesByPage);
-   if (countNotesInNextPages < 0) countNotesInNextPages = 0;
+    let countNotesInNextPages = notesResult.hits.total.value - (page * notesByPage);
+    if (countNotesInNextPages < 0) countNotesInNextPages = 0;
 
-   return {
+    return {
         totalNotesInAllPages: (
             notesResult.hits.total.value
         ),
@@ -128,5 +128,5 @@ export async function load({url}) {
             }
         ),
         noteTypes: (aggsNoteTypesResult?.aggregations?.note_type_count?.buckets || [])
-   };
+    };
 }
