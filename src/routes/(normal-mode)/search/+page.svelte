@@ -100,7 +100,7 @@
     type="text"
     name="search"
     value={queryString}
-    use:debounceAction={{ duration: 400 }}
+    use:debounceAction={{ duration: 800 }}
     on:debounced={(e) => {
         const url = new URL($page.url);
         if (e.target.value.trim() === "") {
