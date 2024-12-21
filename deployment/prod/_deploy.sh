@@ -11,6 +11,7 @@ cat <<EOF > ${PROJECT_FOLDER}docker-compose.yaml
 services:
     elasticsearch:
         image: elasticsearch:8.15.2
+        restart: on-failure
         ports:
             - 127.0.0.1:{{ .Env.INSTANCE_PROD_ELASTICSEARCH_PORT }}:9200
         environment:
@@ -30,7 +31,7 @@ services:
         deploy:
             resources:
                 limits:
-                    memory: 1GB
+                    memory: 4GB
         volumes:
             - /var/lib/notes.sklein.xyz/elasticsearch/:/usr/share/elasticsearch/data
         healthcheck:
