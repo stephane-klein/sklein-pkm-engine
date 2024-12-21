@@ -68,8 +68,8 @@
             >
                 <li><a class:is-active={$isDiariesPage} href="/diaries/">Journaux</a> | </li>
                 <li><a class:is-active={$isNotePage} href="/notes/">Notes</a> | </li>
-                <li><a href="/search/">Recherche</a> | </li>
-                <li><a href="/tags/">Explorer tous les tags</a></li>
+                <li><a class:is-active={$isSearchPage} href="/search/">Recherche</a> | </li>
+                <li><a class:is-active={$isTagsPage} href="/tags/">Explorer tous les tags</a></li>
             </ul>
             <div>
             {#if $page.route.id === "/(normal-mode)/[note_filename]"}
