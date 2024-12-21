@@ -48,6 +48,14 @@ export async function load({url}) {
     currentPageQuery.body._source = ["title", "created_at", "filename", "content_html", "tags"];
     currentPageQuery.body.from = notesByPage * (page - 1);
     currentPageQuery.body.size = notesByPage;
+    currentPageQuery.body.sort = [
+        "_score",
+        {
+            created_at: {
+                order: "desc"
+            }
+        }
+    ];
 
     if (queryString !== "") {
         currentPageQuery.body._source.splice(currentPageQuery.body._source.indexOf("content_html"), 1);
@@ -61,6 +69,7 @@ export async function load({url}) {
                 }
             }
         };
+
     }
     if (noteType !== "") {
         currentPageQuery.body.query.bool.must.push({
