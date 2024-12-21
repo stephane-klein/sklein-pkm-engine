@@ -15,7 +15,7 @@
     {#if data.note._source.tags.length > 0}
         <ul class="tags">
             {#each data.note._source.tags as tag, i}
-                <li><a href={`/diaries/?tags=${tag}`}>#{tag}</a>{#if i < data.note._source.tags.length - 1}, {/if}
+                <li><a href={`/search/?tags=${tag}`}>#{tag}</a>{#if i < data.note._source.tags.length - 1}, {/if}
                 </li>
             {/each}
         </ul>
