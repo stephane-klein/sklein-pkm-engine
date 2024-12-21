@@ -24,8 +24,6 @@
     let currentPage;
     $: currentPage = parseInt($page.url.searchParams.get("page") || 1, 10);
 
-
-
     $: currentUrl = $page.url;
 
     let previousPageUrl = "";
