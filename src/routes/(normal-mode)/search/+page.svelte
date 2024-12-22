@@ -164,7 +164,7 @@
             title={note._source.title}
             created_at={note._source.created_at}
             tags={note._source.tags}
-            content_html={note?.highlight?.content_html || note._source.content_html}
+            content_html={note?.highlight?.content_html || note._source.content_html || ""}
         />
     {/each}
     {#if (data.countNotesInNextPages === 0)}
