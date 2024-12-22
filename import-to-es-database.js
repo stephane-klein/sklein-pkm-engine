@@ -153,10 +153,17 @@ const tasks = new Listr(
                         body: {
                             settings: {
                                 analysis: {
+                                    tokenizer: {
+                                        ngram_tokenizer: {
+                                            type: "ngram",
+                                            min_gram: 3,
+                                            max_gram: 10
+                                        }
+                                    },
                                     analyzer: {
                                         french_analyzer: {
                                             type: "custom",
-                                            tokenizer: "standard",
+                                            tokenizer: "ngram_tokenizer",
                                             filter: [
                                                 "lowercase",
                                                 "asciifolding",
@@ -167,7 +174,7 @@ const tasks = new Listr(
                                         },
                                         french_html_analyzer: {
                                             type: "custom",
-                                            tokenizer: "standard",
+                                            tokenizer: "ngram_tokenizer",
                                             filter: [
                                                 "lowercase",
                                                 "asciifolding",
