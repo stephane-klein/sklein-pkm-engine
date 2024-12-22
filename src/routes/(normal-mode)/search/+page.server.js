@@ -36,9 +36,11 @@ export async function load({url}) {
 
     if (queryString !== "") {
         baseQuery.body.query.bool.must.push({
-            query_string: {
+            multi_match: {
                 query: queryString,
-                default_field: "content_html"
+                fields: ["title^2", "content_html"],
+                fuzziness: "AUTO",
+                type: "best_fields"
             }
         });
     }
