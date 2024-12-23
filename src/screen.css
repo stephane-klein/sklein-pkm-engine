@@ -103,6 +103,13 @@ BODY {
         padding: 1rem 1.5rem;
         border: 1px solid #bbb;
         background: #f8f8f8;
+        width: 100%;
+        CODE {
+            display: block;
+            width: 100%;
+            white-space: normal;
+            word-wrap: break-word;
+        }
     }
 
     CODE:not(PRE CODE) {
