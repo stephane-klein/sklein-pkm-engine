@@ -325,8 +325,10 @@ BODY {
 
     .body {
         margin: 2rem 0;
-        hyphens: auto;
-        text-align: justify;
+        P {
+            text-align: justify;
+            hyphens: auto;
+        }
 
         IMG {
             box-shadow: 0 0 5px 0 #777;
