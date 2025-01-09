@@ -36,6 +36,15 @@ md.use(
         defaultElementType: "blockquote"
     }
 );
+
+md.renderer.rules.callout_open = function() {
+    return `<blockquote class="callout-quote">\n<div>\n`;
+};
+
+md.renderer.rules.callout_close = function() {
+    return `</div>\n</blockquote>\n`;
+};
+
 md.use(
     hashtag,
     {
