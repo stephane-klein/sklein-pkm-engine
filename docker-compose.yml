@@ -36,4 +36,4 @@ services:
 
 volumes:
   elasticsearch:
-     name: ${COMPOSE_PROJECT_NAME}_postgres
+     name: ${COMPOSE_PROJECT_NAME}_elasticsearch
