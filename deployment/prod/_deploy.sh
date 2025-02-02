@@ -33,7 +33,7 @@ services:
                 limits:
                     memory: 4GB
         volumes:
-            - /var/lib/notes.sklein.xyz/elasticsearch/:/usr/share/elasticsearch/data
+            - elasticsearch:/usr/share/elasticsearch/data
         healthcheck:
             test:
                 [
@@ -63,6 +63,10 @@ services:
             ELASTICSEARCH_URL: "http://elasticsearch:9200"
         depends_on:
             - elasticsearch
+
+volumes:
+  elasticsearch:
+     name: notes_sklein_xyz_elasticsearch
 EOF
 
 cd ${PROJECT_FOLDER}
