@@ -4,8 +4,6 @@ set -e
 PROJECT_FOLDER="/srv/notes.sklein.xyz/"
 
 mkdir -p ${PROJECT_FOLDER}
-mkdir -p /var/lib/notes.sklein.xyz/elasticsearch/
-chmod ugo+rwX /var/lib/notes.sklein.xyz/elasticsearch/
 
 cat <<EOF > ${PROJECT_FOLDER}docker-compose.yaml
 services:
