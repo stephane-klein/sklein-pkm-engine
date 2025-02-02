@@ -13,4 +13,3 @@ find ./content/src/ -type f -name "*.md" | while read -r file; do
     rm "$file"
   fi
 done
-rm -rf ./content/src/attachments/
