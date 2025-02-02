@@ -21,6 +21,11 @@
     $: currentFilterTags = $page.url.searchParams.getAll("tags");
 </script>
 
+<svelte:head>
+    <title>Notes du type Evergreen du jardin numérique de Stéphane Klein</title>
+    <meta name="description" content="Notes du type Evergreen du jardin numérique de Stéphane Klein" />
+</svelte:head>
+
 <CurrentAppliedTagsFilterList tags={currentFilterTags} currentUrl={currentUrl} />
 
 {#if data.tags.length > 0}

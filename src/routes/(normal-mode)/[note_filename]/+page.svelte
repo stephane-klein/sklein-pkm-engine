@@ -10,6 +10,10 @@
 
     export let data;
 </script>
+<svelte:head>
+    <title>{data.note._source?.title || `Journal du ${formatDate(data.note._source.created_at)}`} - Jardin numérique de Stéphane Klein</title>
+    <meta name="description" content={data.note._source?.title || `Journal du ${formatDate(data.note._source.created_at)}`} />
+</svelte:head>
 
 <div class="note">
     <h1>{data.note._source?.title || formatDate(data.note._source.created_at)}</h1>

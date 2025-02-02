@@ -74,6 +74,11 @@
     $: totalSumOfAllNoteTypes = data.noteTypes.reduce((accumulator, noteType) => accumulator + noteType.doc_count, 0);
 </script>
 
+<svelte:head>
+    <title>Page de recherche dans les notes du jardin numérique de Stéphane Klein</title>
+    <meta name="description" content="Page de recherche dans les notes du jardin numérique de Stéphane Klein" />
+</svelte:head>
+
 <div style="display: flex; gap: 1em;">
     <div>Recherche effectué dans :</div>
     <div>

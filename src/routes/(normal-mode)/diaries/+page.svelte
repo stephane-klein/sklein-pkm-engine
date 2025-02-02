@@ -54,6 +54,10 @@
     let currentFilterTags;
     $: currentFilterTags = $page.url.searchParams.getAll("tags");
 </script>
+<svelte:head>
+    <title>Journaux du jardin numérique de Stéphane Klein</title>
+    <meta name="description" content="Journaux du jardin numérique de Stéphane Klein" />
+</svelte:head>
 
 <CurrentAppliedTagsFilterList tags={currentFilterTags} currentUrl={currentUrl} />
 
