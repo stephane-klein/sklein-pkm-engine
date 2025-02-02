@@ -75,8 +75,8 @@
 </script>
 
 <svelte:head>
-    <title>Page de recherche dans les notes du jardin numérique de Stéphane Klein</title>
-    <meta name="description" content="Page de recherche dans les notes du jardin numérique de Stéphane Klein" />
+    <title>Page de recherche dans les notes du jardin numérique de {data.digital_garden_name}</title>
+    <meta name="description" content="Page de recherche dans les notes du jardin numérique de {data.digital_garden_name}" />
 </svelte:head>
 
 <div style="display: flex; gap: 1em;">

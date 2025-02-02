@@ -11,7 +11,7 @@
     export let data;
 </script>
 <svelte:head>
-    <title>{data.note._source?.title || `Journal du ${formatDate(data.note._source.created_at)}`} - Jardin numérique de Stéphane Klein</title>
+    <title>{data.note._source?.title || `Journal du ${formatDate(data.note._source.created_at)}`} - Jardin numérique de {data.digital_garden_name}</title>
     <meta name="description" content={data.note._source?.title || `Journal du ${formatDate(data.note._source.created_at)}`} />
 </svelte:head>
 

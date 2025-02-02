@@ -60,6 +60,7 @@ services:
     webapp:
         image: sklein-pkm-engine-webapp:prod
         environment:
+            DIGITAL_GARDEN_NAME: "Stéphane Klein"
             ELASTICSEARCH_URL: "http://elasticsearch:9200"
         depends_on:
             - elasticsearch

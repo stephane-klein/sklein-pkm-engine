@@ -22,8 +22,8 @@
 </script>
 
 <svelte:head>
-    <title>Notes du type Evergreen du jardin numérique de Stéphane Klein</title>
-    <meta name="description" content="Notes du type Evergreen du jardin numérique de Stéphane Klein" />
+    <title>Notes du type Evergreen du jardin numérique de {data.digital_garden_name}</title>
+    <meta name="description" content="Notes du type Evergreen du jardin numérique de {data.digital_garden_name}" />
 </svelte:head>
 
 <CurrentAppliedTagsFilterList tags={currentFilterTags} currentUrl={currentUrl} />

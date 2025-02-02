@@ -2,8 +2,8 @@
     export let data;
 </script>
 <svelte:head>
-    <title>Les tags du jardin numérique de Stéphane Klein</title>
-    <meta name="description" content="Les tags du jardin numérique de Stéphane Klein" />
+    <title>Les tags du jardin numérique de {data.digital_garden_name}</title>
+    <meta name="description" content="Les tags du jardin numérique de {data.digital_garden_name}" />
 </svelte:head>
 
 <ul class="search-tags-panel">
