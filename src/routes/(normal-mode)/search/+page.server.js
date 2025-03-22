@@ -14,6 +14,13 @@ export async function load({url}) {
             query: {
                 bool: {
                     must: [
+                    ],
+                    must_not: [
+                        {
+                            term: {
+                                note_type: "unlisted"
+                            }
+                        }
                     ]
                 }
             }

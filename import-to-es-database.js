@@ -83,6 +83,10 @@ const tasks = new Listr(
                             frontMatterUpdated = true;
                             task.output = `Inject type: "journal_note" to ${relativeFilePath} note`;
                         }
+                    } else if (relativeFilePath.startsWith("/src/unlisted/")) {
+                        data.data.type = "unlisted";
+                        frontMatterUpdated = true;
+                        task.output = `Inject type: "unlisted" to ${relativeFilePath} note`;
                     } else {
                         if (!data.data?.type) {
                             data.data.type = "evergreen_note";
@@ -357,7 +361,7 @@ const tasks = new Listr(
                             document: {
                                 filename: fileName,
                                 created_at: (data.data.created_at && (data.data.type === "journal_note")) ? data.data.created_at + ":00" : null,
-                                title: data.data?.title || ((data.data.type !== "journal_note") ? path.parse(fileName).name : undefined),
+                                title: data.data?.title || ((data.data.type === "evergreen_note") ? path.parse(fileName).name : undefined),
                                 note_type: data.data?.type || null,
                                 linked_notes: WikiLinks,
                                 tags: data.data?.tags || [],

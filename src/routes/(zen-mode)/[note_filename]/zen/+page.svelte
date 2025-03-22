@@ -10,7 +10,9 @@
     export let data;
 </script>
 <div class="note">
-    <h1>{data.note._source?.title || formatDate(data.note._source.created_at)}</h1>
+    {#if (data.note._source.note_type !== "unlisted") || (data.note._source?.title)}
+        <h1>{data.note._source?.title || formatDate(data.note._source.created_at)}</h1>
+    {/if}
 
     {#if data.note._source.tags.length > 0}
         <ul class="tags">
@@ -30,4 +32,6 @@
     </div>
 </div>
 
-<p style="text-align: center;margin-top: 5rem;"><a href="../" class="action-button">Quitter le mode Zen</a></p>
+{#if data.note._source.note_type !== "unlisted"}
+    <p style="text-align: center;margin-top: 5rem;"><a href="../" class="action-button">Quitter le mode Zen</a></p>
+{/if}

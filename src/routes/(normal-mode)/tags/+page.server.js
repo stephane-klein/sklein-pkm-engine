@@ -5,6 +5,17 @@ export async function load() {
         index: "notes",
         body: {
             size: 0,
+            query: {
+                bool: {
+                    must_not: [
+                        {
+                            term: {
+                                note_type: "unlisted"
+                            }
+                        }
+                    ]
+                }
+            },
             aggs: {
                 tags_count: {
                     terms: {

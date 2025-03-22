@@ -32,6 +32,11 @@ export async function load({url}) {
                                 note_type: "journal_note"
                             }
                         },
+                        {
+                            term: {
+                                note_type: "unlisted"
+                            }
+                        }
                     ]
                 }
             },

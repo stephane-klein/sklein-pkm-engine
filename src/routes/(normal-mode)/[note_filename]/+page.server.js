@@ -1,4 +1,4 @@
-import { error } from "@sveltejs/kit";
+import { redirect, error } from "@sveltejs/kit";
 import esClient from "$lib/server/elasticsearch.js";
 
 export async function load({params}) {
@@ -54,6 +54,11 @@ export async function load({params}) {
     if (!noteResult.hits.hits[0]) {
         throw error(404, 'Page not found');
     }
+
+    if (noteResult.hits.hits[0]._source.note_type === 'unlisted') {
+        throw redirect(307, `/${params.note_filename}/zen/`);
+    }
+
     return {
         note: noteResult.hits.hits[0],
         backlink_notes: backlinkNotesResult.hits.hits
