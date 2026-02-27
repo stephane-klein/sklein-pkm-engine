@@ -432,3 +432,10 @@ hr.ornament::before {
     width: 100%;
     top: 50%;
 }
+
+/* HACK: force word wrapping in <th> — Chrome requires an explicit width constraint (max-width: 0) to respect overflow-wrap in auto-layout tables */
+th {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 0;
+}
